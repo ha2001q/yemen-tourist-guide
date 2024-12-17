@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "840146696225",
+    "project_id": "yemen-tourist-guide",
+    "storage_bucket": "yemen-tourist-guide.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840146696225:android:eef628223984498609cb60",
+        "android_client_info": {
+          "package_name": "com.example.yemen_tourist_guide"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFdnkc6XuLfREMuTv9KmSn8XbSpPiamGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
