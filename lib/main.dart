@@ -2,9 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 
 import 'core/middleware/authMiddleware.dart';
-import 'customer/homePage/view/home_screen.dart';
+import 'customer/homePage/home_view/pages/home_screen.dart';
 
 SharedPreferences? sharedPref;
 
@@ -26,13 +27,19 @@ class MyApp extends StatelessWidget {
 
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       initialRoute: "/first",
       getPages: [
-        GetPage(name: "/first", page: ()=>HomePageScreen(),middlewares: [AuthMiddleWare()])
+        GetPage(
+            name: "/first",
+            page: ()=>HomePageScreen(),
+            binding: BindingsBuilder(()=>Get.put(HomeController()))
+        ),
+
       ],
     );
   }
