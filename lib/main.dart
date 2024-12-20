@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yemen_tourist_guide/core/locale/my_locale.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
+import 'package:yemen_tourist_guide/customer/splash_screen/controller/Splash_controller.dart';
 
 import 'customer/homePage/home_view/pages/home_screen.dart';
+import 'customer/splash_screen/view/splash_screen.dart';
 
 SharedPreferences? sharedPref;
 
@@ -34,10 +36,15 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/first",
+      initialRoute: "/splash",
       getPages: [
         GetPage(
-            name: "/first",
+            name: "/splash",
+            page: ()=>SplashScreen(),
+            binding: BindingsBuilder(()=>Get.put(SplashController()))
+        ),
+        GetPage(
+            name: "/home",
             page: ()=>HomePageScreen(),
             binding: BindingsBuilder(()=>Get.put(HomeController()))
         ),
