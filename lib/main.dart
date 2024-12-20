@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yemen_tourist_guide/core/locale/my_locale.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
+import 'package:yemen_tourist_guide/customer/profile_screen/controller/profile_controller.dart';
+import 'package:yemen_tourist_guide/customer/profile_screen/view/pages/profile_screen.dart';
 import 'package:yemen_tourist_guide/customer/splash_screen/controller/Splash_controller.dart';
 
 import 'customer/homePage/home_view/pages/home_screen.dart';
@@ -28,15 +30,15 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
 
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      // title: 'Flutter Demo',
+      //
+      // theme: ThemeData(
+      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      //   useMaterial3: true,
+      // ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/splash",
+      initialRoute: "/profile",
       getPages: [
         GetPage(
             name: "/splash",
@@ -47,6 +49,11 @@ class MyApp extends StatelessWidget {
             name: "/home",
             page: ()=>HomePageScreen(),
             binding: BindingsBuilder(()=>Get.put(HomeController()))
+        ),
+        GetPage(
+            name: "/profile",
+            page: ()=>ProfileScreen(),
+            binding: BindingsBuilder(()=>Get.put(ProfileController()))
         ),
 
       ],

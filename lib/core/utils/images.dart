@@ -14,6 +14,12 @@ class Images {
   static const String facebookIcon = 'assets/svg/facebookIcon.svg';
   static const String googleIcon = 'assets/svg/googleIcon.svg';
   static const String editIcon = 'assets/svg/editIcon.svg';
+  static const String editProfileIcon = 'assets/svg/editProfile.svg';
+  static const String smallEmail = 'assets/svg/small_email.svg';
+  static const String lockIcon = 'assets/svg/lockIcon.svg';
+
+
+
 
 
 
