@@ -2,9 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yemen_tourist_guide/core/locale/my_locale.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 
-import 'core/middleware/authMiddleware.dart';
 import 'customer/homePage/home_view/pages/home_screen.dart';
 
 SharedPreferences? sharedPref;
@@ -32,6 +32,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      locale: Get.deviceLocale,
+      translations: MyLocal(),
       initialRoute: "/first",
       getPages: [
         GetPage(
