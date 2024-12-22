@@ -5,14 +5,19 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/core/locale/my_locale.dart';
+import 'package:yemen_tourist_guide/customer/favorite_screen/controller/favorite_controller.dart';
+import 'package:yemen_tourist_guide/customer/favorite_screen/view/pages/favorite_screen.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
+import 'package:yemen_tourist_guide/customer/login_screen/controller/login_controller.dart';
+import 'package:yemen_tourist_guide/customer/login_screen/view/login_screen.dart';
 import 'package:yemen_tourist_guide/customer/place_details/view/place_details.dart';
 import 'package:yemen_tourist_guide/customer/profile_screen/controller/profile_controller.dart';
 import 'package:yemen_tourist_guide/customer/profile_screen/view/pages/profile_screen.dart';
 import 'package:yemen_tourist_guide/customer/root_screen/root_screen.dart';
+import 'package:yemen_tourist_guide/customer/signup_screen/controller/signup_controller.dart';
+import 'package:yemen_tourist_guide/customer/signup_screen/view/signup_screen.dart';
 
 import 'customer/homePage/home_view/pages/home_screen.dart';
-import 'customer/place_details/controller/page_detail_controller.dart';
 
 SharedPreferences? sharedPref;
 
@@ -54,7 +59,7 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/home-page",
+      initialRoute: "/login",
 
       getPages: [
         GetPage(
@@ -80,7 +85,22 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: "/placeDetailes",
           page: ()=>PlaceDetails(),
-          binding: BindingsBuilder(()=>Get.put(PageDetailController()))
+          // binding: BindingsBuilder(()=>Get.put(ProfileController()))
+        ),
+        GetPage(
+            name: "/favorite",
+            page: ()=>FavoriteScreen(),
+            binding: BindingsBuilder(()=>Get.put(FavoriteController()))
+        ),
+        GetPage(
+            name: "/login",
+            page: ()=>LoginScreen(),
+            binding: BindingsBuilder(()=>Get.put(LoginController()))
+        ),
+        GetPage(
+            name: "/sign",
+            page: ()=>SignupScreen(),
+            binding: BindingsBuilder(()=>Get.put(SignupController()))
         ),
       ],
 

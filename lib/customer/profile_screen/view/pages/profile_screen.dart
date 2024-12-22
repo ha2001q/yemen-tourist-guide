@@ -11,12 +11,11 @@ import '../widgets/profile_appbar.dart';
 import '../widgets/user_data_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final int userId = 1; // User ID to fetch.
   final ProfileController profileController = Get.put(ProfileController());
 
   ProfileScreen({super.key}) {
     // Call listenToUser in the constructor.
-    profileController.listenToUser(userId);
+    profileController.listenToUser();
   }
 
   @override
@@ -41,7 +40,7 @@ class ProfileScreen extends StatelessWidget {
       body: Obx(() {
         // Check if data is available.
         if (profileController.userData.isEmpty) {
-          return Center(child: Text('No data available for user ID: $userId'));
+          return Center(child: Text('No data available for user ID: ${profileController.userController.userId}'));
         }
 
         // Display user data.

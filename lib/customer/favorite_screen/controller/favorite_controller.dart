@@ -1,9 +1,100 @@
-import 'package:flutter/material.dart';
-class FavoriteController extends StatelessWidget {
-  const FavoriteController({super.key});
+import 'dart:async';
 
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
+
+class FavoriteController extends GetxController{
+
+  UserController userController=Get.put(UserController());
+
+  // A list to store the user favorites data.
+  var userFavorites = <Map<String, dynamic>>[].obs;
+  var placesData = <Map<String, dynamic>>[].obs; // List to store places data.
+
+
+  // Firestore instance.
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // StreamSubscription to manage the listener.
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _favoritesSubscription;
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _placesSubscription;
+
+
+  // Method to listen to user favorites for a specific user_id.
+  void listenToUserFavorites() {
+    try {
+      // Listen to the collection snapshot for a specific user_id.
+      _favoritesSubscription = firestore
+          .collection('User_favorites')
+          .where('user_id', isEqualTo: int.parse(userController.userId.value))
+          .snapshots()
+          .listen((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          // Map the documents to a list of maps.
+          userFavorites.value = querySnapshot.docs.map((doc) {
+            return doc.data();
+          }).toList();
+
+          // Fetch places data for the favorite place IDs.
+          print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+          final placeIds = userFavorites.map((fav) {
+            final placeId = fav['place_id'];
+            return placeId is int ? placeId.toString() : placeId;
+          }).toList();
+          print("Place IDs to fetch: $placeIds");
+          fetchPlacesData(placeIds);
+
+          // Log success.
+          print('User favorites updated for userId ${userController.userId.value}: ${userFavorites.length} items.');
+        } else {
+          // Handle the case where no matching documents are found.
+          userFavorites.clear();
+          placesData.clear();
+          print('No favorites found for userId ${userController.userId.value}.');
+        }
+      });
+    } catch (e) {
+      // Handle errors.
+      print('Error listening to user favorites for userId ${userController.userId.value}: $e');
+    }
   }
+@override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    listenToUserFavorites();
+
+  }
+  // Method to fetch places data for a list of place IDs.
+
+  void fetchPlacesData(List<dynamic> placeIds) {
+    try {
+      print(placeIds[0]);
+      // Fetch documents from Places collection where ID is in placeIds.
+      _placesSubscription = firestore
+          .collection('Places')
+          .where('place_id', whereIn: placeIds )
+          .snapshots()
+          .listen((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          // Map the documents to a list of maps.
+          placesData.value = querySnapshot.docs.map((doc) {
+            return doc.data();
+          }).toList();
+
+          // Log success.
+          print('Places data updated: ${placesData.length} items fetched.');
+        } else {
+          // Handle the case where no matching documents are found.
+          placesData.clear();
+          print('No places data found for the given place IDs.');
+        }
+      });
+    } catch (e) {
+      // Handle errors.
+      print('Error fetching places data: $e');
+    }
+  }
+
 }

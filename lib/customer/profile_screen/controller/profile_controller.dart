@@ -9,10 +9,14 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
+import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
+
 
 class ProfileController extends GetxController {
   // A variable to store the user data.
   var userData = <String, dynamic>{}.obs;
+
+  UserController userController=Get.put(UserController());
 
   // Firestore instance.
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -21,12 +25,12 @@ class ProfileController extends GetxController {
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _userSubscription;
 
   // Method to listen to user data for a specific user_id.
-  void listenToUser(int userId) {
+  void listenToUser() {
     try {
       // Listen to the collection snapshot for a specific user_id.
       _userSubscription = firestore
           .collection('Users')
-          .where('user_id', isEqualTo: userId)
+          .where('user_id', isEqualTo: userController.userId.value)
           .snapshots()
           .listen((querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
@@ -34,16 +38,16 @@ class ProfileController extends GetxController {
           userData.value = querySnapshot.docs.first.data();
 
           // Log success.
-          print('User data updated for userId $userId: ${userData.value}');
+          print('User data updated for userId ${userController.userId.value}: ${userData.value}');
         } else {
           // Handle the case where no matching documents are found.
           userData.value = {};
-          print('No user data found for userId $userId.');
+          print('No user data found for userId ${userController.userId.value}.');
         }
       });
     } catch (e) {
       // Handle errors.
-      print('Error listening to user data for userId $userId: $e');
+      print('Error listening to user data for userId ${userController.userId.value}: $e');
     }
   }
 
@@ -90,19 +94,19 @@ class ProfileController extends GetxController {
     final downloadUrl = await snapshot.ref.getDownloadURL();
     print(downloadUrl.toString());
     imageUrl.value=downloadUrl;
-    await updateUserImagePath(1, imageUrl.value);
+    await updateUserImagePath(imageUrl.value);
     return downloadUrl;
   }
 
 
   /// Updates the user's image path in Firestore
-  Future<void> updateUserImagePath(int userId, String imageUrl) async {
+  Future<void> updateUserImagePath( String imageUrl) async {
     try {
       print("====================================");
       // Query the Users collection for the document with matching user_id
       var querySnapshot = await FirebaseFirestore.instance
           .collection('Users')
-          .where('user_id', isEqualTo: userId)
+          .where('user_id', isEqualTo: userController.userId.value)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
