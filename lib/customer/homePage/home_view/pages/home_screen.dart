@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/state_manager.dart';
+import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 import '../../../../core/utils/images.dart';
 import '../../../../core/utils/styles.dart';
@@ -25,6 +26,7 @@ class HomePageScreen extends StatelessWidget {
   HomePageScreen({super.key});
 
   final HomeController homeController = Get.put(HomeController(), permanent: true);
+  final UserController userController = Get.put(UserController());
   final controller = CarouselController();
 
   void animateToSlide(int index) => controller.animateToPage(index);
@@ -59,14 +61,14 @@ class HomePageScreen extends StatelessWidget {
 
                         Obx(
                         (){
-                          return homeController.isGuest.value?Container(
+                          return !homeController.isGuest.value?Container(
                             height: 45.0,
                             width: 45.0,
                             margin: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              image: const DecorationImage(
-                                image: AssetImage('assets/images/logo_image.jpg'),
+                              image:  DecorationImage(
+                                image: CachedNetworkImageProvider(userController.userImage.value),
                                 fit: BoxFit.cover
                               )
                             ),

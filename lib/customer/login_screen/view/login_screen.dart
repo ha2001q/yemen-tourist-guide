@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../core/utils/images.dart';
 import '../../../core/utils/styles.dart';
 import '../../root_screen/root_screen.dart';
 import '../../signup_screen/view/signup_screen.dart';
+import '../controller/login_controller.dart';
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+   LoginScreen({super.key});
+  // Create an instance of the LoginController
+  final LoginController loginController = Get.put(LoginController());
 
-  @override
+
+   TextEditingController email = TextEditingController();
+   TextEditingController password = TextEditingController();
+
+   final _loginForm = GlobalKey<FormState>();
+
+   @override
   Widget build(BuildContext context) {
-    TextEditingController email = TextEditingController();
-    TextEditingController password = TextEditingController();
 
-    final _loginForm = GlobalKey<FormState>();
     return SafeArea(
         child: Scaffold(
             body:
@@ -52,24 +59,18 @@ class LoginScreen extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     TextFormField(
+
                                       decoration: InputDecoration(
                                         filled: true,
                                         fillColor: Theme.of(context).cardColor,
+
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(20),
                                           borderSide: BorderSide.none,
                                         ),
                                         hintText:"Email",
                                       ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return "enter Email";
-                                        }
-                                        if (!RegExp(r'^[a-zA-Z\s]*$').hasMatch(value!)) {
-                                          return "just_letter";
-                                        }
-                                        return null;
-                                      },
+
                                       onSaved: (value) {
                                         email = email;
                                         // = value!;
@@ -88,15 +89,7 @@ class LoginScreen extends StatelessWidget {
                                         ),
                                         hintText:"Password",
                                       ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return "enter password";
-                                        }
-                                        if (!RegExp(r'^[a-zA-Z\s]*$').hasMatch(value!)) {
-                                          return "just_letter";
-                                        }
-                                        return null;
-                                      },
+
                                       onSaved: (value) {
                                         password = password;
                                         // = value!;
@@ -104,13 +97,27 @@ class LoginScreen extends StatelessWidget {
                                       controller:password,
                                       keyboardType: TextInputType.visiblePassword,
                                     ),
-                                    SizedBox(height: 20,),
+                                    const SizedBox(height: 20,),
                                     InkWell(
-                                        onTap:(){
+                                        onTap:() async {
                                           if (_loginForm.currentState!.validate()) {
                                             try{
-                                              email = email.text as TextEditingController;
-                                              password = password.text as TextEditingController;
+
+                                              var email1 = email.text;
+                                              var password1 = password.text;
+
+                                              // Call the login method
+                                              bool success = await loginController.loginUser(email1, password1);
+
+                                              if (success) {
+                                                // Navigate to the next screen if login is successful
+                                                Get.snackbar('Login Success', 'Welcome back!');
+                                                // You can use Get.to() for navigation
+                                                Get.offAndToNamed('/root');
+                                              } else {
+                                                // Show error message if login fails
+                                                Get.snackbar('Login Failed', loginController.errorMessage.value);
+                                              }
                                             }catch(onPressed){
                                               Navigator.push(
                                                   context,
