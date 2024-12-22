@@ -47,6 +47,9 @@ dependencies:
   file_picker: ^8.0.0+1
   #package html
   html: ^0.15.5
+  # bottom nav bar
+  line_icons: ^2.0.3
+  google_nav_bar: ^5.0.6
 
   #share references
   shared_preferences: ^2.2.2
