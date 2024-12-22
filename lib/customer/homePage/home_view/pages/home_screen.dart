@@ -184,6 +184,7 @@ class HomePageScreen extends StatelessWidget {
                                 print('0');
                                 homeController.cityId.value = 0;
                                 homeController.listenToBanners(0);
+                                homeController.listenToPlaces(homeController.cityId.value, homeController.typeId.value);
                               },
                               shape: StadiumBorder(
                                 side: BorderSide(
@@ -242,7 +243,6 @@ class HomePageScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
 
 
                   /// banner section
@@ -322,6 +322,7 @@ class HomePageScreen extends StatelessWidget {
                                 homeController.selectedOptionTypes.value = (homeController.selectedOptionTypes.value == 'All' ? 'All' : 'All');
                                 print('0');
                                 homeController.typeId.value = 0;
+                                homeController.listenToPlaces(homeController.cityId.value, homeController.typeId.value);
                               },
                               shape: StadiumBorder(
                                 side: BorderSide(
@@ -388,7 +389,34 @@ class HomePageScreen extends StatelessWidget {
                           spacing: 30, // Space between items horizontally
                           runSpacing: 10, // Space between items vertically
                           children: homeController.places.map((place) {
-                            return PlaceCard(title: place['place_name'], location: 'kkk', rating: 4.0, reviews: 4, imagePath: 'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg');
+                            return PlaceCard(title: place['place_name'], location: place['place_location'], rating: double.parse(place['rate_avg']) ?? 0.0, reviews: int.parse(place['review_num'])??0, imagePath: place['place_image'][0]??'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg');
+                          }).toList(),
+                        );
+                      }),
+
+
+                  /// high rate places
+                  const SizedBox(height: 20,),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 13),
+                    child: Align(alignment: Alignment.bottomLeft,child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('love by people', style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+                        // Text('See All', style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold, color: Colors.deepOrange),),
+                      ],
+                    )),
+                  ),
+                  Obx(
+                          (){
+                        return  Wrap(
+                          spacing: 30, // Space between items horizontally
+                          runSpacing: 10, // Space between items vertically
+                          children: homeController.services.map((service) {
+                            return Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: ServicesCard(title: service['service_name'], type: service['service_type'], location: service['service_location'], rating: 4, reviews: 4, imageBath: service['service_images']),
+                            );
                           }).toList(),
                         );
                       }),
