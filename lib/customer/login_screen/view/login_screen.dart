@@ -41,15 +41,15 @@ class LoginScreen extends StatelessWidget {
 
                           // SvgPicture.asset(Images.janbiahBack,fit: BoxFit.cover,),
                           Text("Login",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
-                          SizedBox(height: 54,),
-                          Text("Happy to see you again! Please enter your email and",style: TextStyle(color: Colors.grey),),
-                          Text("password to login to your account.",style: TextStyle(color: Colors.grey)),
+                          SizedBox(height: 35,),
+                          Text("Happy to see you again! Please enter your email and",style: TextStyle(color: Colors.black),),
+                          Text("password to login to your account.",style: TextStyle(color: Colors.black)),
                           SizedBox(height: 110,),
                           Container(
                             // width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              color: Color(0xffDBC9BD),
+                              color: Colors.grey,
                             ),
                             child:Form(
                               key: _loginForm,
@@ -169,7 +169,16 @@ class LoginScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 30.0),
-                          Text("Sign in with",
+
+
+                              // Container(
+                              //   height: 1,
+                              //   width: double.infinity,
+                              //   color: Colors.white,
+                              // ),
+
+
+                          const Text("Sign in with",
                               style: fontSmallBold
                           ),
                           const SizedBox(height: 10.0),
