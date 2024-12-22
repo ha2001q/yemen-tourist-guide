@@ -66,7 +66,17 @@ class HomePageRepo{
 
   /// get the places by place type and city id
   Stream<List<Map<String, dynamic>>> streamPlacesByCityIdAndType(int cityId, int typeId) {
-    if(cityId == 0){
+    if(cityId == 0 && typeId != 0){
+      return _firestore
+          .collection('Places').where('type_id', isEqualTo: typeId)
+          .snapshots()
+          .map((querySnapshot) {
+        return querySnapshot.docs.map((doc) {
+          final data = doc.data();
+          return data;
+        }).toList();
+      });
+    }else if(typeId == 0 && cityId == 0) {
       return _firestore
           .collection('Places')
           .snapshots()
@@ -76,7 +86,7 @@ class HomePageRepo{
           return data;
         }).toList();
       });
-    } else {
+    }else {
 
       return _firestore
           .collection('Places')
@@ -93,6 +103,18 @@ class HomePageRepo{
   }
 
 
-  /// get the
+  /// get the services
+  Stream<List<Map<String, dynamic>>> streamServices() {
+    return _firestore
+        .collection('Services')
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        final data = doc.data();
+        return data;
+      }).toList();
+    });
+
+  }
 
 }

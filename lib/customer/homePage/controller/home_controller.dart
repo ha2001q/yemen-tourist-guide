@@ -38,6 +38,8 @@ class HomeController extends GetxController{
   var places = <Map<String, dynamic>>[].obs;
 
 
+  // services data variables
+  var services = <Map<String, dynamic>>[].obs;
 
 
   // Observable for banners list, loading, and error message
@@ -61,6 +63,7 @@ class HomeController extends GetxController{
     listenToBanners(0);
     listenToTypes();
     listenToPlaces(0, 0);
+    listenToServices();
   }
 
 
@@ -126,6 +129,14 @@ class HomeController extends GetxController{
   void listenToPlaces(int cityId, int typeId) {
     _repository.streamPlacesByCityIdAndType(cityId, typeId).listen((data) {
       places.value = data;
+    }, onError: (error) {
+      Get.snackbar("Error", error.toString());
+    });
+  }
+
+  void listenToServices() {
+    _repository.streamServices().listen((data) {
+      services.value = data;
     }, onError: (error) {
       Get.snackbar("Error", error.toString());
     });

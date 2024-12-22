@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/profile",
+      initialRoute: "/home-page",
       getPages: [
         GetPage(
             name: "/first",
