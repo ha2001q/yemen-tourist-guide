@@ -77,6 +77,7 @@ class HomePageRepo{
         }).toList();
       });
     } else {
+
       return _firestore
           .collection('Places')
           .where('city_id', isEqualTo: cityId).where('type_id', isEqualTo: typeId)
