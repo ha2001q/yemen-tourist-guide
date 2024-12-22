@@ -54,6 +54,7 @@ class MyApp extends StatelessWidget {
       locale: Get.deviceLocale,
       translations: MyLocal(),
       initialRoute: "/placeDetailes",
+
       getPages: [
         GetPage(
             name: "/first",
