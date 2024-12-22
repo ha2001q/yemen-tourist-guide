@@ -78,6 +78,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                         if(_userController.userId.value == ''){
                           print(_userController.userId.value);
                           Get.snackbar('Error bro', ' You have to login first');
+                          Get.toNamed('login');
                           return;
                         }
                         pageDetailController.placeIdd.value = int.parse(arguments['place']['place_id']);

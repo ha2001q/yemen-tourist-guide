@@ -1,6 +1,5 @@
 
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/customer/place_details/data/page_detial_repo.dart';
 
@@ -22,7 +21,7 @@ class PageDetailController extends GetxController{
 
     _userController.loadUser();
 
-    checkIf(int.parse(_userController.userId.value), placeIdd.value);
+    // checkIf(int.parse(_userController.userId.value), placeIdd.value);
 
   }
 
@@ -34,8 +33,10 @@ class PageDetailController extends GetxController{
 
       isRed.value = true;
 
-    } else{
+    } else if(add == 'delete'){
       isRed.value = false;
+    } else if(add == 'login'){
+      Get.toNamed('login');
     }
   }
 
