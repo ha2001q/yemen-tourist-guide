@@ -1,6 +1,11 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:card_swiper/card_swiper.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -20,6 +25,9 @@ class HomePageScreen extends StatelessWidget {
   HomePageScreen({super.key});
 
   final HomeController homeController = Get.put(HomeController());
+  final controller = CarouselController();
+
+  void animateToSlide(int index) => controller.animateToPage(index);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +76,7 @@ class HomePageScreen extends StatelessWidget {
 
                         Column(
                           children: [
-                            Text('how_u_day'.tr, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                            Align(alignment: Alignment.bottomRight,child: Text('how_u_day'.tr, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),)),
 
                             const SizedBox(height: 7,),
                             Wrap(
@@ -172,9 +180,10 @@ class HomePageScreen extends StatelessWidget {
                                   : Colors.white, // Selected color
                               onPressed: () {
                                 // Toggle the "All" selection
-                                homeController.selectedOption.value = (homeController.selectedOption.value == 'All' ? null : 'All')!;
+                                homeController.selectedOption.value = (homeController.selectedOption.value == 'All' ? 'All' : 'All');
                                 print('0');
                                 homeController.cityId.value = 0;
+                                homeController.listenToBanners(0);
                               },
                               shape: StadiumBorder(
                                 side: BorderSide(
@@ -213,6 +222,9 @@ class HomePageScreen extends StatelessWidget {
 
                                   homeController.cityId.value = option['city_id'];
                                   print(option['city_id'].toString());
+                                  homeController.listenToBanners(option['city_id']);
+                                  homeController.listenToPlaces(option['city_id'],homeController.typeId.value);
+
                                 },
                                 shape: StadiumBorder(
                                   side: BorderSide(
@@ -232,29 +244,154 @@ class HomePageScreen extends StatelessWidget {
                   ),
 
 
+
+                  /// banner section
                   const SizedBox(height: 30,),
                   Obx(() {
-                    // Check if the loading state is true
-                    if (homeController.isLoadingB.value) {
-                      return const Center(child: CircularProgressIndicator());
+                    if (homeController.bannersd.isEmpty) {
+                      return const Center(child: Text('No banners found'));
                     }
 
-                    // Check if there is any error message
-                    if (homeController.errorMessageB.isNotEmpty) {
-                      return Center(child: Text('Error: ${homeController.errorMessageB}'));
-                    }
-
-                    // Display the banners if they exist
-                    return BannerSectionWidget(
-                      bannerList: homeController.banners, // Observable banners list
-                      onTapBanner: (index) {
-                        // Handle banner tap (e.g., navigate to banner detail)
-                        // if (kDebugMode) {
-                        //   print(homeController.banners[index].id);
-                        // }
-                      },
+                    print(homeController.bannersd[0]['title']);
+                    return SizedBox(
+                      child: Column(
+                        children: [
+                          CarouselSlider.builder(
+                            carouselController: controller,
+                            itemCount: homeController.bannersd.length,
+                            itemBuilder: (context, index, realIndex) {
+                              return promotionWidget(
+                                homeController.bannersd[index]['image'],
+                                homeController.bannersd[index]['title'],
+                                homeController.bannersd[index]['description'],
+                                index,
+                              );
+                            },
+                            options: CarouselOptions(
+                              autoPlay: true,
+                              enableInfiniteScroll: false,
+                              autoPlayAnimationDuration: const Duration(seconds: 2),
+                              enlargeCenterPage: true,
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   }),
+
+
+                  /// place type section
+                  const SizedBox(height: 20,),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 13),
+                    child: Align(alignment: Alignment.bottomLeft,child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Expoler places', style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+                        Text('See All', style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold, color: Colors.deepOrange),),
+                      ],
+                    )),
+                  ),
+                  const SizedBox(height: 20,),
+
+                  Obx(
+                        () => SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          // Static "All" chip
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 6),
+                            child: ActionChip(
+                              label: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  'All', // Static label for "All"
+                                  style: TextStyle(
+                                    color: homeController.selectedOptionTypes.value == 'All' ? Colors.white : Colors.black, // Text color
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                              backgroundColor: homeController.selectedOptionTypes.value == 'All'
+                                  ? const Color(0xFFD05730)
+                                  : Colors.white, // Selected color
+                              onPressed: () {
+                                // Toggle the "All" selection
+                                homeController.selectedOptionTypes.value = (homeController.selectedOptionTypes.value == 'All' ? 'All' : 'All');
+                                print('0');
+                                homeController.typeId.value = 0;
+                              },
+                              shape: StadiumBorder(
+                                side: BorderSide(
+                                  color: homeController.selectedOptionTypes.value == 'All' ? Colors.deepOrange : Colors.white, // Border color change
+                                  width: 0,
+                                ),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15), // Padding inside the chip
+                              shadowColor: Colors.black.withOpacity(0.5), // Optional shadow
+                              elevation: 5, // Elevation for 3D effect
+                            ),
+                          ),
+
+                          // Dynamic city chips
+                          ...homeController.types.map((option) {
+                            final isSelected = homeController.selectedOptionTypes.value == option['type_name'];
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 6),
+                              child: ActionChip(
+                                label: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                  child: Text(
+                                    option['type_name'],
+                                    style: TextStyle(
+                                      color: isSelected ? Colors.white : Colors.black, // Text color
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                                backgroundColor: isSelected
+                                    ? const Color(0xFFD05730)
+                                    : Colors.white, // Selected color
+                                onPressed: () {
+                                  homeController.selectedOptionTypes.value = isSelected ? null : option['type_name']; // Toggle selection
+
+                                  homeController.typeId.value = option['type_id'];
+                                  print(option['type_id'].toString());
+                                  homeController.listenToPlaces(homeController.cityId.value, option['type_id']);
+                                },
+                                shape: StadiumBorder(
+                                  side: BorderSide(
+                                    color: isSelected ? Colors.deepOrange : Colors.white, // Border color change
+                                    width: 0,
+                                  ),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15), // Padding inside the chip
+                                shadowColor: Colors.black.withOpacity(0.5), // Optional shadow
+                                elevation: 5, // Elevation for 3D effect
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                  ),
+
+
+                  /// places data
+                  const SizedBox(height: 20,),
+                  Obx(
+                      (){
+                        return  Wrap(
+                          spacing: 30, // Space between items horizontally
+                          runSpacing: 10, // Space between items vertically
+                          children: homeController.places.map((place) {
+                            return PlaceCard(title: place['place_name'], location: 'kkk', rating: 4.0, reviews: 4, imagePath: 'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg');
+                          }).toList(),
+                        );
+                      }),
 
                 ],
               ),
@@ -264,355 +401,114 @@ class HomePageScreen extends StatelessWidget {
       ),
     );
   }
+
+
+  Widget promotionWidget(String image, String title, String description,
+      int index) {
+    return Container(
+      width: 310.0,
+      height: 150,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(25),
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
+      ),
+      child: InkWell(
+        onTap: () {
+          // widget.onTapBanner(index);
+        },
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(image),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(25),
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.1),
+                      Colors.black.withOpacity(0.6),
+                    ],
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    bottomRight: Radius.circular(25),
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: SizedBox(
+                width: 93,
+                height: 56,
+                child: ElevatedButton(
+                    onPressed: () {
+                      // widget.onTapBanner(index);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: const Color(0xFFD05730), // Text color
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10)
+                        ), // Corner radius
+                      ),
+                    ),
+                    child: const Icon(Icons.arrow_forward)
+                ),
+              ),
+            ),
+
+            Positioned(
+              top: 55,
+              right: 33,
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'Raleway',
+                  fontWeight: FontWeight.w700,
+                  height: 0,
+                  letterSpacing: 0.54,
+                ),
+              ),
+            ),
+
+            Positioned(
+              top: 105,
+              right: 9,
+              child: Text(
+                description,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontFamily: 'Raleway',
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-// class HomePageScreen extends StatelessWidget {
-//    HomePageScreen({super.key});
-//   PlacesController placesController = Get.put(PlacesController(), permanent:true);
-//
-//
-//    int _selectedTab = 0;
-//    int _selectedCategory = 0;
-//
-//    final List<String> _cities = ['الكل', 'حجة', 'صنعاء', 'تعز', 'الحديدة','صعدة','عمران'];
-//    final List<String> _categories = ['الكل', 'مساجد', 'سدود وشلالات', 'قلاع وحصون', 'معابد'];
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(
-//       child: Scaffold(
-//
-//         body:
-//           // sharedPref!.setString("id", "1");
-//            SingleChildScrollView(
-//             child: Column(
-//               children: [
-//                 Stack(
-//                     alignment: Alignment.topRight,
-//                     children: [
-//                       SvgPicture.asset('assets/svg/half_circle.svg'),
-//                       Column(
-//                         children: [
-//                           // الجزء العلوي مع الصورة الشخصية والترحيب
-//
-//                           Padding(
-//                             padding: const EdgeInsets.all(26.0),
-//                             child: Row(
-//
-//                               children: [
-//                                 Container(
-//                                   height: 80,
-//                                   width: 80,
-//                                   decoration: BoxDecoration(
-//                                       borderRadius: BorderRadius.circular(50)
-//                                   ),
-//                                   child:
-//                                   CircleAvatar(
-//                                     radius: 25, // Adjust the radius as needed
-//                                     // backgroundColor: Colors.white,
-//                                     child: ClipOval(
-//                                       child: Image.asset(Images.logoIcon,fit:BoxFit.cover,
-//                                         // CachedNetworkImage(
-//                                         //   imageUrl: widget.image,
-//                                         //   placeholder: (context, url) => const CircularProgressIndicator(),
-//                                         //   errorWidget: (context, url, error) => const Icon(Icons.error),
-//
-//                                       ),
-//                                     ),
-//
-//                                   ),
-//                                 ),
-//                                 const SizedBox(width: 12),
-//                                 Expanded(
-//                                   child: Column(
-//                                     crossAxisAlignment: CrossAxisAlignment.end,
-//                                     children: [
-//                                       const Text(
-//                                           "كيف يومك ",
-//                                           style:fontLargeBold
-//                                       ),
-//                                       const SizedBox(width: 4),
-//                                       // Image.asset('assets/svg/half_circle.svg', height: 20),
-//                                       // const Text("حمزة!"),
-//                                       Row(
-//                                         mainAxisAlignment:MainAxisAlignment.end ,
-//                                         children: [
-//                                           const Text(
-//                                               "اليمن، صنعاء",
-//                                               style: TextStyle(color: Color(0xFFE17055))
-//                                           ),
-//
-//                                           const Icon(Icons.location_on,
-//                                               color: Color(0xFFE17055), size: 16),
-//
-//                                         ],
-//
-//                                       )
-//                                     ],
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                           SizedBox(height: 50,),
-//
-//                           Padding(
-//                             padding: const EdgeInsets.all(28.0),
-//                             child: TextField(
-//                               decoration: InputDecoration(
-//                                 hintText: "ابحث",
-//                                 prefixIcon: const Icon(Icons.search),
-//                                 filled: true,
-//                                 fillColor: Colors.grey[200],
-//                                 border: OutlineInputBorder(
-//                                   borderRadius: BorderRadius.circular(30),
-//                                   borderSide: BorderSide.none,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                           const SizedBox(height: 20),
-//
-//                           //شريط التنقل بين المدن
-//                           Padding(
-//                             padding: const EdgeInsets.symmetric(horizontal: 13.0),
-//                             child: SizedBox(
-//                               height: 40,
-//                               child: ListView.builder(
-//                                 scrollDirection: Axis.horizontal,
-//                                 itemCount: _cities.length,
-//                                 itemBuilder: (context, index) {
-//                                   return Padding(
-//                                     padding: const EdgeInsets.symmetric(horizontal: 4),
-//                                     child: ChoiceChip(
-//                                       label: Text(_cities[index]),
-//                                       selected: _selectedTab == index,
-//                                       onSelected: (selected) {
-//                                           _selectedTab = index;
-//                                       },
-//                                       backgroundColor: Colors.grey[200],
-//                                       selectedColor: const Color(0xFFE17055),
-//                                       labelStyle: TextStyle(
-//                                         color: _selectedTab == index
-//                                             ? Colors.white
-//                                             : Colors.black,
-//                                       ),
-//                                     ),
-//                                   );
-//                                 },
-//                               ),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ]
-//                 ),
-//                 SingleChildScrollView(
-//                   scrollDirection: Axis.vertical,
-//                   child: Column(
-//                     children: [
-//                       Column(
-//                           children: [
-//                             // صورة جبال خولان
-//                             Container(
-//                               margin: const EdgeInsets.all(16),
-//                               decoration: BoxDecoration(
-//                                 borderRadius: BorderRadius.circular(20),
-//                                 image: const DecorationImage(
-//                                   image: AssetImage('assets/images/logo_icon.jpg'),
-//                                   fit: BoxFit.cover,
-//                                 ),
-//                               ),
-//                               height: 200,
-//                               child: Stack(
-//                                 children: [
-//                                   Positioned(
-//                                     bottom: 20,
-//                                     left: 20,
-//                                     child: Row(
-//                                       children: [
-//                                         const Text(
-//                                           "جبال خولان",
-//                                           style: TextStyle(
-//                                             color: Colors.white,
-//                                             fontSize: 24,
-//                                             fontWeight: FontWeight.bold,
-//                                           ),
-//                                         ),
-//                                         const SizedBox(width: 8),
-//                                         Container(
-//                                           padding: const EdgeInsets.all(8),
-//                                           decoration: BoxDecoration(
-//                                             color: const Color(0xFFE17055),
-//                                             borderRadius: BorderRadius.circular(20),
-//                                           ),
-//                                           child: const Icon(
-//                                             Icons.arrow_forward,
-//                                             color: Colors.white,
-//                                             size: 20,
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           ]
-//                       ),
-//
-//                       Padding(
-//                         padding: const EdgeInsets.all(16),
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             const Text("استكشاف الأماكن", style: fontLargeBold),
-//                             const SizedBox(height: 12),
-//
-//                             // شريط التصنيفات
-//                             SizedBox(
-//                               height: 40,
-//                               child: ListView.builder(
-//                                 scrollDirection: Axis.horizontal,
-//                                 itemCount: _categories.length,
-//                                 itemBuilder: (context, index) {
-//                                   return Padding(
-//                                     padding: const EdgeInsets.symmetric(horizontal: 4),
-//                                     child: ChoiceChip(
-//                                       label: Text(_categories[index]),
-//                                       selected: _selectedCategory == index,
-//                                       onSelected: (selected) {
-//                                           _selectedCategory = index;
-//                                       },
-//                                       backgroundColor: Colors.grey[200],
-//                                       selectedColor: const Color(0xFFE17055),
-//                                       labelStyle: TextStyle(
-//                                         color: _selectedCategory == index
-//                                             ? Colors.white
-//                                             : Colors.black,
-//                                       ),
-//                                     ),
-//                                   );
-//                                 },
-//                               ),
-//                             ),
-//
-//                             const SizedBox(height: 16),
-//
-//                             // بطاقات المواقع
-//
-//                                Obx((){
-//                                  return
-//                                 GridView.builder(
-//                                  shrinkWrap: true,
-//                                     physics: const NeverScrollableScrollPhysics(),
-//                                  padding: EdgeInsets.symmetric(horizontal: 10),
-//                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,),
-//                                  itemCount: placesController.placesList.length,
-//                                 itemBuilder: (context,index){
-//                                   final place = placesController.placesList[index];
-//                                   return
-//                                     Padding(
-//                                       padding: const EdgeInsets.all(5.0),
-//                                       child: PlaceCard(
-//                                               title: place['place_name'],
-//                                               location: place['place_location']??' ',
-//                                               rating: 4.0,
-//                                               reviews: 36,
-//                                               imagePath: 'assets/images/logo_icon.jpg',
-//                                             ),
-//                                     );
-//                                 }
-//                                 // shrinkWrap: true,
-//                                 // physics: const NeverScrollableScrollPhysics(),
-//                                 // crossAxisCount: 2,
-//                                 // childAspectRatio: 1,
-//                                 // mainAxisSpacing: 16,
-//                                 // crossAxisSpacing: 16,
-//                                 // children: [
-//                                 //   PlaceCard(
-//                                 //     title: 'حديقة السبعين',
-//                                 //     location: 'اليمن، صنعاء',
-//                                 //     rating: 4.0,
-//                                 //     reviews: 36,
-//                                 //     imagePath: 'assets/images/logo_icon.jpg',
-//                                 //   ),
-//                                 //   PlaceCard(
-//                                 //     title: 'جبل النبي شعيب',
-//                                 //     location: 'اليمن، صنعاء',
-//                                 //     rating: 4.0,
-//                                 //     reviews: 36,
-//                                 //     imagePath: 'assets/images/logo_icon.jpg',
-//                                 //   ),
-//                                 // ],
-//                                                              );
-//
-//                                }),
-//
-//                           ],
-//                         ),
-//                       ),
-//                       Padding(
-//                         padding: const EdgeInsets.all(16),
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Row(
-//                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                               children: [
-//                                 const Text("معجب بأشخاص", style: fontLargeBold),
-//                                 TextButton(
-//                                   onPressed: () {},
-//                                   child: const Text("عرض الكل",
-//                                     style: TextStyle(
-//                                       color: Color(0xFFE17055),
-//                                     ),
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                             ServicesCard(
-//                               title: 'مطعم الملكي',
-//                               type: 'مطاعم',
-//                               location: 'اليمن، صنعاء',
-//                               rating: 4.0,
-//                               reviews: 36,
-//                               imageBath: 'assets/images/logo_icon.jpg',
-//
-//                               // '\$400/night',
-//                             ),
-//                             const SizedBox(height: 16),
-//                             ServicesCard(
-//                               title: 'مقهى حراز',
-//                               type: 'Park',
-//                               location: 'اليمن، صنعاء',
-//                               rating: 4.0,
-//                               reviews: 36,
-//                               imageBath: 'assets/images/logo_icon.jpg',
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 )
-//               ],
-//             ),
-//           ),
-//
-//           //   ListView.builder(
-//           //
-//           //   itemCount: placesController.placesList.length,
-//           //   itemBuilder: (context, index) {
-//           //     final place = placesController.placesList[index];
-//           //     return ListTile(
-//           //
-//           //       title: Text(place['place_name'] ?? 'Unnamed Place'),
-//           //       subtitle: Text(place['place_description'] ?? 'No description'),
-//           //     );
-//           //   },
-//           // );
-//
-//       ),
-//     );
-//   }
-// }
+

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
+import 'package:yemen_tourist_guide/customer/homePage/data/home_page_repo.dart';
 
 import '../data/banner_model.dart';
 import '../data/cities_service.dart';
@@ -28,15 +29,21 @@ class HomeController extends GetxController{
   // Variable to keep track of the selected option
   var selectedOption = 'All'.obs;
 
+  // place types variables
+  var selectedOptionTypes = 'All'.obs;
+  var typeId = 0.obs;
+  var types = <Map<String, dynamic>>[].obs;
+
+  // places data variables
+  var places = <Map<String, dynamic>>[].obs;
+
+
 
 
   // Observable for banners list, loading, and error message
-  RxList<BannerModel> banners = <BannerModel>[].obs;
-  RxBool isLoadingB = false.obs;
-  RxString errorMessageB = ''.obs;
-
-  // Firestore reference to 'banners' collection
+  final HomePageRepo _repository = HomePageRepo();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  var bannersd = <Map<String, dynamic>>[].obs;
 
   @override
   Future<void> onInit() async {
@@ -51,7 +58,9 @@ class HomeController extends GetxController{
       print('is not guest ${id}');
     }
     fetchAllCities(); // Fetch cities when the controller is initialized
-    fetchBanners();
+    listenToBanners(0);
+    listenToTypes();
+    listenToPlaces(0, 0);
   }
 
 
@@ -96,28 +105,29 @@ class HomeController extends GetxController{
   }
 
 
-  // Stream to listen for banner updates from Firebase Firestore
-  Stream<List<BannerModel>> get bannersStream {
-    return _firestore.collection('Banners').snapshots().map(
-          (QuerySnapshot snapshot) {
-        return snapshot.docs.map((doc) {
-          // Mapping Firestore document to BannerModel
-          return BannerModel.fromJson(doc.data() as Map<String, dynamic>);
-        }).toList();
-      },
-    );
+  void listenToBanners(int cityId) {
+    _repository.streamBannersByCityId(cityId).listen((data) {
+      bannersd.value = data;
+    }, onError: (error) {
+      Get.snackbar("Error", error.toString());
+    });
   }
 
-  // Fetch banners and update observable list
-  void fetchBanners() async {
-    try {
-      isLoadingB(true);
-      banners.bindStream(bannersStream); // Bind the Firestore stream to banners
-    } catch (e) {
-      errorMessageB.value = e.toString();
-    } finally {
-      isLoadingB(false);
-    }
+
+  void listenToTypes() {
+    _repository.streamTypes().listen((data) {
+      types.value = data;
+    }, onError: (error) {
+      Get.snackbar("Error", error.toString());
+    });
   }
 
+
+  void listenToPlaces(int cityId, int typeId) {
+    _repository.streamPlacesByCityIdAndType(cityId, typeId).listen((data) {
+      places.value = data;
+    }, onError: (error) {
+      Get.snackbar("Error", error.toString());
+    });
+  }
 }
