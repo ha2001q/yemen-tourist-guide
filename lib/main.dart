@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/core/locale/my_locale.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
-import 'package:yemen_tourist_guide/customer/homePage/data/home_page_repo.dart';
+import 'package:yemen_tourist_guide/customer/profile_screen/controller/profile_controller.dart';
+import 'package:yemen_tourist_guide/customer/profile_screen/view/pages/profile_screen.dart';
 
 import 'customer/homePage/home_view/pages/home_screen.dart';
 
@@ -30,10 +31,6 @@ Future<void> main() async {
 
   // userController.setUser('1', 'dheya', 'dmmmmmm');
   // userController.deleteUser();
-
-  HomePageRepo homePageRepo = HomePageRepo();
-
-  var d = homePageRepo.streamBannersByCityId(1);
   runApp(const MyApp());
 }
 
@@ -54,7 +51,7 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/home-page",
+      initialRoute: "/profile",
       getPages: [
         GetPage(
             name: "/first",
@@ -65,6 +62,11 @@ class MyApp extends StatelessWidget {
             name: "/home-page",
             page: ()=>HomePageScreen(),
             binding: BindingsBuilder(()=>Get.put(HomeController()))
+        ),
+        GetPage(
+            name: "/profile",
+            page: ()=>ProfileScreen(),
+            binding: BindingsBuilder(()=>Get.put(ProfileController()))
         ),
       ],
     );

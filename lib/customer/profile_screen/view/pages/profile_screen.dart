@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -53,18 +56,33 @@ class ProfileScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       /// image
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Colors.deepOrange
-                          // image: DecorationImage(
-                          //   image:
-                          //   fit: BoxFit.cover,
-                          // ),
+                      InkWell(
+                        onTap: profileController.pickFile,
+                        child: Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            image: DecorationImage(
+                              image: CachedNetworkImageProvider(profileController.userData['user_image']),
+                              fit: BoxFit.cover
+                            )
+                          ),
+                          // child: Image.network(profileController.userData['user_image'],fit: BoxFit.cover,),
                         ),
                       ),
+                      // Container(
+                      //   width: 100,
+                      //   height: 100,
+                      //   decoration: BoxDecoration(
+                      //     borderRadius: BorderRadius.circular(100),
+                      //     color: Colors.deepOrange
+                      //     // image: DecorationImage(
+                      //     //   image:
+                      //     //   fit: BoxFit.cover,
+                      //     // ),
+                      //   ),
+                      // ),
                       const SizedBox(height: 5,),
                       /// text user_name
                       Text(profileController.userData['user_name'], style: fontMediumBold,),
