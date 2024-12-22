@@ -12,6 +12,7 @@ import 'package:yemen_tourist_guide/customer/profile_screen/view/pages/profile_s
 import 'package:yemen_tourist_guide/customer/root_screen/root_screen.dart';
 
 import 'customer/homePage/home_view/pages/home_screen.dart';
+import 'customer/place_details/controller/page_detail_controller.dart';
 
 SharedPreferences? sharedPref;
 
@@ -31,7 +32,7 @@ Future<void> main() async {
 
   UserController userController = Get.put(UserController(), permanent: true);
 
-  // userController.setUser('1', 'dheya', 'dmmmmmm');
+  userController.setUser('1', 'dheya', 'dmmmmmm');
   // userController.deleteUser();
   runApp(const MyApp());
 }
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/placeDetailes",
+      initialRoute: "/home-page",
 
       getPages: [
         GetPage(
@@ -79,7 +80,7 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: "/placeDetailes",
           page: ()=>PlaceDetails(),
-          // binding: BindingsBuilder(()=>Get.put(ProfileController()))
+          binding: BindingsBuilder(()=>Get.put(PageDetailController()))
         ),
       ],
 

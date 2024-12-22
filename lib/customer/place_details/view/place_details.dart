@@ -1,4 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
+import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
+import 'package:yemen_tourist_guide/customer/place_details/controller/page_detail_controller.dart';
+import 'package:yemen_tourist_guide/customer/place_details/view/widgets/image_slider_widget.dart';
 
 import '../../../core/utils/styles.dart';
 import '../../favorite_screen/view/pages/favorite_screen.dart';
@@ -13,8 +19,28 @@ class PlaceDetails extends StatefulWidget {
 }
 
 class _PlaceDetailsState extends State<PlaceDetails> {
+  HomeController homeController = Get.find();
+  PageDetailController pageDetailController = Get.put(PageDetailController());
+
+  final UserController _userController = Get.put(UserController());
+  var arguments;
+  late final List<dynamic> imageList;
+  @override
+  void initState() {
+    super.initState();
+    // Access the arguments
+    arguments = Get.arguments;
+    pageDetailController.placeIdd.value = int.parse(arguments['place']['place_id']);
+    homeController.listenToServices(int.parse(arguments['place']['place_id']));
+    imageList = arguments['place']['place_image'];
+    _userController.setUser('1', 'dheya', 'dmmmmmm');
+    _userController.loadUser();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -25,16 +51,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
             Stack(
               children: [
                 // صورة المكان
-                Container(
-                  height: 300,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/logo_icon.jpg'), // ضع مسار الصورة الخاصة بك
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+                ImageSliderWidget(images: imageList),
                 // زر العودة
                 Positioned(
                   top: 50,
@@ -52,25 +69,33 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                   ),
                 ),
                 // زر المفضلة
-                Positioned(
-                  bottom: 20,
-                  left: 20,
-                  child: InkWell(
-                    onTap:(){ Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context)=>FavoriteScreen()));},
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Icon(
-                        Icons.favorite_border,
-                        color: Color(0xFFE17055),
+                Obx(
+                  (){ return Positioned(
+                    bottom: 20,
+                    left: 20,
+                    child: InkWell(
+                      onTap:(){
+                        if(_userController.userId.value == ''){
+                          print(_userController.userId.value);
+                          Get.snackbar('Error bro', ' You have to login first');
+                          return;
+                        }
+                        pageDetailController.placeIdd.value = int.parse(arguments['place']['place_id']);
+                        pageDetailController.addFavorite(int.parse(arguments['place']['place_id']), int.parse(_userController.userId.value));
+                        },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child:  Icon(
+                          Icons.favorite,
+                          color:  pageDetailController.isRed.value?Color(0xFFE17055):Colors.grey,
+                        ),
                       ),
                     ),
-                  ),
+                  );}
                 ),
               ],
             ),
@@ -91,7 +116,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                       ),
                       const SizedBox(width: 5),
                       Text(
-                        'صنعاء، حراز',
+                        arguments['place']['place_location'],
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 16,
@@ -103,7 +128,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                   const SizedBox(height: 15),
 
                   // اسم المكان
-                  const Text('جبل النبي شعيب',
+                  Text(arguments['place']['place_name'],
                     style: fontLargeBold
                   ),
 
@@ -111,7 +136,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
 
                   // الوصف
                   Text(
-                    'جبل النبي شعيب هو أعلى قمة جبلية في اليمن والجزيرة العربية، يقع في محافظة صنعاء بمنطقة حراز. يرتفع الجبل إلى 3666 متراً عن سطح البحر.',
+                      arguments['place']['place_description'],
                     style: fontMedium
                   ),
 
@@ -129,7 +154,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                           //         builder: (context)=>AddComments())
                           // );
                         },
-                          child: const Text(' 4.0')),
+                          child: Text(arguments['place']['rate_avg'])),
                       const SizedBox(width: 20),
                       TextButton(
                         onPressed: () {
@@ -161,24 +186,29 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                   const SizedBox(height: 20),
 
                   // قائمة الخدمات
-                  ServicesCard(
-                    type: 'مطاعم',
-                    title: 'مقهى حراز',
-                    location: 'اليمن، صنعاء، بيت بوس',
-                    rating: 4.0,
-                    reviews: 25,
-                    imageBath: 'assets/images/logo_icon.jpg',
-                  ),
+                  Obx(
+                        () {
+                      // Create a sorted copy of the places list
 
-                  const SizedBox(height: 15),
-
-                  ServicesCard(
-                    type: 'استراحات',
-                    title: 'استراحة الجبل',
-                    location: 'اليمن، صنعاء، بيت بوس',
-                    rating: 4.0,
-                    reviews: 25,
-                    imageBath: 'assets/images/logo_icon.jpg',
+                      return Wrap(
+                        spacing: 30, // Space between items horizontally
+                        runSpacing: 10, // Space between items vertically
+                        children: homeController.services.map((service) {
+                          return Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: ServicesCard(
+                              onTap: (){},
+                                title: service['service_name'],
+                                type: service['service_type'],
+                                location: service['service_location'],
+                                rating: 0.0,
+                                reviews: 0,
+                                imageBath: service['service_images']??'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg'
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    },
                   ),
                 ],
               ),

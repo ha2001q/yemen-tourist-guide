@@ -3,12 +3,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class PlaceCard extends StatefulWidget {
-  const PlaceCard({super.key,required this.title,required this.location,required this.rating,required this.reviews,required this.imagePath});
+  const PlaceCard({super.key,required this.title,required this.location,required this.rating,required this.reviews,required this.imagePath, required this.onTap});
   final String title;
   final String location;
   final double rating;
   final int reviews;
   final String imagePath;
+  final VoidCallback onTap;
 
   @override
   State<PlaceCard> createState() => _PlaceCardState();
@@ -21,9 +22,7 @@ class _PlaceCardState extends State<PlaceCard> {
     int rev=widget.reviews;
     double rating=widget.rating;
     return InkWell(
-      onTap: (){
-        // Navigator.push(context, MaterialPageRoute(builder: (context)=>PlaceDetails()));
-      },
+      onTap: widget.onTap,
       child: Container(
         height: 200,
         width: 160,

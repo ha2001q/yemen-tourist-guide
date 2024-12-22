@@ -63,7 +63,6 @@ class HomeController extends GetxController{
     listenToBanners(0);
     listenToTypes();
     listenToPlaces(0, 0);
-    listenToServices();
   }
 
 
@@ -134,8 +133,8 @@ class HomeController extends GetxController{
     });
   }
 
-  void listenToServices() {
-    _repository.streamServices().listen((data) {
+  void listenToServices(int placeId) {
+    _repository.streamServices(placeId).listen((data) {
       services.value = data;
     }, onError: (error) {
       Get.snackbar("Error", error.toString());

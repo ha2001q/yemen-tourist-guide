@@ -24,7 +24,7 @@ import '../widgets/banner_section_widget.dart';
 class HomePageScreen extends StatelessWidget {
   HomePageScreen({super.key});
 
-  final HomeController homeController = Get.put(HomeController());
+  final HomeController homeController = Get.put(HomeController(), permanent: true);
   final controller = CarouselController();
 
   void animateToSlide(int index) => controller.animateToPage(index);
@@ -389,7 +389,15 @@ class HomePageScreen extends StatelessWidget {
                           spacing: 30, // Space between items horizontally
                           runSpacing: 10, // Space between items vertically
                           children: homeController.places.map((place) {
-                            return PlaceCard(title: place['place_name'], location: place['place_location'], rating: double.parse(place['rate_avg']) ?? 0.0, reviews: int.parse(place['review_num'])??0, imagePath: place['place_image'][0]??'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg');
+                            return PlaceCard(title: place['place_name'], location: place['place_location'], rating: double.parse(place['rate_avg']) ?? 0.0, reviews: int.parse(place['review_num'])??0, imagePath: place['place_image'][0]??'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg',onTap: (){
+                              Get.toNamed(
+                                '/placeDetailes',
+                                arguments: {
+                                  'place': place
+                                },
+                              );
+
+                            },);
                           }).toList(),
                         );
                       }),
@@ -408,18 +416,45 @@ class HomePageScreen extends StatelessWidget {
                     )),
                   ),
                   Obx(
-                          (){
-                        return  Wrap(
-                          spacing: 30, // Space between items horizontally
-                          runSpacing: 10, // Space between items vertically
-                          children: homeController.services.map((service) {
-                            return Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: ServicesCard(title: service['service_name'], type: service['service_type'], location: service['service_location'], rating: 4, reviews: 4, imageBath: service['service_images']),
-                            );
-                          }).toList(),
-                        );
-                      }),
+                        () {
+                      // Create a sorted copy of the places list
+                      final sortedPlaces = List.from(homeController.places)
+                        ..sort((a, b) {
+                          final double rateA = double.tryParse(a['rate_avg']) ?? 0.0;
+                          final double rateB = double.tryParse(b['rate_avg']) ?? 0.0;
+                          return rateB.compareTo(rateA); // Sort in descending order
+                        });
+
+                      return Wrap(
+                        spacing: 30, // Space between items horizontally
+                        runSpacing: 10, // Space between items vertically
+                        children: sortedPlaces.map((place) {
+                          return Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: ServicesCard(
+                                onTap: (){
+                                  Get.toNamed(
+                                    '/placeDetailes',
+                                    arguments: {
+                                      'place': place
+                                    },
+                                  );
+
+                                },
+                              title: place['place_name'],
+                              type: place['type_id'].toString(),
+                              location: place['place_location'],
+                              rating: double.tryParse(place['rate_avg']) ?? 0.0,
+                              reviews: int.tryParse(place['review_num']) ?? 0,
+                              imageBath: place['place_image'][0]??'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg'
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    },
+                  ),
+
+
 
                 ],
               ),
