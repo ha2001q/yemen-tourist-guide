@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import '../../../../../core/utils/styles.dart';
 
 class ProfileAppBarWidget extends StatelessWidget  implements PreferredSizeWidget{
-  const ProfileAppBarWidget({super.key, required this.onTapBack, required this.onTapEdit, required this.editIcon});
+  const ProfileAppBarWidget({super.key,required this.onTapEdit, required this.editIcon});
   // final String title;
-  final VoidCallback onTapBack;
+  // final VoidCallback onTapBack;
   final VoidCallback onTapEdit;
   final String editIcon;
 
@@ -20,13 +20,13 @@ class ProfileAppBarWidget extends StatelessWidget  implements PreferredSizeWidge
         title: Text('profile'.tr,style: fontLargeBold,),
         centerTitle: true,
 
-        leading: IconButton(
-            style: IconButton.styleFrom(
-              backgroundColor:const Color(0xffF5F4F8),
-            ),
-            icon: const Icon(Icons.arrow_back_ios_new_outlined,),
-            onPressed: onTapBack
-        ),
+        // leading: IconButton(
+        //     style: IconButton.styleFrom(
+        //       backgroundColor:const Color(0xffF5F4F8),
+        //     ),
+        //     icon: const Icon(Icons.arrow_back_ios_new_outlined,),
+        //     onPressed: onTapBack
+        // ),
         actions: [
           IconButton(
               style: IconButton.styleFrom(

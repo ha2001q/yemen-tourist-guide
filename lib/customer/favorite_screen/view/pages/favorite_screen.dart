@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yemen_tourist_guide/customer/favorite_screen/controller/favorite_controller.dart';
+import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 import 'package:yemen_tourist_guide/customer/homePage/home_view/widgets/PlaceCard.dart';
 
 import '../../../../core/utils/images.dart';
@@ -12,6 +13,7 @@ import '../widgets/favorite_appbar.dart';
 class FavoriteScreen extends StatelessWidget {
   FavoriteScreen({super.key});
   FavoriteController favoriteController=Get.put(FavoriteController());
+  HomeController homeController=Get.put(HomeController());
 
 
 
@@ -26,7 +28,10 @@ class FavoriteScreen extends StatelessWidget {
       appBar: FavoriteAppBar(
         title:"Favorite",
         // icon:SvgPicture.asset(Images.trushIcon,) as Icon ,
-        onTap: () => {},),
+        onTap: (){
+          favoriteController.deleteAllUserFavorites();
+          Navigator.pop(context);
+        },),
       body:
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -57,7 +62,15 @@ class FavoriteScreen extends StatelessWidget {
                               location: placeData['place_location'].toString(),
                             imagePath: placeData['place_image'][0],
                             reviews: int.parse(placeData['review_num']),
-                            rating: double.parse(placeData['rate_avg']), onTap: () {  },
+                            rating: double.parse(placeData['rate_avg']),
+                              onTap: () {
+                                Get.toNamed(
+                                  '/placeDetailes',
+                                  arguments: {
+                                    'place': placeData
+                                  },
+                                );
+                              }, heartFavorite: () {  },
                             ),
                           );
                         }).toList(),

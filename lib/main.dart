@@ -8,6 +8,7 @@ import 'package:yemen_tourist_guide/core/locale/my_locale.dart';
 import 'package:yemen_tourist_guide/customer/favorite_screen/controller/favorite_controller.dart';
 import 'package:yemen_tourist_guide/customer/favorite_screen/view/pages/favorite_screen.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
+import 'package:yemen_tourist_guide/customer/homePage/home_view/pages/all_places.dart';
 import 'package:yemen_tourist_guide/customer/login_screen/controller/login_controller.dart';
 import 'package:yemen_tourist_guide/customer/login_screen/view/login_screen.dart';
 import 'package:yemen_tourist_guide/customer/place_details/view/place_details.dart';
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/login",
+      initialRoute: "/root",
 
       getPages: [
         GetPage(
@@ -101,6 +102,11 @@ class MyApp extends StatelessWidget {
             name: "/sign",
             page: ()=>SignupScreen(),
             binding: BindingsBuilder(()=>Get.put(SignupController()))
+        ),
+        GetPage(
+            name: "/all_places",
+            page: ()=>AllPlacesScreen(),
+            // binding: BindingsBuilder(()=>Get.put(SignupController()))
         ),
       ],
 

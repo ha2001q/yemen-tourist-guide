@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:yemen_tourist_guide/customer/favorite_screen/controller/favorite_controller.dart';
 import '../../../../../core/utils/images.dart';
 import '../../../../core/utils/styles.dart';
 
 class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const FavoriteAppBar({super.key, required this.onTap,required this.title,});
+  FavoriteAppBar({super.key, required this.onTap,required this.title,});
   final VoidCallback onTap;
   final String title;
   // final Icon icon;
 
+  FavoriteController favoriteController=Get.put(FavoriteController());
 
 
   @override
@@ -50,9 +53,9 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Delete favorite",style: fontMediumBold,),
+                const Text("Delete favorite",style: fontMediumBold,),
                 const SizedBox(height: 10,),
-                Text("Delete all favorite",style:fontMediumBold,),
+                const Text("Delete all favorite",style:fontMediumBold,),
                 const SizedBox(height: 20,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),

@@ -14,6 +14,8 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/state_manager.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
+import 'package:yemen_tourist_guide/customer/homePage/home_view/pages/all_places.dart';
+import 'package:yemen_tourist_guide/customer/place_details/controller/page_detail_controller.dart';
 import '../../../../core/utils/images.dart';
 import '../../../../core/utils/styles.dart';
 import '../../controller/Controller.dart';
@@ -28,6 +30,7 @@ class HomePageScreen extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController(), permanent: true);
   final UserController userController = Get.put(UserController());
   final controller = CarouselController();
+
 
   void animateToSlide(int index) => controller.animateToPage(index);
 
@@ -284,13 +287,24 @@ class HomePageScreen extends StatelessWidget {
 
                   /// place type section
                   const SizedBox(height: 20,),
-                  const Padding(
+                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 13),
                     child: Align(alignment: Alignment.bottomLeft,child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Expoler places', style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-                        Text('See All', style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold, color: Colors.deepOrange),),
+                        InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      AllPlacesScreen(),
+                                ),
+                              );
+                            },
+                            child: Text('See All', style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold, color: Colors.deepOrange),)
+                        ),
                       ],
                     )),
                   ),
@@ -398,8 +412,9 @@ class HomePageScreen extends StatelessWidget {
                                   'place': place
                                 },
                               );
-
-                            },);
+                            },
+                              heartFavorite: () {},
+                              );
                           }).toList(),
                         );
                       }),

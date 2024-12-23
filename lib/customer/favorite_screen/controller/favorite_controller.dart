@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 
 class FavoriteController extends GetxController{
@@ -96,5 +97,40 @@ class FavoriteController extends GetxController{
       print('Error fetching places data: $e');
     }
   }
+
+  void deleteAllUserFavorites() {
+    try {
+      // Query the collection for documents with the specific user_id.
+      firestore
+          .collection('User_favorites')
+          .where('user_id', isEqualTo: int.parse(userController.userId.value))
+          .get()
+          .then((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          // Delete each document returned by the query.
+          for (var doc in querySnapshot.docs) {
+            firestore.collection('User_favorites').doc(doc.id).delete().then((_) async {
+              print('Deleted favorite with ID: ${doc.id}');
+            }).catchError((error) {
+              print('Error deleting favorite with ID ${doc.id}: $error');
+            });
+          }
+
+          // Log success after all deletions.
+          print('Deleted all favorites for userId ${userController.userId.value}.');
+        } else {
+          // Handle case where no matching documents are found.
+          print('No favorites found to delete for userId ${userController.userId.value}.');
+        }
+      }).catchError((error) {
+        // Handle errors during the query.
+        print('Error querying favorites for userId ${userController.userId.value}: $error');
+      });
+    } catch (e) {
+      // Handle any unexpected errors.
+      print('Error deleting favorites for userId ${userController.userId.value}: $e');
+    }
+  }
+
 
 }
