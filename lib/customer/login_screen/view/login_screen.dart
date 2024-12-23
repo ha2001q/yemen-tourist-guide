@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:yemen_tourist_guide/core/method/SRValidator.dart';
 
 import '../../../core/utils/images.dart';
 import '../../../core/utils/styles.dart';
 import '../../root_screen/root_screen.dart';
 import '../../signup_screen/view/signup_screen.dart';
 import '../controller/login_controller.dart';
+
+
+final _loginForm = GlobalKey<FormState>();
 class LoginScreen extends StatelessWidget {
    LoginScreen({super.key});
   // Create an instance of the LoginController
@@ -16,7 +20,6 @@ class LoginScreen extends StatelessWidget {
    TextEditingController email = TextEditingController();
    TextEditingController password = TextEditingController();
 
-   final _loginForm = GlobalKey<FormState>();
 
    @override
   Widget build(BuildContext context) {
@@ -75,6 +78,7 @@ class LoginScreen extends StatelessWidget {
                                         email = email;
                                         // = value!;
                                       },
+                                      validator: SRValidator.validateEmail,
                                       controller:email,
                                       keyboardType: TextInputType.emailAddress,
                                     ),
@@ -125,14 +129,18 @@ class LoginScreen extends StatelessWidget {
                                             }
                                           }
                                         },
-                                        child: Container(
-                                          height: 45,
-                                          width: 280,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(20),
-                                            color: Color(0xffDE7254),
-                                          ),
-                                          child: Text("Login",style: fontLarge,textAlign: TextAlign.center,),
+                                        child: Obx(
+                                            (){
+                                              return Container(
+                                                height: 45,
+                                                width: 280,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                  color: Color(0xffDE7254),
+                                                ),
+                                                child: loginController.isLoading.value?Center(child: CircularProgressIndicator(color: Colors.white,)):Text("Login",style: fontLarge,textAlign: TextAlign.center,),
+                                              );
+                                            }
                                         )
                                     ),
                                   ],

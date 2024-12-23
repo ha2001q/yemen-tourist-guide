@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/login",
+      initialRoute: "/home-page",
 
       getPages: [
         GetPage(

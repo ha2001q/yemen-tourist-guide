@@ -86,7 +86,17 @@ class HomePageRepo{
           return data;
         }).toList();
       });
-    }else {
+    }else if(cityId!=0 && typeId == 0){
+      return _firestore
+          .collection('Places').where('city_id', isEqualTo: cityId)
+          .snapshots()
+          .map((querySnapshot) {
+        return querySnapshot.docs.map((doc) {
+          final data = doc.data();
+          return data;
+        }).toList();
+      });
+    }else{
 
       return _firestore
           .collection('Places')

@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/instance_manager.dart';
+import 'package:yemen_tourist_guide/core/method/SRValidator.dart';
+import 'package:yemen_tourist_guide/customer/signup_screen/controller/signup_controller.dart';
 
 import '../../../core/utils/images.dart';
 import '../../../core/utils/styles.dart';
 import '../../login_screen/view/login_screen.dart';
+
+final _SignUpForm = GlobalKey<FormState>();
+
 class SignupScreen extends StatelessWidget {
-  const SignupScreen({super.key});
+   SignupScreen({super.key});
+
+  TextEditingController name = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  SignupController signupController = Get.put(SignupController());
 
   @override
   Widget build(BuildContext context) {
-
-    TextEditingController name = TextEditingController();
-    TextEditingController email = TextEditingController();
-    TextEditingController password = TextEditingController();
-
-    final _SignUpForm = GlobalKey<FormState>();
-
     return SafeArea(
         child: Scaffold(
           body: Stack(
@@ -87,15 +93,7 @@ class SignupScreen extends StatelessWidget {
                                       ),
                                       hintText:"Email",
                                     ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "enter Email";
-                                      }
-                                      if (!RegExp(r'^[a-zA-Z\s]*$').hasMatch(value!)) {
-                                        return "just_letter";
-                                      }
-                                      return null;
-                                    },
+                                    validator: SRValidator.validateEmail,
                                     onSaved: (value) {
                                       email = email;
                                       // = value!;
@@ -114,15 +112,15 @@ class SignupScreen extends StatelessWidget {
                                       ),
                                       hintText:"Password",
                                     ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "enter password";
-                                      }
-                                      if (!RegExp(r'^[a-zA-Z\s]*$').hasMatch(value!)) {
-                                        return "just_letter";
-                                      }
-                                      return null;
-                                    },
+                                    // validator: (value) {
+                                    //   if (value == null || value.isEmpty) {
+                                    //     return "enter password";
+                                    //   }
+                                    //   if (!RegExp(r'^[a-zA-Z\s]*$').hasMatch(value!)) {
+                                    //     return "just_letter";
+                                    //   }
+                                    //   return null;
+                                    // },
                                     onSaved: (value) {
                                       password = password;
                                       // = value!;
@@ -132,13 +130,24 @@ class SignupScreen extends StatelessWidget {
                                   ),
                                   SizedBox(height: 50,),
                                   InkWell(
-                                      onTap:(){
+                                      onTap:() async {
                                         if (_SignUpForm.currentState!.validate()) {
                                           try{
-                                            name = name.text as TextEditingController;
-                                            email = email.text as TextEditingController;
-                                            password = password.text as TextEditingController;
+                                           var name1 = name.text ;
+                                           var email1 = email.text ;
+                                           var password1 = password.text ;
+                                           // Call the login method
+                                           bool success = await signupController.signupUser(name1, email1, password1);
 
+                                           if (success) {
+                                             // Navigate to the next screen if login is successful
+                                             Get.snackbar('Login Success', 'Welcome back!');
+                                             // You can use Get.to() for navigation
+                                             Get.offAndToNamed('/root');
+                                           } else {
+                                             // Show error message if login fails
+                                             Get.snackbar('Login Failed', signupController.errorMessage.value);
+                                           }
                                           }catch(onPressed){
                                             Navigator.push(
                                                 context,

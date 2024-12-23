@@ -390,7 +390,7 @@ class HomePageScreen extends StatelessWidget {
                         return  Wrap(
                           spacing: 30, // Space between items horizontally
                           runSpacing: 10, // Space between items vertically
-                          children: homeController.places.map((place) {
+                          children: homeController.places.take(4).map((place) {
                             return PlaceCard(title: place['place_name'], location: place['place_location'], rating: double.parse(place['rate_avg']) ?? 0.0, reviews: int.parse(place['review_num'])??0, imagePath: place['place_image'][0]??'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg',onTap: (){
                               Get.toNamed(
                                 '/placeDetailes',
