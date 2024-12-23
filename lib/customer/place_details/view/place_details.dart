@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
+import 'package:yemen_tourist_guide/customer/add_review/view/review_screen.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 import 'package:yemen_tourist_guide/customer/place_details/controller/page_detail_controller.dart';
 import 'package:yemen_tourist_guide/customer/place_details/view/widgets/image_slider_widget.dart';
@@ -148,12 +149,8 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                     children: [
                       const Icon(Icons.star, color: Colors.amber, size: 20),
                       InkWell(
-                        onTap: (){
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context)=>AddComments())
-                          // );
+                        onTap: (){Get.toNamed('/add_review',arguments: {'place_id':arguments['place']['place_id']});
+
                         },
                           child: Text(arguments['place']['rate_avg'])),
                       const SizedBox(width: 20),

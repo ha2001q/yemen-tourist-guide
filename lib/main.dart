@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/core/locale/my_locale.dart';
+import 'package:yemen_tourist_guide/customer/add_review/controller/review_controller.dart';
+import 'package:yemen_tourist_guide/customer/add_review/view/review_screen.dart';
 import 'package:yemen_tourist_guide/customer/favorite_screen/controller/favorite_controller.dart';
 import 'package:yemen_tourist_guide/customer/favorite_screen/view/pages/favorite_screen.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
@@ -107,6 +109,11 @@ class MyApp extends StatelessWidget {
             name: "/all_places",
             page: ()=>AllPlacesScreen(),
             // binding: BindingsBuilder(()=>Get.put(SignupController()))
+        ),
+        GetPage(
+          name: "/add_review",
+          page: ()=>ReviewScreen(),
+          binding: BindingsBuilder(()=>Get.put(ReviewController()))
         ),
       ],
 
