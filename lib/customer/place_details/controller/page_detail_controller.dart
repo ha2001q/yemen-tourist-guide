@@ -21,6 +21,7 @@ class PageDetailController extends GetxController{
 
     _userController.loadUser();
 
+
     // checkIf(int.parse(_userController.userId.value), placeIdd.value);
 
   }

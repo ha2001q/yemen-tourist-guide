@@ -23,13 +23,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: ProfileAppBarWidget(
         editIcon: Images.editProfileIcon,
-        onTapBack: (){
-
-          Navigator.pop(context);
-          // print("onTapback");
-        },
         onTapEdit: (){
-
           // Navigator.push(
           //     context,
           //     MaterialPageRoute(

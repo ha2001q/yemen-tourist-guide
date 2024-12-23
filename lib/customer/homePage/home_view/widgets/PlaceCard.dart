@@ -2,14 +2,17 @@ import 'dart:core';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+
 class PlaceCard extends StatefulWidget {
-  const PlaceCard({super.key,required this.title,required this.location,required this.rating,required this.reviews,required this.imagePath, required this.onTap});
+  PlaceCard({super.key,required this.title,required this.location,required this.rating,required this.reviews,required this.imagePath, required this.onTap, required this.heartFavorite});
   final String title;
   final String location;
   final double rating;
   final int reviews;
   final String imagePath;
   final VoidCallback onTap;
+  final VoidCallback heartFavorite;
+
 
   @override
   State<PlaceCard> createState() => _PlaceCardState();
@@ -39,6 +42,7 @@ class _PlaceCardState extends State<PlaceCard> {
         ),
         child: Stack(
           children: [
+
             Container(
               height: double.infinity,
               width: double.infinity,
@@ -50,12 +54,33 @@ class _PlaceCardState extends State<PlaceCard> {
                 ),
               ),
             ),
+            // heart favorite
+            Positioned(
+              top: 7,
+              right: 7,
+              child: InkWell(
+                onTap:widget.heartFavorite,
+
+                child: Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child:  Icon(
+                    Icons.favorite,
+                    color:Colors.grey,
+                      // pageDetailController.isRed.value?const Color(0xFFE17055):
+                  ),
+                ),
+              ),
+            ),
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(7),
                 child: Container(
                   decoration: BoxDecoration(
 
