@@ -38,6 +38,7 @@ class SignupController extends GetxController {
       // Success! Return true
       successMessage.value = 'Account created successfully';
       return true;
+
     } catch (e) {
       // Error during the Firestore operation
       print("Error signing up: $e");
