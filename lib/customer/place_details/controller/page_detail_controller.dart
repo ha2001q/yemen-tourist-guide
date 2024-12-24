@@ -27,7 +27,7 @@ class PageDetailController extends GetxController{
   }
 
 
-  void addFavorite(int placeId, int userId) async{
+  void addFavorite(int placeId, String userId) async{
     var add = await _pageDetailRepo.createFavorite(userId, placeId);
 
     if(add == 'done'){
@@ -43,6 +43,9 @@ class PageDetailController extends GetxController{
 
   void checkIf(int userId,int placeId)async{
     placeIdd.value = placeId;
-   isRed.value = await _pageDetailRepo.checkFavorite(userId, placeId);
+    // Perform necessary logic, e.g., API call
+    Future.delayed(Duration.zero, () async {
+      isRed.value = await _pageDetailRepo.checkFavorite(userId, placeId); // Safe update outside the build phase
+    });
   }
 }

@@ -38,7 +38,7 @@ class PageDetailRepo{
       return false;
     }
   }
-  Future<String> createFavorite( int userId, int placeId) async {
+  Future<String> createFavorite( String userId, int placeId) async {
     try {
       if(userId == ''){
         Get.snackbar('Error','you have to login first');

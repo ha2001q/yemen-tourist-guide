@@ -28,7 +28,7 @@ class FavoriteController extends GetxController{
       // Listen to the collection snapshot for a specific user_id.
       _favoritesSubscription = firestore
           .collection('User_favorites')
-          .where('user_id', isEqualTo: int.parse(userController.userId.value))
+          .where('user_id', isEqualTo: userController.userId.value)
           .snapshots()
           .listen((querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
@@ -103,7 +103,7 @@ class FavoriteController extends GetxController{
       // Query the collection for documents with the specific user_id.
       firestore
           .collection('User_favorites')
-          .where('user_id', isEqualTo: int.parse(userController.userId.value))
+          .where('user_id', isEqualTo: userController.userId.value)
           .get()
           .then((querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {

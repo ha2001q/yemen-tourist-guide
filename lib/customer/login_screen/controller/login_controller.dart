@@ -32,7 +32,7 @@ class LoginController extends GetxController {
         // For example, storing user ID:
     // .write('userId', user.id);
 
-        userController.setUser(user.data()['user_id'], user.data()['user_name'], user.data()['user_image']);
+        userController.setUser(user.data()['user_id'], user.data()['user_name'], user.data()['user_image']??'');
 
         userController.loadUser();
         print('----------------- ${userController.userId.value}');

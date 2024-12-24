@@ -33,7 +33,6 @@ class _PlaceDetailsState extends State<PlaceDetails> {
     pageDetailController.placeIdd.value = int.parse(arguments['place']['place_id']);
     homeController.listenToServices(int.parse(arguments['place']['place_id']));
     imageList = arguments['place']['place_image'];
-    _userController.setUser('1', 'dheya', 'dmmmmmm');
     _userController.loadUser();
   }
 
@@ -74,16 +73,28 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                     bottom: 20,
                     left: 20,
                     child: InkWell(
-                      onTap:(){
-                        if(_userController.userId.value == ''){
-                          print(_userController.userId.value);
-                          Get.snackbar('Error bro', ' You have to login first');
+                      // onTap:(){
+                      //   if(_userController.userId.value == ''){
+                      //     print(_userController.userId.value);
+                      //     Get.snackbar('Error bro', ' You have to login first');
+                      //     Get.toNamed('login');
+                      //     return;
+                      //   }
+                      //   pageDetailController.placeIdd.value = int.parse(arguments['place']['place_id']);
+                      //   pageDetailController.addFavorite(int.parse(arguments['place']['place_id']), int.parse(_userController.userId.value));
+                      //   },
+                      onTap: () {
+                        if (_userController.userId.value == '') {
+                          Get.snackbar('Error', 'You have to login first');
                           Get.toNamed('login');
-                          return;
+                        } else {
+                          pageDetailController.addFavorite(
+                            int.parse(arguments['place']['place_id']),
+                            _userController.userId.value,
+                          );
                         }
-                        pageDetailController.placeIdd.value = int.parse(arguments['place']['place_id']);
-                        pageDetailController.addFavorite(int.parse(arguments['place']['place_id']), int.parse(_userController.userId.value));
-                        },
+                      },
+
                       child: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -222,6 +233,13 @@ class _PlaceDetailsState extends State<PlaceDetails> {
         padding: const EdgeInsets.all(20),
         child: ElevatedButton(
           onPressed: () {
+
+            Get.toNamed('map_page',
+                arguments: {
+              'lat': arguments['place']['Place_latitude'],
+                  'lon':arguments['place']['Place_longitude']
+
+                });
             // هنا يمكنك إضافة كود فتح الخريطة أو عرض المسار
             // Navigator.pushReplacement(
             //   context,

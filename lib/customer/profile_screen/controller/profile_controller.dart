@@ -95,6 +95,7 @@ class ProfileController extends GetxController {
     print(downloadUrl.toString());
     imageUrl.value=downloadUrl;
     await updateUserImagePath(imageUrl.value);
+    userController.userImage.value = imageUrl.value;
     return downloadUrl;
   }
 

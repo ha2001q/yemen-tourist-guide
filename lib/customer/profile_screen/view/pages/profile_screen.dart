@@ -57,7 +57,7 @@ class ProfileScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                             image: DecorationImage(
-                              image: CachedNetworkImageProvider(profileController.userData['user_image']),
+                              image: CachedNetworkImageProvider(profileController.userData['user_image']??'a'),
                               fit: BoxFit.cover
                             )
                           ),

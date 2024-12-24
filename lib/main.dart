@@ -11,6 +11,7 @@ import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller
 import 'package:yemen_tourist_guide/customer/homePage/home_view/pages/all_places.dart';
 import 'package:yemen_tourist_guide/customer/login_screen/controller/login_controller.dart';
 import 'package:yemen_tourist_guide/customer/login_screen/view/login_screen.dart';
+import 'package:yemen_tourist_guide/customer/map/view/pages/map_page.dart';
 import 'package:yemen_tourist_guide/customer/place_details/view/place_details.dart';
 import 'package:yemen_tourist_guide/customer/profile_screen/controller/profile_controller.dart';
 import 'package:yemen_tourist_guide/customer/profile_screen/view/pages/profile_screen.dart';
@@ -107,6 +108,11 @@ class MyApp extends StatelessWidget {
             name: "/all_places",
             page: ()=>AllPlacesScreen(),
             // binding: BindingsBuilder(()=>Get.put(SignupController()))
+        ),
+        GetPage(
+          name: "/map_page",
+          page: ()=>MapWithLineScreen(),
+          // binding: BindingsBuilder(()=>Get.put(SignupController()))
         ),
       ],
 
