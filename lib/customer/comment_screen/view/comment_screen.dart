@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yemen_tourist_guide/core/utils/images.dart';
 import 'package:yemen_tourist_guide/core/utils/styles.dart';
 import 'package:yemen_tourist_guide/customer/comment_screen/controller/comment_controller.dart';
 
 import '../../homePage/home_view/widgets/ServicesCard.dart';
-class CommentScreen extends StatefulWidget {
-  const CommentScreen({super.key});
+class CommentScreen extends StatelessWidget {
+   CommentScreen({super.key});
   
 
-  @override
-  State<CommentScreen> createState() => _CommentScreenState();
-}
-
-class _CommentScreenState extends State<CommentScreen> {
   CommentController commentController=Get.put(CommentController());
-
 
   @override
   Widget build(BuildContext context) {
