@@ -44,6 +44,8 @@ class ReviewController extends GetxController{
         'rate': rate,
         'message': message,
         'timestamp': FieldValue.serverTimestamp(), // Server-side time
+        'user_image': userController.userImage.value??'',
+        'user_name': userController.userName.value
       };
 
       // Add the data to Firestore
@@ -125,5 +127,13 @@ class ReviewController extends GetxController{
   }
 
 
+  @override
+  void onInit() {
+    super.onInit();
+    userController.setUser('1', 'dheya', 'https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg');
+
+    userController.loadUser();
+
+  }
 
 }

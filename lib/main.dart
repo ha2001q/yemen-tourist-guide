@@ -7,6 +7,7 @@ import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/core/locale/my_locale.dart';
 import 'package:yemen_tourist_guide/customer/add_review/controller/review_controller.dart';
 import 'package:yemen_tourist_guide/customer/add_review/view/review_screen.dart';
+import 'package:yemen_tourist_guide/customer/add_review/view/test.dart';
 import 'package:yemen_tourist_guide/customer/comment_screen/controller/comment_controller.dart';
 import 'package:yemen_tourist_guide/customer/comment_screen/view/comment_screen.dart';
 import 'package:yemen_tourist_guide/customer/favorite_screen/controller/favorite_controller.dart';
@@ -44,8 +45,8 @@ Future<void> main() async {
 
   UserController userController = Get.put(UserController(), permanent: true);
 
-  // userController.setUser('1', 'dheya', 'dmmmmmm');
-  userController.deleteUser();
+  userController.setUser('1', 'dheya', 'https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg');
+  // userController.deleteUser();
   userController.loadUser();
   runApp(const MyApp());
 }
@@ -67,7 +68,7 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/root",
+      initialRoute: "/test",
 
       getPages: [
         GetPage(
@@ -134,6 +135,11 @@ class MyApp extends StatelessWidget {
             name: "/Setting",
             page: ()=>SettingScreen(),
             // binding: BindingsBuilder(()=>Get.put(CommentController()))
+        ),
+        GetPage(
+          name: "/test",
+          page: ()=>Test(),
+          // binding: BindingsBuilder(()=>Get.put(CommentController()))
         ),
       ],
 
