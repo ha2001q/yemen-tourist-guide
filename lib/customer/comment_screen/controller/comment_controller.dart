@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:yemen_tourist_guide/customer/comment_screen/view/comment_screen.dart';
+
 
 class CommentController extends GetxController{
 
@@ -9,29 +9,32 @@ class CommentController extends GetxController{
   var placeData = <String, dynamic>{}.obs;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  
 
 
   // Method to fetch a place by its place_id
-  Future<Map<String, dynamic>?> fetchPlaceById(placeId) async {
+  Stream<Map<String, dynamic>?> getPlaceByPlaceId(String placeId) {
     try {
-      // Query the Places collection for the specific place_id
-      final querySnapshot = await _firestore
+      // Return a stream of snapshots
+      return FirebaseFirestore.instance
           .collection('Places')
           .where('place_id', isEqualTo: placeId)
-          .get();
-
-      if (querySnapshot.docs.isNotEmpty) {
-        // Return the first matching document's data
-        placeData.value = querySnapshot.docs.first.data();
-        return querySnapshot.docs.first.data();
-      } else {
-        print("No place found with the given place_id: $placeId");
-        return null;
-      }
+          .limit(1) // Limit to one document for efficiency
+          .snapshots()
+          .map((querySnapshot) {
+        // If there are documents in the snapshot, return the first document
+        if (querySnapshot.docs.isNotEmpty) {
+          final doc = querySnapshot.docs.first;
+          return {"id": doc.id, ...doc.data() as Map<String, dynamic>};
+        } else {
+          // If no document is found, return null
+          return null;
+        }
+      });
     } catch (e) {
-      print("Error fetching place: $e");
-      return null;
+      // Log and return a stream with null in case of an error
+      print("Error fetching place by placeId: $e");
+      return Stream.value(null); // Emit null if there's an error
     }
   }
 
@@ -58,7 +61,23 @@ class CommentController extends GetxController{
     }
   }
 
-
+ @override
+  void onInit() {
+    super.onInit();
+    
+    getPlaceByPlaceId(argument['place_id']).listen((event) { });
+    try {
+      // Subscribe to the stream from the repository method
+      getPlaceByPlaceId(argument['place_id']).listen((data) {
+        // Update the reactive variable with the new data
+        placeData.value = data!;
+      }, onError: (e) {
+        print("Error fetching place: $e");
+      });
+    } catch (e) {
+      print("Error fetching place: $e");
+    }
+  }
 
 
 }

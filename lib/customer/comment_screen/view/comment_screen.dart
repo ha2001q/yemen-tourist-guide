@@ -34,44 +34,44 @@ class _CommentScreenState extends State<CommentScreen> {
         Column(
           children: [
             ServicesCard(
-              title: commentController.placeData['place_name'],
-              location: commentController.placeData['place_name'],
-              imageBath: commentController.placeData['place_name'],
-              reviews: int.parse(commentController.placeData['place_name']),
-              rating: commentController.placeData['place_name'],
-              type: commentController.placeData['place_name'],
+              title: commentController.placeData.value['place_name'],
+              location: commentController.placeData.value['place_location'],
+              imageBath: commentController.placeData.value['place_image'][0],
+              reviews: int.parse(commentController.placeData.value['review_num']),
+              rating: double.parse(commentController.placeData.value['rate_avg']),
+              type: commentController.placeData.value['type_id'].toString(),
               onTap: (){},
             ),
-            Container(
-              height: 1,
-              color: Colors.grey,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text("مراجعات المستخدم",style: fontLarge,),
-                InkWell(
-                  onTap: (){
-                    // Get.toNamed('/add_review',arguments: {'place_id': arguments['place_id']});
-                  },
-                    child: Image.asset(Images.addComment)
-                )
-              ],
-            ),
-            SingleChildScrollView(
-            child:ListView.builder(
-                reverse: true,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  // final message = messages[index];
-                  return ListTile(
-                    // title: Text(message.user),
-                    // subtitle: Text(message.message),
-                    // trailing: Text(message.timestamp.toString()),
-                  );
-                },
-              )
-            )
+            // Container(
+            //   height: 1,
+            //   color: Colors.grey,
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     const Text("مراجعات المستخدم",style: fontLarge,),
+            //     InkWell(
+            //       onTap: (){
+            //         // Get.toNamed('/add_review',arguments: {'place_id': arguments['place_id']});
+            //       },
+            //         child: Image.asset(Images.addComment)
+            //     )
+            //   ],
+            // ),
+            // SingleChildScrollView(
+            // child:ListView.builder(
+            //     reverse: true,
+            //     itemCount: 5,
+            //     itemBuilder: (context, index) {
+            //       // final message = messages[index];
+            //       return ListTile(
+            //         // title: Text(message.user),
+            //         // subtitle: Text(message.message),
+            //         // trailing: Text(message.timestamp.toString()),
+            //       );
+            //     },
+            //   )
+            // )
         ]
         );
 
