@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -33,14 +33,14 @@ class FavoriteScreen extends StatelessWidget {
           Navigator.pop(context);
         },),
       body:
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
+            Obx(
+              (){ return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
 
-                Obx(() {
-                  return Expanded(
+                  Expanded(
                     child: Column(
                       children: [
                         Padding(
@@ -55,34 +55,35 @@ class FavoriteScreen extends StatelessWidget {
                           spacing: 30, // Space between items horizontally
                           runSpacing: 10, // Space between items vertically
                           children: favoriteController.placesData.map((placeData) {
-                          return Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child:
-                            PlaceCard(title: placeData['place_name'].toString(),
-                              location: placeData['place_location'].toString(),
-                            imagePath: placeData['place_image'][0],
-                            reviews: int.parse(placeData['review_num']),
-                            rating: double.parse(placeData['rate_avg']),
-                              onTap: () {
-                                Get.toNamed(
-                                  '/placeDetailes',
-                                  arguments: {
-                                    'place': placeData
-                                  },
-                                );
-                              }, heartFavorite: () {  },
-                            ),
-                          );
-                        }).toList(),
-                                        ),
+                            return Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child:
+                              PlaceCard(title: placeData['place_name'].toString(),
+                                location: placeData['place_location'].toString(),
+                                imagePath: placeData['place_image'][0],
+                                reviews: int.parse(placeData['review_num']),
+                                rating: double.parse(placeData['rate_avg']),
+                                onTap: () {
+                                  Get.toNamed(
+                                    '/placeDetailes',
+                                    arguments: {
+                                      'place': placeData
+                                    },
+                                  );
+                                }, heartFavorite: () {  },
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ],
                     ),
-                  );
-                })
+                  )
 
 
 
-              ],
+                ],
+              );
+              }
             ),
 
 

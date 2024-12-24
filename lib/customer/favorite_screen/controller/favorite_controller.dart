@@ -109,12 +109,26 @@ class FavoriteController extends GetxController{
         if (querySnapshot.docs.isNotEmpty) {
           // Delete each document returned by the query.
           for (var doc in querySnapshot.docs) {
-            firestore.collection('User_favorites').doc(doc.id).delete().then((_) async {
+            FirebaseFirestore.instance
+                .collection('User_favorites')
+                .doc(doc.id)
+                .delete()
+                .then((_) async {
               print('Deleted favorite with ID: ${doc.id}');
-            }).catchError((error) {
+
+              // Safely remove the corresponding data from `placesData`
+              int indexToRemove = placesData.value.indexWhere((place) => place['id'] == doc.id);
+              if (indexToRemove != -1) {
+                placesData.value.removeAt(indexToRemove);
+                placesData.refresh(); // Notify listeners about the change
+              }
+            })
+                .catchError((error) {
               print('Error deleting favorite with ID ${doc.id}: $error');
             });
           }
+
+
 
           // Log success after all deletions.
           print('Deleted all favorites for userId ${userController.userId.value}.');

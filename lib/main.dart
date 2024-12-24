@@ -45,7 +45,8 @@ Future<void> main() async {
   UserController userController = Get.put(UserController(), permanent: true);
 
   // userController.setUser('1', 'dheya', 'dmmmmmm');
-  // userController.deleteUser();
+  userController.deleteUser();
+  userController.loadUser();
   runApp(const MyApp());
 }
 
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/Setting",
+      initialRoute: "/root",
 
       getPages: [
         GetPage(
