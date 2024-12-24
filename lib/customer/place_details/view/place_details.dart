@@ -231,12 +231,25 @@ class _PlaceDetailsState extends State<PlaceDetails> {
         child: ElevatedButton(
           onPressed: () {
 
-            Get.toNamed('map_page',
-                arguments: {
-              'lat': arguments['place']['Place_latitude'],
-                  'lon':arguments['place']['Place_longitude']
-
+            if (arguments != null && arguments['place'] != null) {
+              var place = arguments['place'];
+              if (place['Place_latitude'] != null && place['Place_longitude'] != null) {
+                Get.toNamed('map_page', arguments: {
+                  'lat': place['Place_latitude'],
+                  'lon': place['Place_longitude']
                 });
+              } else {
+                // Handle the case where latitude or longitude is null
+                print('Error: Latitude or Longitude is missing.');
+                Get.snackbar('Error', 'Latitude or Longitude is missing.');
+              }
+            } else {
+              // Handle the case where arguments or place is null
+              print('Error: Arguments or place data is missing.');
+
+              Get.snackbar('Error', 'Arguments or place data is missing.');
+            }
+
             // هنا يمكنك إضافة كود فتح الخريطة أو عرض المسار
             // Navigator.pushReplacement(
             //   context,

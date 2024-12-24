@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_fonts/google_fonts.dart';
 
 class MapWithLineScreen extends StatefulWidget {
   @override
@@ -19,6 +20,10 @@ class _MapWithLineScreenState extends State<MapWithLineScreen> {
   Set<Polyline> _polylines = {};
   var arguments = Get.arguments;
 
+  String _duration = '';
+  String _distance = '';
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -27,6 +32,10 @@ class _MapWithLineScreenState extends State<MapWithLineScreen> {
   }
 
   Future<void> _setMarkersAndLine() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       // Get the current location
       Position position = await Geolocator.getCurrentPosition(
@@ -42,11 +51,13 @@ class _MapWithLineScreenState extends State<MapWithLineScreen> {
           markerId: const MarkerId("startMarker"),
           position: currentLocation,
           infoWindow: const InfoWindow(title: "Start Location"),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen), // Custom marker color
         );
         _endMarker = Marker(
           markerId: const MarkerId("endMarker"),
           position: _destinationPosition,
           infoWindow: const InfoWindow(title: "Destination"),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed), // Custom marker color
         );
       });
 
@@ -79,9 +90,14 @@ class _MapWithLineScreenState extends State<MapWithLineScreen> {
       );
     } catch (e) {
       print("Error: $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
-// Function to fetch the route from Google Maps Directions API
+
+  // Function to fetch the route from Google Maps Directions API
   Future<void> _getRouteFromAPI(LatLng origin, LatLng destination) async {
     final String url =
         "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=AIzaSyBadvdbDUOBWaod8XbuA2AB5Ot4cdoiKfY";
@@ -94,21 +110,31 @@ class _MapWithLineScreenState extends State<MapWithLineScreen> {
 
         // Check if the response contains routes and legs
         if (data['routes'].isNotEmpty) {
-          var route = data['routes'][0]['legs'][0]['steps'];
-          List<LatLng> polylinePoints = [];
+          var route = data['routes'][0]['legs'][0];
 
-          for (var step in route) {
-            var lat = step['end_location']['lat'];
-            var lng = step['end_location']['lng'];
-            polylinePoints.add(LatLng(lat, lng));
-          }
+          // Extract duration and distance
+          var duration = route['duration']['text'];
+          var distance = route['distance']['text'];
 
           setState(() {
+            _duration = duration;
+            _distance = distance;
+
+            var steps = route['steps'];
+            List<LatLng> polylinePoints = [];
+
+            for (var step in steps) {
+              var lat = step['end_location']['lat'];
+              var lng = step['end_location']['lng'];
+              polylinePoints.add(LatLng(lat, lng));
+            }
+
+            // Add polyline with smooth line style
             _polylines.add(Polyline(
               polylineId: const PolylineId("route"),
               points: polylinePoints,
-              color: Colors.blue,
-              width: 5,
+              color: Colors.deepOrange, // Deep orange color for the route
+              width: 6,
               geodesic: true,  // Ensures that the polyline follows the curvature of the Earth.
             ));
           });
@@ -123,64 +149,101 @@ class _MapWithLineScreenState extends State<MapWithLineScreen> {
     }
   }
 
-  // Function to fetch the route from Google Maps Directions API
-  // Future<void> _getRouteFromAP1I(LatLng origin, LatLng destination) async {
-  //   final String url =
-  //       "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=AIzaSyBadvdbDUOBWaod8XbuA2AB5Ot4cdoiKfY";
-  //
-  //   try {
-  //     final response = await http.get(Uri.parse(url));
-  //
-  //     if (response.statusCode == 200) {
-  //       var data = json.decode(response.body);
-  //       var route = data['routes'][0]['legs'][0]['steps'];
-  //       List<LatLng> polylinePoints = [];
-  //
-  //       for (var step in route) {
-  //         var lat = step['end_location']['lat'];
-  //         var lng = step['end_location']['lng'];
-  //         polylinePoints.add(LatLng(lat, lng));
-  //       }
-  //
-  //       setState(() {
-  //         _polylines.add(Polyline(
-  //           polylineId: const PolylineId("route"),
-  //           points: polylinePoints,
-  //           color: Colors.blue,
-  //           width: 5,
-  //         ));
-  //       });
-  //     } else {
-  //       throw Exception('Failed to load directions');
-  //     }
-  //   } catch (e) {
-  //     print("Error fetching route: $e");
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       appBar: AppBar(
-        title: const Text("Map with Line"),
+        title: const Text("Route Map"),
+        backgroundColor: Colors.deepOrange,
+        elevation: 5.0,
       ),
-      body: _initialPosition.latitude != 0.0
-          ? GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: _initialPosition,
-          zoom: 12.0,
-        ),
-        onMapCreated: (controller) => _mapController = controller,
-        markers: {
-          if (_startMarker != null) _startMarker!,
-          if (_endMarker != null) _endMarker!,
-        },
-        polylines: _polylines,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
-      )
-          : const Center(
-        child: CircularProgressIndicator(),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
+        children: [
+          // Google Map as the background
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: _initialPosition,
+              zoom: 12.0,
+              tilt: 45.0, // Tilt for 3D view
+            ),
+            onMapCreated: (controller) {
+              _mapController = controller;
+            },
+            markers: {
+              if (_startMarker != null) _startMarker!,
+              if (_endMarker != null) _endMarker!,
+            },
+            polylines: _polylines,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            compassEnabled: true, // Enable compass to rotate the map
+            rotateGesturesEnabled: true, // Allow rotation gesture
+            tiltGesturesEnabled: true, // Allow tilt gestures
+            mapType: MapType.hybrid, // Hybrid mode for satellite + terrain view
+            onCameraMove: (position) {
+              // This can be used for any additional logic on camera movement
+            },
+          ),
+
+
+          // Overlay: Information Section
+          Positioned(
+            bottom: 100.0,
+            left: 16.0,
+            right: 16.0,
+            child: Card(
+              elevation: 8.0,
+              color: Colors.white.withOpacity(0.5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Duration: $_duration',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.deepOrange,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Distance: $_distance',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.deepOrange,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Floating Action Button to Refresh Route
+          Positioned(
+            top: 10.0,
+            left: 20.0,
+            child: FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  _setMarkersAndLine();
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Route has been refreshed')),
+                );
+              },
+              backgroundColor: Colors.deepOrange,
+              child: const Icon(Icons.refresh),
+            ),
+          ),
+        ],
       ),
     );
   }

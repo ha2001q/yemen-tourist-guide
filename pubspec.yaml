@@ -68,6 +68,7 @@ dependencies:
   geolocator: ^8.2.1
   google_maps_flutter: ^2.6.1
   flutter_polyline_points: ^2.1.0
+  google_fonts: ^6.2.0
 
 
 

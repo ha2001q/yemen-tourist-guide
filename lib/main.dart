@@ -39,7 +39,7 @@ Future<void> main() async {
 
   UserController userController = Get.put(UserController(), permanent: true);
 
-  userController.setUser('1', 'dheya', 'dmmmmmm');
+  // userController.setUser('1', 'dheya', 'dmmmmmm');
   // userController.deleteUser();
   runApp(const MyApp());
 }
