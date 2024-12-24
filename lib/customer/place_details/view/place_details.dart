@@ -168,11 +168,8 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                       const SizedBox(width: 20),
                       TextButton(
                         onPressed: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const Star() )
-                          // );
+                          Get.toNamed('/comments',arguments: {'place_id': arguments['place_id']},);
+
                         },
                         child: const Text(
                           'قراءة التعليقات',

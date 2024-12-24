@@ -5,6 +5,10 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/core/locale/my_locale.dart';
+import 'package:yemen_tourist_guide/customer/add_review/controller/review_controller.dart';
+import 'package:yemen_tourist_guide/customer/add_review/view/review_screen.dart';
+import 'package:yemen_tourist_guide/customer/comment_screen/controller/comment_controller.dart';
+import 'package:yemen_tourist_guide/customer/comment_screen/view/comment_screen.dart';
 import 'package:yemen_tourist_guide/customer/favorite_screen/controller/favorite_controller.dart';
 import 'package:yemen_tourist_guide/customer/favorite_screen/view/pages/favorite_screen.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
@@ -16,6 +20,7 @@ import 'package:yemen_tourist_guide/customer/place_details/view/place_details.da
 import 'package:yemen_tourist_guide/customer/profile_screen/controller/profile_controller.dart';
 import 'package:yemen_tourist_guide/customer/profile_screen/view/pages/profile_screen.dart';
 import 'package:yemen_tourist_guide/customer/root_screen/root_screen.dart';
+import 'package:yemen_tourist_guide/customer/setting_screen/view/setting_screen.dart';
 import 'package:yemen_tourist_guide/customer/signup_screen/controller/signup_controller.dart';
 import 'package:yemen_tourist_guide/customer/signup_screen/view/signup_screen.dart';
 
@@ -61,7 +66,7 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/root",
+      initialRoute: "/Setting",
 
       getPages: [
         GetPage(
@@ -113,6 +118,21 @@ class MyApp extends StatelessWidget {
           name: "/map_page",
           page: ()=>MapWithLineScreen(),
           // binding: BindingsBuilder(()=>Get.put(SignupController()))
+        ),
+        GetPage(
+          name: "/add_review",
+          page: ()=>ReviewScreen(),
+          binding: BindingsBuilder(()=>Get.put(ReviewController()))
+        ),
+        GetPage(
+            name: "/comments",
+            page: ()=>CommentScreen(),
+            binding: BindingsBuilder(()=>Get.put(CommentController()))
+        ),
+        GetPage(
+            name: "/Setting",
+            page: ()=>SettingScreen(),
+            // binding: BindingsBuilder(()=>Get.put(CommentController()))
         ),
       ],
 

@@ -35,8 +35,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return  Scaffold(
       appBar: AppBar(
         title: const Text("Add Comment"),
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios_new_outlined),
           onPressed: () => Navigator.pop(context),
         ),
       ),
