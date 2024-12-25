@@ -28,14 +28,15 @@ class FavoriteController extends GetxController{
     try {
       final storage = GetStorage();
       var userI = storage.read('userId') ?? '';
-      if(userI == ''){
-        return ;
-      }
+      print('*************---------${userI}');
+      // if(userI == ''){
+      //   return ;
+      // }
       userController.loadUser();
         // Listen to the collection snapshot for a specific user_id.
         _favoritesSubscription = firestore
             .collection('User_favorites')
-            .where('user_id', isEqualTo: userI.toString())
+            .where('user_id', isEqualTo: '72a059e8-c068-4e04-b9b9-b0d9a9814238')
             .snapshots()
             .listen((querySnapshot) {
           if (querySnapshot.docs.isNotEmpty) {
@@ -72,6 +73,7 @@ class FavoriteController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    userController.loadUser();
     listenToUserFavorites();
 
   }
