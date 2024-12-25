@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 
 import '../favorite_screen/view/pages/favorite_screen.dart';
 import '../homePage/home_view/pages/home_screen.dart';
@@ -16,6 +18,7 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> {
 
+  UserController userController =Get.put(UserController());
   int bottomNavIndex = 0;
 
   List<Widget> pages =  [

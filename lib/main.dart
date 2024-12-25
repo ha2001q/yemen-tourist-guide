@@ -45,11 +45,11 @@ Future<void> main() async {
       statusBarIconBrightness: Brightness.light,
     ),);
 
-  UserController userController = Get.put(UserController(), permanent: true);
-
-  // userController.setUser('1', 'dheya', 'https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg');
-  // userController.deleteUser();
-  userController.loadUser();
+  // UserController userController = Get.put(UserController(), permanent: true);
+  //
+  // // userController.setUser('1', 'dheya', 'https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg');
+  // // userController.deleteUser();
+  // userController.loadUser();
   runApp(const MyApp());
 }
 

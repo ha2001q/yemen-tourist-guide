@@ -26,7 +26,7 @@ class FavoriteController extends GetxController{
   void listenToUserFavorites() {
     try {
 
-      if(userController.userId.value!=''){
+      userController.loadUser();
         // Listen to the collection snapshot for a specific user_id.
         _favoritesSubscription = firestore
             .collection('User_favorites')
@@ -57,9 +57,6 @@ class FavoriteController extends GetxController{
             print('No favorites found for userId ${userController.userId.value}.');
           }
         });
-      }else{
-        return;
-      }
 
     } catch (e) {
       // Handle errors.
