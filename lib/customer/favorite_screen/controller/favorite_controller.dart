@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 
@@ -25,12 +26,16 @@ class FavoriteController extends GetxController{
   // Method to listen to user favorites for a specific user_id.
   void listenToUserFavorites() {
     try {
-
+      final storage = GetStorage();
+      var userI = storage.read('userId') ?? '';
+      if(userI == ''){
+        return ;
+      }
       userController.loadUser();
         // Listen to the collection snapshot for a specific user_id.
         _favoritesSubscription = firestore
             .collection('User_favorites')
-            .where('user_id', isEqualTo: userController.userId.value)
+            .where('user_id', isEqualTo: userI.toString())
             .snapshots()
             .listen((querySnapshot) {
           if (querySnapshot.docs.isNotEmpty) {

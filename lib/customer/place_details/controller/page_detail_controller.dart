@@ -22,6 +22,7 @@ class PageDetailController extends GetxController {
     super.onInit();
 
     // Extract placeId from arguments
+    _userController.loadUser();
     placeIdd.value = arguments['place']['place_id'];
 
     print("*******************************${placeIdd.value}");
@@ -29,7 +30,7 @@ class PageDetailController extends GetxController {
     homeController.listenToServices(int.parse(placeIdd.value));
 
     // Load user data
-    _userController.loadUser();
+
     userId = _userController.userId.value==""?'':_userController.userId.value;
 
     // Fetch place details and check favorite status
