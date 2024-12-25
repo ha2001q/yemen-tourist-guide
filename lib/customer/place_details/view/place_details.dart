@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/customer/add_review/view/review_screen.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
@@ -23,7 +24,7 @@ class PlaceDetails extends StatefulWidget {
 class _PlaceDetailsState extends State<PlaceDetails> {
   // HomeController homeController = Get.find();
   PageDetailController pageDetailController = Get.put(PageDetailController());
-
+  UserController userController = Get.put(UserController());
 
 
   @override
@@ -45,7 +46,7 @@ class _PlaceDetailsState extends State<PlaceDetails> {
               Stack(
                 children: [
                   // Replace this with your image slider widget
-                  ImageSliderWidget(images: placeData['place_image']),
+                  ImageSliderWidget(images: placeData['place_image']??['']),
                   Positioned(
                     top: 50,
                     left: 20,
@@ -66,14 +67,13 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                     left: 20,
                     child: InkWell(
                       onTap: () {
-                        if (pageDetailController.userId == null ||
-                            pageDetailController.userId.isEmpty) {
-                          Get.snackbar('Error', 'You have to login first');
-                          Get.toNamed('login');
+                        if (userController.userId.value == '' ) {
+                          Get.snackbar('Errorr', 'You have to login first');
+                          Get.toNamed('/login');
                         } else {
                           pageDetailController.addFavorite(
                             pageDetailController.placeIdd.value,
-                            pageDetailController.userId,
+                            userController.userId.value,
                           );
                         }
                       },
@@ -142,10 +142,17 @@ class _PlaceDetailsState extends State<PlaceDetails> {
                         const Icon(Icons.star, color: Colors.amber, size: 20),
                         InkWell(
                             onTap: (){
+
+
+                              print(userController.userId.value);
+                              if(userController.userId.value == ""){
+                                Get.toNamed('login');
+                                return;
+                              }
                               Get.toNamed('/add_review',arguments: {'place_id':placeData['place_id']});
 
                             },
-                            child: Text(placeData['rate_avg'])),
+                            child: Text(placeData['rate_avg']??"")),
                         const SizedBox(width: 20),
                         TextButton(
                           onPressed: () {

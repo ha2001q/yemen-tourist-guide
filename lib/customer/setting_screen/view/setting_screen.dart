@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
+import 'package:yemen_tourist_guide/core/utils/styles.dart';
 import 'package:yemen_tourist_guide/customer/setting_screen/view/widget/setting_widget.dart';
 
 import '../../../core/utils/images.dart';
 
 class SettingScreen extends StatelessWidget {
-  const SettingScreen({super.key});
+   SettingScreen({super.key});
+  UserController userController = Get.put(UserController());
 
   get userId => null;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar:AppBarWidget(
-      //   title: 'setting_title',
-      //   onTap: () {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder:
-      //           (context)=>const RootScreen(),));
-      //   },
-      // ),
+      appBar:AppBar(
+        title: Text("Setting",style: fontLargeBold,),
+        centerTitle: true,
+
+      ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -30,7 +28,7 @@ class SettingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 70,
+                height: 20,
               ),
 
               SettingTemplete(
@@ -38,58 +36,20 @@ class SettingScreen extends StatelessWidget {
                 path: Images.profileIcon,
                 flag: true,
                 onTap: () {
-                  // if(checkIfLogIn()) {
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(builder:
-                  //           (context) => const ProfileScreen())
-                  //   );
-                  // } else{
-                  //   showLoginPopup(context);
-                  // }
-                },
+                  Get.toNamed('/profile');
+                  }
               ),
 
               const SizedBox(
                 height: 15,
               ),
 
-              // SettingTemplete(
-              //   hamzah:'add_alarm_notification',
-              //   path: Images.guideLines,
-              //   flag: false,
-              //   onTap: (){
-              //     // Navigator.push(
-              //     //     context,
-              //     //     MaterialPageRoute(builder: (context)=> const AddAlarmScreen())
-              //     // );
-              //   },
-              // ),
 
               const SizedBox(
                 height: 15,
               ),
 
-              // SettingTemplete(
-              //   hamzah:'owner_page',
-              //   path: Images.userPage,
-              //   flag: false,
-              //   onTap: (){
-              //     // if(userType == AppConstants.promoter || userType == AppConstants.agent || userType == AppConstants.admin|| userType == AppConstants.owner){
-              //     //   Navigator.pushReplacement(
-              //     //       context,
-              //     //       MaterialPageRoute(builder: (context)=> const OwnerRootScreen())
-              //     //   );
-              //     }
-              //     // else{
-              //       // Navigator.push(
-              //       //     context,
-              //       //     MaterialPageRoute(builder: (context)=> const ModificationScreen())
-              //       // );
-              //     // }
-              //
-              //   // },
-              // ),
+
 
               const SizedBox(
                 height: 15,
@@ -112,14 +72,8 @@ class SettingScreen extends StatelessWidget {
                 hamzah: 'notification',
                 path: Images.notification,
                 flag: true,
-                onTap: () async {
-                  // final token = await SharedPrefManager.getData(AppConstants.token);
-                  // if(token != null){
-                  //   // Navigator.push(
-                  //   //     context,
-                  //   //     MaterialPageRoute(builder: (context)=> NotificationScreen(token: token))
-                  //   // );
-                  // }
+                onTap: ()  {
+
                 },
               ),
 
@@ -127,17 +81,6 @@ class SettingScreen extends StatelessWidget {
                 height: 15,
               ),
 
-              // SettingTemplete(
-              //   hamzah:'customer_service',
-              //   path: Images.notification,
-              //   flag: false,
-              //   onTap: (){
-              //     // Navigator.push(
-              //     //     context,
-              //     //     MaterialPageRoute(builder: (context)=> const FeedbackScreen())
-              //     // );
-              //   },
-              // ),
 
               const SizedBox(
                 height: 30.0,
@@ -196,7 +139,14 @@ class SettingScreen extends StatelessWidget {
                           child: const Text('Cancel'),
                         ),
                         TextButton(
-                          onPressed: () => Get.back(result: true),
+                          onPressed: (){
+                            if(userController.userId.value == ''){
+                              return;
+                            }else{
+                              userController.deleteUser();
+                              userController.loadUser();
+                            }
+                          },
                           child: const Text('Logout'),
                         ),
                       ],

@@ -28,6 +28,9 @@ class ProfileController extends GetxController {
   void listenToUser() {
     try {
       // Listen to the collection snapshot for a specific user_id.
+      if(userController.userId.value == '') {
+        return;
+      }
       _userSubscription = firestore
           .collection('Users')
           .where('user_id', isEqualTo: userController.userId.value)
@@ -58,12 +61,6 @@ class ProfileController extends GetxController {
     _userSubscription?.cancel();
   }
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-
-  }
 
 
   PlatformFile? pickImage;

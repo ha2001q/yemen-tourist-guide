@@ -8,9 +8,9 @@ class SplashController extends GetxController{
   void onInit() {
     super.onInit();
     // Start the timer for the splash screen duration
-    Timer(const Duration(seconds: 3),() {
+    Timer(const Duration(seconds: 1),() {
       // Navigate to the next screen after the timer ends
-      Get.offNamed('/home');
+      Get.offNamed('/root');
     });
   }
 }

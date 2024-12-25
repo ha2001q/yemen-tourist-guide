@@ -1,14 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yemen_tourist_guide/core/utils/styles.dart';
 import 'package:yemen_tourist_guide/customer/comment_screen/controller/comment_controller.dart';
+import 'package:yemen_tourist_guide/customer/comment_screen/view/widgets/place_review_widget.dart';
 
+import '../../../core/common_controller/user_data.dart';
+import '../../../core/utils/images.dart';
 import '../../homePage/home_view/widgets/ServicesCard.dart';
 class CommentScreen extends StatelessWidget {
    CommentScreen({super.key});
-  
+
+   UserController userController = Get.put(UserController(), permanent: true);
 
   CommentController commentController=Get.put(CommentController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,49 +30,73 @@ class CommentScreen extends StatelessWidget {
       ),
 
       body: Obx(() {
+
+        final placeData = commentController.placeData.value;
+
+        if (placeData == null) {
+          return Center(child: CircularProgressIndicator()); // Show a loading indicator
+        }
         return
-        Column(
-          children: [
-            ServicesCard(
-              title: commentController.placeData.value['place_name'],
-              location: commentController.placeData.value['place_location'],
-              imageBath: commentController.placeData.value['place_image'][0],
-              reviews: int.parse(commentController.placeData.value['review_num']),
-              rating: double.parse(commentController.placeData.value['rate_avg']),
-              type: commentController.placeData.value['type_id'].toString(),
-              onTap: (){},
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                ServicesCard(
+                  title: placeData['place_name']??" ",
+                  location: placeData['place_location']??"",
+                  imageBath: placeData['place_image'][0]??"https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg",
+                  reviews: int.parse(placeData['review_num']?? ""),
+                  rating: double.parse(placeData['rate_avg']?? ""),
+                  type: placeData['type_id'].toString()??"",
+                  onTap: (){},
+                ),
+                const SizedBox(height: 20,),
+                Container(
+                  height: 1,
+                  color: Colors.grey,
+                ),
+                const SizedBox(height: 20,),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                        onTap: (){
+
+                          print(userController.userId.value);
+                          if(userController.userId.value == ""){
+                            Get.toNamed('login');
+                            return;
+                          }
+                          Get.toNamed('/add_review',arguments: {'place_id':placeData['place_id']});
+
+                        },
+                        child: SvgPicture.asset(Images.addComment)
+                    ),
+                    const Text("مراجعات المستخدم",style: fontLarge,),
+                  ],
+                ),
+                SizedBox(height: 10,),
+                Wrap(
+                  spacing: 8.0, // Horizontal spacing
+                  runSpacing: 8.0, // Vertical spacing
+                  children: commentController.commentData.map((comment) {
+                    return PlaceReviewWidget(
+                      image: comment['user_image']??'https://images.tagesschau.de/image/45f26910-1a13-4397-b18a-685d81b81d9d/AAABjTEBCY4/AAABkZLiamM/16x9-1920/jemen-huthi-kaempfer-102.jpg',
+                      massage: comment['message'].toString(),
+                      name: comment['user_name'].toString()??'',
+                      rate: comment['rate'].toString(),
+                      time: '',
+                    );
+                  }).toList(),
+                )
+
+
+              ]
             ),
-            // Container(
-            //   height: 1,
-            //   color: Colors.grey,
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     const Text("مراجعات المستخدم",style: fontLarge,),
-            //     InkWell(
-            //       onTap: (){
-            //         // Get.toNamed('/add_review',arguments: {'place_id': arguments['place_id']});
-            //       },
-            //         child: Image.asset(Images.addComment)
-            //     )
-            //   ],
-            // ),
-            // SingleChildScrollView(
-            // child:ListView.builder(
-            //     reverse: true,
-            //     itemCount: 5,
-            //     itemBuilder: (context, index) {
-            //       // final message = messages[index];
-            //       return ListTile(
-            //         // title: Text(message.user),
-            //         // subtitle: Text(message.message),
-            //         // trailing: Text(message.timestamp.toString()),
-            //       );
-            //     },
-            //   )
-            // )
-        ]
+          ),
         );
 
       }),

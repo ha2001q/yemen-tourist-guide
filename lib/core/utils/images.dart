@@ -22,7 +22,7 @@ class Images {
   static const String termsOfService ="assets/svg/terms_of_service_icon.svg";
   static const String version ="assets/svg/version_icon.svg";
   static const String notification ="assets/svg/notification_icon.svg";
-  static const String language ="assets/svg/language_icon.svg";
+  static const String language ="assets/svg/language.svg";
   static const String userPage ="assets/svg/user_page_icon.svg";
   static const String guideLines ="assets/svg/guide_lines_icon.svg";
 

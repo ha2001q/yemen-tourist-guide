@@ -3,7 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 class PlaceReviewWidget extends StatelessWidget {
-  const PlaceReviewWidget({super.key});
+  PlaceReviewWidget({super.key, required this.name, required this.image, required this.massage, required this.rate, required this.time});
+  final String name;
+  final String image;
+  final String massage;
+  final String rate;
+  final String time;
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +32,7 @@ class PlaceReviewWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
                 image: DecorationImage(
-                  image: CachedNetworkImageProvider('https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg'),
+                  image: CachedNetworkImageProvider(image),
                   fit: BoxFit.cover
                 )
               ),
@@ -49,18 +57,44 @@ class PlaceReviewWidget extends StatelessWidget {
                     children: [
 
 
-                      Text('dheya'),
+                      Text(name),
+
+                      // rate == 1 ? "⭐" : "⭐ ⭐ ⭐ ⭐ ⭐";
+                      // rate == 1 ? "⭐" : "⭐ ⭐ ⭐ ⭐ ⭐";
 
 
-                      Text('⭐ ⭐ ⭐ ⭐ ⭐')
+
+
+                      Text(
+                        rate == '1.0'
+                            ? '⭐'
+                            : rate == '1.5'
+                            ? '⭐½'
+                            : rate == '2.0'
+                            ? '⭐⭐'
+                            : rate == '2.5'
+                            ? '⭐⭐½'
+                            : rate == '3.0'
+                            ? '⭐⭐⭐'
+                            : rate == '3.5'
+                            ? '⭐⭐⭐½'
+                            : rate == '4.0'
+                            ? '⭐⭐⭐⭐'
+                            : rate == '4.5'
+                            ? '⭐⭐⭐⭐½'
+                            : rate == '5.0'
+                            ? '⭐⭐⭐⭐⭐'
+                            : '',
+                      ),
+
                     ],
                   ),
 
                   /// message
-                  Text('dheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheyadheya'),
+                  Text(massage),
 
                   /// time
-                  Text('10:4PM')
+                  Text(time)
                 ],
               ),
             )

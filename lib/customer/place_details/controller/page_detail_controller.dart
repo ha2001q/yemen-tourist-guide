@@ -12,7 +12,7 @@ class PageDetailController extends GetxController {
   RxBool isRed = false.obs;
   RxString placeIdd = ''.obs;
   var arguments = Get.arguments;
-  final Rx<Map<String, dynamic>?> placeData = Rx<Map<String, dynamic>?>(null);
+  final Rx<Map<String, dynamic>?> placeData = Rx<Map<String, dynamic>?>({});
 
 
   var userId;
@@ -30,11 +30,14 @@ class PageDetailController extends GetxController {
 
     // Load user data
     _userController.loadUser();
-    userId = _userController.userId.value;
+    userId = _userController.userId.value==""?'':_userController.userId.value;
 
     // Fetch place details and check favorite status
     getPlace(placeIdd.value);
     print(placeData);
+    if(userId==''){
+      return;
+    }
     await checkIf(userId, placeIdd.value);
   }
 

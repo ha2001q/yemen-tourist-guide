@@ -24,6 +24,8 @@ import 'package:yemen_tourist_guide/customer/root_screen/root_screen.dart';
 import 'package:yemen_tourist_guide/customer/setting_screen/view/setting_screen.dart';
 import 'package:yemen_tourist_guide/customer/signup_screen/controller/signup_controller.dart';
 import 'package:yemen_tourist_guide/customer/signup_screen/view/signup_screen.dart';
+import 'package:yemen_tourist_guide/customer/splash_screen/controller/Splash_controller.dart';
+import 'package:yemen_tourist_guide/customer/splash_screen/view/splash_screen.dart';
 
 import 'customer/homePage/home_view/pages/home_screen.dart';
 
@@ -45,7 +47,7 @@ Future<void> main() async {
 
   UserController userController = Get.put(UserController(), permanent: true);
 
-  userController.setUser('1', 'dheya', 'https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg');
+  // userController.setUser('1', 'dheya', 'https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg');
   // userController.deleteUser();
   userController.loadUser();
   runApp(const MyApp());
@@ -68,13 +70,13 @@ class MyApp extends StatelessWidget {
       ),
       locale: Get.deviceLocale,
       translations: MyLocal(),
-      initialRoute: "/test",
+      initialRoute: "/first",
 
       getPages: [
         GetPage(
             name: "/first",
-            page: ()=>HomePageScreen(),
-            binding: BindingsBuilder(()=>Get.put(HomeController()))
+            page: ()=>SplashScreen(),
+            binding: BindingsBuilder(()=>Get.put(SplashController()))
         ),
         GetPage(
             name: "/home-page",
@@ -136,11 +138,11 @@ class MyApp extends StatelessWidget {
             page: ()=>SettingScreen(),
             // binding: BindingsBuilder(()=>Get.put(CommentController()))
         ),
-        GetPage(
-          name: "/test",
-          page: ()=>Test(),
-          // binding: BindingsBuilder(()=>Get.put(CommentController()))
-        ),
+        // GetPage(
+        //   name: "/test",
+        //   page: ()=>Test(),
+        //   // binding: BindingsBuilder(()=>Get.put(CommentController()))
+        // ),
       ],
 
     );

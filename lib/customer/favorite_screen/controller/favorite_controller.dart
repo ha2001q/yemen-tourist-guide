@@ -25,36 +25,42 @@ class FavoriteController extends GetxController{
   // Method to listen to user favorites for a specific user_id.
   void listenToUserFavorites() {
     try {
-      // Listen to the collection snapshot for a specific user_id.
-      _favoritesSubscription = firestore
-          .collection('User_favorites')
-          .where('user_id', isEqualTo: userController.userId.value)
-          .snapshots()
-          .listen((querySnapshot) {
-        if (querySnapshot.docs.isNotEmpty) {
-          // Map the documents to a list of maps.
-          userFavorites.value = querySnapshot.docs.map((doc) {
-            return doc.data();
-          }).toList();
 
-          // Fetch places data for the favorite place IDs.
-          print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
-          final placeIds = userFavorites.map((fav) {
-            final placeId = fav['place_id'];
-            return placeId is int ? placeId.toString() : placeId;
-          }).toList();
-          print("Place IDs to fetch: $placeIds");
-          fetchPlacesData(placeIds);
+      if(userController.userId.value!=''){
+        // Listen to the collection snapshot for a specific user_id.
+        _favoritesSubscription = firestore
+            .collection('User_favorites')
+            .where('user_id', isEqualTo: userController.userId.value)
+            .snapshots()
+            .listen((querySnapshot) {
+          if (querySnapshot.docs.isNotEmpty) {
+            // Map the documents to a list of maps.
+            userFavorites.value = querySnapshot.docs.map((doc) {
+              return doc.data();
+            }).toList();
 
-          // Log success.
-          print('User favorites updated for userId ${userController.userId.value}: ${userFavorites.length} items.');
-        } else {
-          // Handle the case where no matching documents are found.
-          userFavorites.clear();
-          placesData.clear();
-          print('No favorites found for userId ${userController.userId.value}.');
-        }
-      });
+            // Fetch places data for the favorite place IDs.
+            print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+            final placeIds = userFavorites.map((fav) {
+              final placeId = fav['place_id'];
+              return placeId is int ? placeId.toString() : placeId;
+            }).toList();
+            print("Place IDs to fetch: $placeIds");
+            fetchPlacesData(placeIds);
+
+            // Log success.
+            print('User favorites updated for userId ${userController.userId.value}: ${userFavorites.length} items.');
+          } else {
+            // Handle the case where no matching documents are found.
+            userFavorites.clear();
+            placesData.clear();
+            print('No favorites found for userId ${userController.userId.value}.');
+          }
+        });
+      }else{
+        return;
+      }
+
     } catch (e) {
       // Handle errors.
       print('Error listening to user favorites for userId ${userController.userId.value}: $e');

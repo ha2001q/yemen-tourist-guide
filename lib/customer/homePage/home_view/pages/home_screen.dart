@@ -64,7 +64,7 @@ class HomePageScreen extends StatelessWidget {
 
                         Obx(
                         (){
-                          return !homeController.isGuest.value?Container(
+                          return userController.userId.value!=''?Container(
                             height: 45.0,
                             width: 45.0,
                             margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -81,7 +81,11 @@ class HomePageScreen extends StatelessWidget {
 
                         Column(
                           children: [
-                            Align(alignment: Alignment.bottomRight,child: Text('how_u_day'.tr, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),)),
+                            Align(alignment: Alignment.bottomRight,child: InkWell(onTap:(){
+
+                              // userController.deleteUser();
+                              // userController.loadUser();
+                              },child: Text('how_u_day'.tr, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),))),
 
                             const SizedBox(height: 7,),
                             Wrap(
