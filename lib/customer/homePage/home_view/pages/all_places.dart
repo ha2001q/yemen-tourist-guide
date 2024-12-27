@@ -14,14 +14,14 @@ class AllPlacesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:AppBar(
-        title: const Text("All places",style: fontLargeBold,),
+        title:  Text('all_places'.tr,style: fontLargeBold,),
         centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: ()=>Navigator.pop(context),
-              icon: Icon(Icons.arrow_forward_ios)
-          )
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: ()=>Navigator.pop(context),
+        //       icon: Icon(Icons.arrow_forward_ios)
+        //   )
+        // ],
       ) ,
       body:
       SingleChildScrollView(
@@ -34,21 +34,36 @@ class AllPlacesScreen extends StatelessWidget {
                     (){
                   return  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                    child: Wrap(
-                      spacing: 30, // Space between items horizontally
-                      runSpacing: 20, // Space between items vertically
-                      children: homeController.places.map((place) {
-                        return PlaceCard(title: place['place_name'], location: place['place_location'], rating: double.parse(place['rate_avg']) ?? 0.0, reviews: int.parse(place['review_num'])??0, imagePath: place['place_image'][0]??'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg',onTap: (){
-                          Get.toNamed(
-                            '/placeDetailes',
-                            arguments: {
-                              'place': place
-                            },
-                          );
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Number of columns
+                        mainAxisSpacing: 20, // Space between rows
+                        crossAxisSpacing: 30, // Space between columns
+                        childAspectRatio: 3 / 4, // Adjust the card's width-to-height ratio
+                      ),
+                      itemCount: homeController.places.length, // Number of items
+                      shrinkWrap: true, // Ensures GridView doesn't take infinite height
+                      physics: const NeverScrollableScrollPhysics(), // Prevents independent scrolling
+                      itemBuilder: (context, index) {
+                        final place = homeController.places[index];
+                        return PlaceCard(
+                          title: place['place_name'],
+                          location: place['place_location'],
+                          rating: double.tryParse(place['rate_avg'] ?? '0.0') ?? 0.0,
+                          reviews: int.tryParse(place['review_num'] ?? '0') ?? 0,
+                          imagePath: place['place_image']?[0] ?? 'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg',
+                          onTap: () {
+                            Get.toNamed(
+                              '/placeDetailes',
+                              arguments: {
+                                'place': place['place_id'],
+                              },
+                            );
+                          },
+                        );
+                      },
+                    )
 
-                        }, heartFavorite: () {  },);
-                      }).toList(),
-                    ),
                   );
                 }),
           ],

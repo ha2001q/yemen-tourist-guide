@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/core/utils/styles.dart';
 import 'package:yemen_tourist_guide/customer/setting_screen/view/widget/setting_widget.dart';
 
+import '../../../core/common_controller/user_data.dart';
 import '../../../core/utils/images.dart';
 
 class SettingScreen extends StatelessWidget {
    SettingScreen({super.key});
-  UserController userController = Get.put(UserController());
+  // UserController userController = Get.put(UserController());
 
   get userId => null;
 
@@ -16,7 +16,7 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:AppBar(
-        title: Text("Setting",style: fontLargeBold,),
+        title: Text('Setting'.tr,style: fontLargeBold,),
         centerTitle: true,
 
       ),
@@ -32,7 +32,7 @@ class SettingScreen extends StatelessWidget {
               ),
 
               SettingTemplete(
-                hamzah: "Profile",
+                hamzah: 'profile'.tr,
                 path: Images.profileIcon,
                 flag: true,
                 onTap: () {
@@ -56,7 +56,7 @@ class SettingScreen extends StatelessWidget {
               ),
 
               SettingTemplete(
-                hamzah: 'Language',
+                hamzah: 'Language'.tr,
                 path: Images.language,
                 flag: true,
                 onTap: () {
@@ -69,7 +69,7 @@ class SettingScreen extends StatelessWidget {
               ),
 
               SettingTemplete(
-                hamzah: 'notification',
+                hamzah: 'notification'.tr,
                 path: Images.notification,
                 flag: true,
                 onTap: ()  {
@@ -86,7 +86,7 @@ class SettingScreen extends StatelessWidget {
                 height: 30.0,
               ),
 
-              Text("information",
+              Text('information'.tr,
                   style: const TextStyle(
                     color: Colors.grey,
                   )),
@@ -96,7 +96,7 @@ class SettingScreen extends StatelessWidget {
               ),
 
               SettingTemplete(
-                hamzah: 'version',
+                hamzah: 'version'.tr,
                 path: Images.version,
                 flag: true,
                 onTap: () {},
@@ -107,7 +107,7 @@ class SettingScreen extends StatelessWidget {
               ),
 
               SettingTemplete(
-                hamzah: 'Terms of service',
+                hamzah: 'Terms of service'.tr,
                 path: Images.termsOfService,
                 flag: true,
                 onTap: () {},
@@ -118,7 +118,7 @@ class SettingScreen extends StatelessWidget {
               ),
 
               SettingTemplete(
-                hamzah: 'Privacy Policy',
+                hamzah: 'Privacy Policy'.tr,
                 path: Images.privacyPolicy,
                 flag: true,
                 onTap: () {},
@@ -131,23 +131,26 @@ class SettingScreen extends StatelessWidget {
               InkWell(
                   onTap: () async {
                     bool confirmLogout = await Get.defaultDialog(
-                      title: 'Confirm Logout',
-                      middleText: 'Are you sure you want to logout?',
+                      title: 'Confirm Logout'.tr,
+                      middleText: 'Are you sure you want to logout?'.tr,
                       actions: [
                         TextButton(
                           onPressed: () => Get.back(result: false),
-                          child: const Text('Cancel'),
+                          child:  Text('Cancel'.tr),
                         ),
                         TextButton(
                           onPressed: (){
-                            if(userController.userId.value == ''){
+                            UserDataController.loadUser();
+                            var id = UserDataController.userId;
+                            if(id == ''){
                               return;
                             }else{
-                              userController.deleteUser();
-                              userController.loadUser();
+                              UserDataController.deleteUser();
+                              UserDataController.loadUser();
+                              Get.back(result: false);
                             }
                           },
-                          child: const Text('Logout'),
+                          child:  Text('Logout'.tr),
                         ),
                       ],
                     );
@@ -159,7 +162,7 @@ class SettingScreen extends StatelessWidget {
                       // Get.offAll(() => const RootScreen());
                     }
                   },
-                  child: Text("logout",
+                  child: Text('Logout'.tr,
                       style:
                           const TextStyle(fontSize: 19, color: Colors.blue))),
             ],
@@ -186,8 +189,8 @@ class SettingScreen extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  const Text(
-                    'Select Language',
+                   Text(
+                    'Select Language'.tr,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -201,7 +204,7 @@ class SettingScreen extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.language, color: Colors.blue),
-                    title: const Text('English'),
+                    title:  Text('English'.tr),
                     onTap: () {
                       Get.updateLocale(const Locale('en', 'US'));
                       Get.back();
@@ -209,7 +212,7 @@ class SettingScreen extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.language, color: Colors.green),
-                    title: const Text('Arabic'),
+                    title:  Text('Arabic'.tr),
                     onTap: () {
                       Get.updateLocale(const Locale('ar', 'SA'));
                       Get.back();

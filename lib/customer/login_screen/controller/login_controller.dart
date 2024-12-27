@@ -6,7 +6,7 @@ class LoginController extends GetxController {
   // Observables for login state (optional, for UI binding)
   var isLoading = false.obs;
   var errorMessage = ''.obs;
-  UserController userController = Get.put(UserController());
+  // UserController userController = Get.put(UserController());
 
 
   // Method to handle login
@@ -32,10 +32,11 @@ class LoginController extends GetxController {
         // For example, storing user ID:
     // .write('userId', user.id);
 
-        userController.setUser(user.data()['user_id'], user.data()['user_name'], user.data()['user_image']??'');
+        UserDataController.setUser(user.data()['user_id'], user.data()['user_name'], user.data()['user_image']??'');
 
-        userController.loadUser();
-        print('----------------- ${userController.userId.value}');
+        UserDataController.loadUser();
+        var id = UserDataController.userId;
+        print('----------------- ${id}');
         // Optional: You can store user data in GetX or other state management libraries
 
         // Success! Return true

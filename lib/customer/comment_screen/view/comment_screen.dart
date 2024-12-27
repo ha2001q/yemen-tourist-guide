@@ -12,7 +12,7 @@ import '../../homePage/home_view/widgets/ServicesCard.dart';
 class CommentScreen extends StatelessWidget {
    CommentScreen({super.key});
 
-   UserController userController = Get.put(UserController(), permanent: true);
+   // UserController userController = Get.put(UserController(), permanent: true);
 
   CommentController commentController=Get.put(CommentController());
 
@@ -21,7 +21,7 @@ class CommentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Comments",style: fontLargeBold,),
+        title:  Text('Comments'.tr,style: fontLargeBold,),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -64,9 +64,12 @@ class CommentScreen extends StatelessWidget {
                   children: [
                     InkWell(
                         onTap: (){
+                          UserDataController.loadUser();
+                          UserDataController.loadUser();
+                          var id = UserDataController.userId;
 
-                          print(userController.userId.value);
-                          if(userController.userId.value == ""){
+                          print('44444444444444$id');
+                          if(id == ""){
                             Get.toNamed('login');
                             return;
                           }
@@ -75,7 +78,7 @@ class CommentScreen extends StatelessWidget {
                         },
                         child: SvgPicture.asset(Images.addComment)
                     ),
-                    const Text("مراجعات المستخدم",style: fontLarge,),
+                     Text('userComment'.tr,style: fontLarge,),
                   ],
                 ),
                 SizedBox(height: 10,),

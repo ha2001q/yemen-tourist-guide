@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/customer/favorite_screen/controller/favorite_controller.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 import 'package:yemen_tourist_guide/customer/homePage/home_view/widgets/PlaceCard.dart';
@@ -13,7 +14,6 @@ import '../widgets/favorite_appbar.dart';
 class FavoriteScreen extends StatelessWidget {
   FavoriteScreen({super.key});
   FavoriteController favoriteController=Get.put(FavoriteController());
-  HomeController homeController=Get.put(HomeController());
 
 
 
@@ -26,7 +26,7 @@ class FavoriteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: FavoriteAppBar(
-        title:"Favorite",
+        title:'favorite'.tr,
         // icon:SvgPicture.asset(Images.trushIcon,) as Icon ,
         onTap: (){
           favoriteController.deleteAllUserFavorites();
@@ -34,7 +34,10 @@ class FavoriteScreen extends StatelessWidget {
         },),
       body:
             Obx(
-              (){ return Column(
+              (){
+
+
+                return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -47,7 +50,7 @@ class FavoriteScreen extends StatelessWidget {
                           padding: EdgeInsets.all(15.0),
                           child: Row(
                             children: [
-                              Text("${favoriteController.placesData.length.toString()} elements",style: fontLarge,),
+                              // Text('${favoriteController.placesData.length.toString()} elements'.tr,style: fontLarge,),
                             ],
                           ),
                         ),
@@ -67,10 +70,10 @@ class FavoriteScreen extends StatelessWidget {
                                   Get.toNamed(
                                     '/placeDetailes',
                                     arguments: {
-                                      'place': placeData
+                                      'place': placeData['place_id']
                                     },
                                   );
-                                }, heartFavorite: () {  },
+                                },
                               ),
                             );
                           }).toList(),

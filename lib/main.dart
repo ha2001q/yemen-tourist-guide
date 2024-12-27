@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/core/locale/my_locale.dart';
@@ -34,6 +35,7 @@ SharedPreferences? sharedPref;
 Future<void> main() async {
   /// 1. for Localization and Languages
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init(); // Initialize GetStorage
   sharedPref = await SharedPreferences.getInstance();
   await Firebase.initializeApp();
 

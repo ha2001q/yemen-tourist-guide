@@ -25,6 +25,8 @@ class Images {
   static const String language ="assets/svg/language.svg";
   static const String userPage ="assets/svg/user_page_icon.svg";
   static const String guideLines ="assets/svg/guide_lines_icon.svg";
+  static const String roadMap ="assets/svg/roadIcon.svg";
+
 
 
 

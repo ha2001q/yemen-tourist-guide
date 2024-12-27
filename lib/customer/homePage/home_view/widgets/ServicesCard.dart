@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/utils/styles.dart';
 class ServicesCard extends StatefulWidget {
-  const ServicesCard({super.key,required this.title,required this.type,required this.location,required this.rating,required this.reviews, required this.imageBath, required this.onTap,});
+   ServicesCard({super.key,required this.title, this.type,required this.location,required this.rating,required this.reviews, required this.imageBath, required this.onTap,});
   final String title;
-  final String type;
+  var  type;
   final String location;
   final double rating;
   final int reviews;
@@ -65,7 +65,7 @@ class _ServicesCardState extends State<ServicesCard> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
+
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(

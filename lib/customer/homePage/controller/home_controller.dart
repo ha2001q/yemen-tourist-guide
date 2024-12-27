@@ -15,7 +15,7 @@ class HomeController extends GetxController{
 
   RxBool isGuest = false.obs;
   var locationData = <String, String>{}.obs;
-  UserController userController = Get.find();
+  // UserController userController = Get.put(UserController());
 
   var cities = <Map<String, dynamic>>[].obs; // Observable list to store city data as maps
   var isLoading = true.obs; // Loading state
@@ -48,13 +48,14 @@ class HomeController extends GetxController{
   var bannersd = <Map<String, dynamic>>[].obs;
 
   @override
-  Future<void> onInit() async {
+  void onInit() {
     // TODO: implement onInit
     super.onInit();
-    var id = userController.userId.value;
+    UserDataController.loadUser();
+    var id = UserDataController.userId;
     if(id == ''){
       isGuest.value = true;
-      print('is guest ${id}');
+      print('is guest');
     } else {
       isGuest.value = false;
       print('is not guest ${id}');

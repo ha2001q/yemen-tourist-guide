@@ -34,7 +34,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: AppBar(
-        title: const Text("Add Comment"),
+        title:  Text('Add Comment'.tr),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_outlined),
@@ -76,7 +76,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
                     ),
-                    hintText: "Add comment",
+                    hintText: 'Add Comment'.tr,
                     contentPadding: const EdgeInsets.symmetric(
                       vertical: 10,
                       horizontal: 10,
@@ -123,8 +123,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                           ? const CircularProgressIndicator(
                         color: Colors.white,
                       )
-                          : const Text(
-                        "Send",
+                          :  Text(
+                        'Send'.tr,
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.white,

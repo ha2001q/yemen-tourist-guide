@@ -9,16 +9,18 @@ class ReviewController extends GetxController{
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   RxBool isLoading = false.obs;
-  UserController userController = Get.put(UserController());
+  // UserController userController = Get.put(UserController());
 
 
 
   // Stream to listen to user comments
   Stream<List<Map<String, dynamic>>> listenToUserComments() {
     try {
+      UserDataController.loadUser();
+      var id = UserDataController.userId;
       return firestore
           .collection('User_comments')
-          .where('user_id', isEqualTo: userController.userId.value)
+          .where('user_id', isEqualTo: id)
           .snapshots()
           .map((querySnapshot) {
         return querySnapshot.docs.map((doc) => doc.data()).toList();
@@ -36,16 +38,20 @@ class ReviewController extends GetxController{
     required String placeId,
   }) async {
     try {
+      UserDataController.loadUser();
+      var id = UserDataController.userId;
+      var image =UserDataController.userImage;
+      var name = UserDataController.userName;
       isLoading.value = true;
       // Create the comment data
       final commentData = {
-        'user_id': userController.userId.value,
+        'user_id': id,
         'place_id': placeId,
         'rate': rate,
         'message': message,
         'timestamp': FieldValue.serverTimestamp(), // Server-side time
-        'user_image': userController.userImage.value??'',
-        'user_name': userController.userName.value
+        'user_image': image??'',
+        'user_name': name
       };
 
       // Add the data to Firestore
@@ -53,10 +59,10 @@ class ReviewController extends GetxController{
       await getAndUpdateAvgReviewPlace(placeId);
 
       isLoading.value = false;
-      print('Comment added successfully for userId ${userController.userId.value} and placeId $placeId.');
+      print('Comment added successfully for userId ${id} and placeId $placeId.');
     } catch (e) {
       isLoading.value = false;
-      print('Error adding comment for userId ${userController.userId.value} and placeId $placeId: $e');
+      print('Error adding comment for userId ${UserDataController.userId} and placeId $placeId: $e');
     }
   }
 
@@ -130,9 +136,7 @@ class ReviewController extends GetxController{
   @override
   void onInit() {
     super.onInit();
-    userController.setUser('1', 'dheya', 'https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg');
-
-    userController.loadUser();
+    UserDataController.loadUser();
 
   }
 

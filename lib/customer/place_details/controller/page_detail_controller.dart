@@ -6,24 +6,25 @@ import '../../homePage/controller/home_controller.dart';
 
 class PageDetailController extends GetxController {
   final PageDetailRepo _pageDetailRepo = PageDetailRepo();
-  final UserController _userController = Get.put(UserController());
   final HomeController homeController = Get.find();
 
   RxBool isRed = false.obs;
   RxString placeIdd = ''.obs;
   var arguments = Get.arguments;
-  final Rx<Map<String, dynamic>?> placeData = Rx<Map<String, dynamic>?>({});
+  final Rx<Map<String, dynamic>?> placeData = Rx<Map<String, dynamic>?>(null);
 
 
   var userId;
 
+
   @override
-  Future<void> onInit() async {
+  void onInit()  {
     super.onInit();
 
     // Extract placeId from arguments
-    _userController.loadUser();
-    placeIdd.value = arguments['place']['place_id'];
+    UserDataController.loadUser();
+    var id = UserDataController.userId;
+    placeIdd.value = arguments['place'];
 
     print("*******************************${placeIdd.value}");
     // Listen to services for the given placeId
@@ -31,7 +32,7 @@ class PageDetailController extends GetxController {
 
     // Load user data
 
-    userId = _userController.userId.value==""?'':_userController.userId.value;
+    userId = id;
 
     // Fetch place details and check favorite status
     getPlace(placeIdd.value);
@@ -39,7 +40,7 @@ class PageDetailController extends GetxController {
     if(userId==''){
       return;
     }
-    await checkIf(userId, placeIdd.value);
+    checkIf(userId, placeIdd.value);
   }
 
   void addFavorite(String placeId, String userId) async {
@@ -67,7 +68,6 @@ class PageDetailController extends GetxController {
       print("Error fetching place: $e");
     }
   }
-
 
   Future<void> checkIf(String userId, String placeId) async {
     try {

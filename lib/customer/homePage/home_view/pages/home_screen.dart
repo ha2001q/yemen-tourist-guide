@@ -12,27 +12,45 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/state_manager.dart';
-import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 import 'package:yemen_tourist_guide/customer/homePage/home_view/pages/all_places.dart';
-import 'package:yemen_tourist_guide/customer/place_details/controller/page_detail_controller.dart';
-import '../../../../core/utils/images.dart';
-import '../../../../core/utils/styles.dart';
-import '../../controller/Controller.dart';
+import 'package:yemen_tourist_guide/customer/search/view/search_screen.dart';
 import '../widgets/PlaceCard.dart';
 import '../widgets/ServicesCard.dart';
-import '../widgets/banner_section_widget.dart';
 
 
-class HomePageScreen extends StatelessWidget {
+class HomePageScreen extends StatefulWidget {
   HomePageScreen({super.key});
 
-  final HomeController homeController = Get.put(HomeController(), permanent: true);
-  final UserController userController = Get.put(UserController());
+
+
+  @override
+  State<HomePageScreen> createState() => _HomePageScreenState();
+}
+
+class _HomePageScreenState extends State<HomePageScreen> {
+   HomeController homeController = Get.put(HomeController(), permanent: true);
+
+  // final UserController userController = Get.put(UserController());
   final controller = CarouselController();
 
-
   void animateToSlide(int index) => controller.animateToPage(index);
+
+  var id;
+
+  var image;
+  final GetStorage _storage = GetStorage();
+  @override
+  void initState() {
+    super.initState();
+    // UserDataController.loadUser();
+    id = _storage.read('userId')??'';
+    image = _storage.read('userImage')??'';
+    print('hiiiiiiiiiiiii$id');
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -62,22 +80,21 @@ class HomePageScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
 
-                        Obx(
-                        (){
-                          return userController.userId.value!=''?Container(
+
+
+                          id!=''?Container(
                             height: 45.0,
                             width: 45.0,
                             margin: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
                               image:  DecorationImage(
-                                image: CachedNetworkImageProvider(userController.userImage.value),
+                                image: CachedNetworkImageProvider(image),
                                 fit: BoxFit.cover
                               )
                             ),
-                          ):const SizedBox.shrink();
-                          },
-                        ),
+                          ):const SizedBox.shrink(),
+
 
                         Column(
                           children: [
@@ -122,41 +139,46 @@ class HomePageScreen extends StatelessWidget {
 
                   /// search bar and filter
                   const SizedBox(height: 60,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Container(
-                      height: 60,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1), // Shadow color with transparency
-                            spreadRadius: 2, // Spread of the shadow
-                            blurRadius: 5,   // Blurring effect
-                            offset: const Offset(0, 3), // Position of the shadow (horizontal, vertical)
-                          ),
-                        ],
-
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SvgPicture.asset('assets/svg/filter-icon.svg'),
-
-                            Wrap(
-                              children: [
-
-                                Text('search'.tr, style: const TextStyle(color: Colors.grey),),
-                                const SizedBox(width: 10,),
-                                SvgPicture.asset('assets/svg/search-icon.svg')
-                              ],
-                            )
-
+                  InkWell(
+                    onTap: (){
+                      Get.to(SearchScreen());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Container(
+                        height: 60,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1), // Shadow color with transparency
+                              spreadRadius: 2, // Spread of the shadow
+                              blurRadius: 5,   // Blurring effect
+                              offset: const Offset(0, 3), // Position of the shadow (horizontal, vertical)
+                            ),
                           ],
+
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SvgPicture.asset('assets/svg/filter-icon.svg'),
+
+                              Wrap(
+                                children: [
+
+                                  Text('search'.tr, style: const TextStyle(color: Colors.grey),),
+                                  const SizedBox(width: 10,),
+                                  SvgPicture.asset('assets/svg/search-icon.svg')
+                                ],
+                              )
+
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -177,7 +199,7 @@ class HomePageScreen extends StatelessWidget {
                               label: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  'All', // Static label for "All"
+                                  'All'.tr, // Static label for "All"
                                   style: TextStyle(
                                     color: homeController.selectedOption.value == 'All' ? Colors.white : Colors.black, // Text color
                                     fontSize: 13,
@@ -296,7 +318,7 @@ class HomePageScreen extends StatelessWidget {
                     child: Align(alignment: Alignment.bottomLeft,child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Expoler places', style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+                        Text('exp'.tr, style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
                         InkWell(
                             onTap: () {
                               Navigator.push(
@@ -307,7 +329,7 @@ class HomePageScreen extends StatelessWidget {
                                 ),
                               );
                             },
-                            child: Text('See All', style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold, color: Colors.deepOrange),)
+                            child: Text('seeAll'.tr, style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold, color: Colors.deepOrange),)
                         ),
                       ],
                     )),
@@ -327,7 +349,7 @@ class HomePageScreen extends StatelessWidget {
                               label: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
-                                  'All', // Static label for "All"
+                                  'All'.tr, // Static label for "All"
                                   style: TextStyle(
                                     color: homeController.selectedOptionTypes.value == 'All' ? Colors.white : Colors.black, // Text color
                                     fontSize: 13,
@@ -402,36 +424,50 @@ class HomePageScreen extends StatelessWidget {
 
 
                   /// places data
-                  const SizedBox(height: 20,),
-                  Obx(
-                      (){
-                        return  Wrap(
-                          spacing: 30, // Space between items horizontally
-                          runSpacing: 10, // Space between items vertically
-                          children: homeController.places.take(4).map((place) {
-                            return PlaceCard(title: place['place_name'], location: place['place_location'], rating: double.parse(place['rate_avg']) ?? 0.0, reviews: int.parse(place['review_num'])??0, imagePath: place['place_image'][0]??'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg',onTap: (){
-                              Get.toNamed(
-                                '/placeDetailes',
-                                arguments: {
-                                  'place': place
-                                },
-                              );
-                            },
-                              heartFavorite: () {},
-                              );
-                          }).toList(),
-                        );
-                      }),
+                  GetX<HomeController>(
+                    builder: (homeController) {
+                      return GridView.count(
+                        crossAxisCount: 2, // Number of columns in the grid
+                        mainAxisSpacing: 10, // Space between rows
+                        crossAxisSpacing: 10, // Space between columns
+                        childAspectRatio: 3 / 4, // Adjust the card's width-to-height ratio
+                        shrinkWrap: true, // Ensures the GridView doesn't take infinite height
+                        physics: const NeverScrollableScrollPhysics(), // Prevents GridView from scrolling independently
+                        children: homeController.places.take(4).map((place) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: PlaceCard(
+                              title: place['place_name'],
+                              location: place['place_location'],
+                              rating: double.tryParse(place['rate_avg'] ?? '0.0') ?? 0.0,
+                              reviews: int.tryParse(place['review_num'] ?? '0') ?? 0,
+                              imagePath: place['place_image']?[0] ?? 'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg',
+                              onTap: () {
+                                Get.toNamed(
+                                  '/placeDetailes',
+                                  arguments: {
+                                    'place': place['place_id'],
+                                  },
+                                );
+                              },
+                            ),
+                          );
+                        }).toList(),
+                      );
+
+                    },
+                  ),
+
 
 
                   /// high rate places
                   const SizedBox(height: 20,),
-                  const Padding(
+                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 13),
                     child: Align(alignment: Alignment.bottomLeft,child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('love by people', style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+                        Text('love by people'.tr, style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
                         // Text('See All', style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold, color: Colors.deepOrange),),
                       ],
                     )),
@@ -457,13 +493,13 @@ class HomePageScreen extends StatelessWidget {
                                   Get.toNamed(
                                     '/placeDetailes',
                                     arguments: {
-                                      'place': place
+                                      'place': place['place_id']
                                     },
                                   );
 
                                 },
                               title: place['place_name'],
-                              type: place['type_id'].toString(),
+                              type: '',
                               location: place['place_location'],
                               rating: double.tryParse(place['rate_avg']) ?? 0.0,
                               reviews: int.tryParse(place['review_num']) ?? 0,
@@ -485,7 +521,6 @@ class HomePageScreen extends StatelessWidget {
       ),
     );
   }
-
 
   Widget promotionWidget(String image, String title, String description,
       int index) {

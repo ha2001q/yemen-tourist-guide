@@ -8,7 +8,7 @@ import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 
 class FavoriteController extends GetxController{
 
-  UserController userController=Get.put(UserController());
+  // UserController userController=Get.put(UserController());
 
   // A list to store the user favorites data.
   var userFavorites = <Map<String, dynamic>>[].obs;
@@ -24,19 +24,19 @@ class FavoriteController extends GetxController{
 
 
   // Method to listen to user favorites for a specific user_id.
-  void listenToUserFavorites() {
+  void listenToUserFavorites(String userId) {
     try {
-      final storage = GetStorage();
-      var userI = storage.read('userId') ?? '';
-      print('*************---------${userI}');
+      // final storage = GetStorage();
+      // var userI = storage.read('userId') ?? '';
+      // print('*************---------${userI}');
       // if(userI == ''){
       //   return ;
       // }
-      userController.loadUser();
+      var id = userId;
         // Listen to the collection snapshot for a specific user_id.
         _favoritesSubscription = firestore
             .collection('User_favorites')
-            .where('user_id', isEqualTo: '72a059e8-c068-4e04-b9b9-b0d9a9814238')
+            .where('user_id', isEqualTo: id)
             .snapshots()
             .listen((querySnapshot) {
           if (querySnapshot.docs.isNotEmpty) {
@@ -55,26 +55,26 @@ class FavoriteController extends GetxController{
             fetchPlacesData(placeIds);
 
             // Log success.
-            print('User favorites updated for userId ${userController.userId.value}: ${userFavorites.length} items.');
+            print('User favorites updated for userId ${id}: ${userFavorites.length} items.');
           } else {
             // Handle the case where no matching documents are found.
             userFavorites.clear();
             placesData.clear();
-            print('No favorites found for userId ${userController.userId.value}.');
+            print('No favorites found for userId ${id}.');
           }
         });
 
     } catch (e) {
       // Handle errors.
-      print('Error listening to user favorites for userId ${userController.userId.value}: $e');
+      print('Error listening to user favorites for userId ${UserDataController.userId}: $e');
     }
   }
 @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    userController.loadUser();
-    listenToUserFavorites();
+    UserDataController.loadUser();
+    listenToUserFavorites(UserDataController.userId);
 
   }
   // Method to fetch places data for a list of place IDs.
@@ -111,9 +111,11 @@ class FavoriteController extends GetxController{
   void deleteAllUserFavorites() {
     try {
       // Query the collection for documents with the specific user_id.
+      UserDataController.loadUser();
+      var id = UserDataController.userId;
       firestore
           .collection('User_favorites')
-          .where('user_id', isEqualTo: userController.userId.value)
+          .where('user_id', isEqualTo: id)
           .get()
           .then((querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
@@ -127,13 +129,15 @@ class FavoriteController extends GetxController{
               print('Deleted favorite with ID: ${doc.id}');
 
               // Safely remove the corresponding data from `placesData`
-              int indexToRemove = placesData.value.indexWhere((place) => place['id'] == doc.id);
-              if (indexToRemove != -1) {
-                placesData.value.removeAt(indexToRemove);
-                placesData.refresh(); // Notify listeners about the change
-              }
-            })
-                .catchError((error) {
+              // int indexToRemove = placesData.value.indexWhere((place) => place['id'] == doc.id);
+              // if (indexToRemove != -1) {
+              //
+              //
+              //   placesData.refresh(); // Notify listeners about the change
+              // }
+              placesData.clear();
+
+            }).catchError((error) {
               print('Error deleting favorite with ID ${doc.id}: $error');
             });
           }
@@ -141,18 +145,18 @@ class FavoriteController extends GetxController{
 
 
           // Log success after all deletions.
-          print('Deleted all favorites for userId ${userController.userId.value}.');
+          print('Deleted all favorites for userId ${id}.');
         } else {
           // Handle case where no matching documents are found.
-          print('No favorites found to delete for userId ${userController.userId.value}.');
+          print('No favorites found to delete for userId ${UserDataController.userId}.');
         }
       }).catchError((error) {
         // Handle errors during the query.
-        print('Error querying favorites for userId ${userController.userId.value}: $error');
+        print('Error querying favorites for userId ${UserDataController.userId}: $error');
       });
     } catch (e) {
       // Handle any unexpected errors.
-      print('Error deleting favorites for userId ${userController.userId.value}: $e');
+      print('Error deleting favorites for userId ${UserDataController.userId}: $e');
     }
   }
 

@@ -69,8 +69,13 @@ dependencies:
   google_maps_flutter: ^2.6.1
   flutter_polyline_points: ^2.1.0
   google_fonts: ^6.2.0
-
-
+  # algolia for search and filter
+  infinite_scroll_pagination: ^3.2.0
+  algolia_helper_flutter: ^1.1.0
+  algolia_client_core: 1.27.1
+  algolia_client_insights: 1.27.1
+  algolia_client_search: 1.27.1
+  algoliasearch: 1.27.1
 
 
 dev_dependencies:

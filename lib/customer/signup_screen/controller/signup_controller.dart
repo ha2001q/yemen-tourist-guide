@@ -10,7 +10,7 @@ class SignupController extends GetxController {
   var errorMessage = ''.obs;
   var successMessage = ''.obs;
 
-  UserController userController = Get.put(UserController());
+  // UserController userController = Get.put(UserController());
 
   // Method to handle user signup
   Future<bool> signupUser(String fullName, String email, String password) async {
@@ -43,10 +43,10 @@ class SignupController extends GetxController {
         'user_password': password, // Ensure this is securely hashed in production
         'user_created_at': FieldValue.serverTimestamp(),
       });
-      userController.setUser(userId, fullName,'');
+      UserDataController.setUser(userId, fullName,'');
 
-      userController.loadUser();
-      print('----------------- ${userController.userId.value}');
+      UserDataController.loadUser();
+      print('----------------- ${UserDataController.userId}');
       // Success! Return true
       successMessage.value = 'Account created successfully';
       return true;

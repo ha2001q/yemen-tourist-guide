@@ -16,7 +16,7 @@ class ProfileController extends GetxController {
   // A variable to store the user data.
   var userData = <String, dynamic>{}.obs;
 
-  UserController userController=Get.put(UserController());
+  // UserController userController=Get.put(UserController());
 
   // Firestore instance.
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -27,13 +27,15 @@ class ProfileController extends GetxController {
   // Method to listen to user data for a specific user_id.
   void listenToUser() {
     try {
+      UserDataController.loadUser();
+      var id = UserDataController.userId;
       // Listen to the collection snapshot for a specific user_id.
-      if(userController.userId.value == '') {
+      if(id == '') {
         return;
       }
       _userSubscription = firestore
           .collection('Users')
-          .where('user_id', isEqualTo: userController.userId.value)
+          .where('user_id', isEqualTo: id)
           .snapshots()
           .listen((querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
@@ -41,16 +43,16 @@ class ProfileController extends GetxController {
           userData.value = querySnapshot.docs.first.data();
 
           // Log success.
-          print('User data updated for userId ${userController.userId.value}: ${userData.value}');
+          print('User data updated for userId ${id}: ${userData.value}');
         } else {
           // Handle the case where no matching documents are found.
           userData.value = {};
-          print('No user data found for userId ${userController.userId.value}.');
+          print('No user data found for userId ${id}.');
         }
       });
     } catch (e) {
       // Handle errors.
-      print('Error listening to user data for userId ${userController.userId.value}: $e');
+      print('Error listening to user data for userId ${UserDataController.userId}: $e');
     }
   }
 
@@ -92,7 +94,13 @@ class ProfileController extends GetxController {
     print(downloadUrl.toString());
     imageUrl.value=downloadUrl;
     await updateUserImagePath(imageUrl.value);
-    userController.userImage.value = imageUrl.value;
+
+    UserDataController.loadUser();
+    var id = UserDataController.userId;
+    var name = UserDataController.userName;
+    UserDataController.setUser(id, name, imageUrl.value);
+    UserDataController.loadUser();
+
     return downloadUrl;
   }
 
@@ -100,11 +108,13 @@ class ProfileController extends GetxController {
   /// Updates the user's image path in Firestore
   Future<void> updateUserImagePath( String imageUrl) async {
     try {
+      UserDataController.loadUser();
+      var id = UserDataController.userId;
       print("====================================");
       // Query the Users collection for the document with matching user_id
       var querySnapshot = await FirebaseFirestore.instance
           .collection('Users')
-          .where('user_id', isEqualTo: userController.userId.value)
+          .where('user_id', isEqualTo: id)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -124,5 +134,10 @@ class ProfileController extends GetxController {
     }
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    UserDataController.loadUser();
+  }
 
 }

@@ -18,7 +18,7 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen> {
 
-  UserController userController =Get.put(UserController());
+  // UserController userController =Get.put(UserController());
   int bottomNavIndex = 0;
 
   List<Widget> pages =  [

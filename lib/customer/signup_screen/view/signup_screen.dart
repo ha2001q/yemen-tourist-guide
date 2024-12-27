@@ -38,10 +38,9 @@ class SignupScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("Sign Up",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
+                        Text('Sign up',style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
                         SizedBox(height: 35,),
-                        Text("Happy to see you again! Please enter your email and",style: TextStyle(color: Colors.black),),
-                        Text("password to login to your account.",style: TextStyle(color: Colors.black)),
+                        Text('welcome'.tr,style: TextStyle(color: Colors.black),),
                         SizedBox(height: 110,),
                         Container(
                           width: double.infinity,
@@ -64,14 +63,14 @@ class SignupScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(20),
                                         borderSide: BorderSide.none,
                                       ),
-                                      hintText:"Full Name",
+                                      hintText:'Full Name'.tr,
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return "enter Full name";
+                                        return 'enter Full name'.tr;
                                       }
                                       if (!RegExp(r'^[a-zA-Z\s]*$').hasMatch(value!)) {
-                                        return "just_letter";
+                                        return 'just_letter'.tr.camelCase;
                                       }
                                       return null;
                                     },
@@ -91,7 +90,7 @@ class SignupScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(20),
                                         borderSide: BorderSide.none,
                                       ),
-                                      hintText:"Email",
+                                      hintText:'Email'.tr,
                                     ),
                                     validator: SRValidator.validateEmail,
                                     onSaved: (value) {
@@ -110,7 +109,7 @@ class SignupScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(20),
                                         borderSide: BorderSide.none,
                                       ),
-                                      hintText:"Password",
+                                      hintText:'Password'.tr,
                                     ),
                                     // validator: (value) {
                                     //   if (value == null || value.isEmpty) {
@@ -162,7 +161,7 @@ class SignupScreen extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(20),
                                           color: Color(0xffDE7254),
                                         ),
-                                        child: Text("Login",style: fontLarge,textAlign: TextAlign.center,),
+                                        child: Text('Sign up'.tr,style: fontLarge,textAlign: TextAlign.center,),
                                       )
                                   ),
                                 ],
@@ -174,12 +173,12 @@ class SignupScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Already have an account? ",style: fontMedium,),
+                            Text('already have'.tr,style: fontMedium,),
                             InkWell(
                               onTap: (){
                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
                               },
-                              child:Text("  Login",style: TextStyle(color: Color(0xffD87234)),),
+                              child:Text('login'.tr,style: TextStyle(color: Color(0xffD87234)),),
                             )
                           ],
                         ),

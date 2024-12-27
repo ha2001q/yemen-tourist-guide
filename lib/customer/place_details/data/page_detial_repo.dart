@@ -83,7 +83,7 @@ class PageDetailRepo{
         // If there are documents in the snapshot, return the first document
         if (querySnapshot.docs.isNotEmpty) {
           final doc = querySnapshot.docs.first;
-          return {"id": doc.id, ...doc.data() as Map<String, dynamic>};
+          return {"place_id": doc.id, ...doc.data()};
         } else {
           // If no document is found, return null
           return null;

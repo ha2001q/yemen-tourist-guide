@@ -13,7 +13,7 @@ class CommentController extends GetxController{
 
   var commentData = <Map<String, dynamic>>[].obs;
 
-  UserController userController=Get.put(UserController());
+  // UserController userController=Get.put(UserController());
 
 
 

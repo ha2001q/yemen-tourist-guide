@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 
 class PlaceCard extends StatefulWidget {
-  PlaceCard({super.key,required this.title,required this.location,required this.rating,required this.reviews,required this.imagePath, required this.onTap, required this.heartFavorite});
+  PlaceCard({super.key,required this.title,required this.location,required this.rating,required this.reviews,required this.imagePath, required this.onTap});
   final String title;
   final String location;
   final double rating;
   final int reviews;
   final String imagePath;
   final VoidCallback onTap;
-  final VoidCallback heartFavorite;
+  // final VoidCallback heartFavorite;
 
 
   @override
@@ -55,26 +55,26 @@ class _PlaceCardState extends State<PlaceCard> {
               ),
             ),
             // heart favorite
-            Positioned(
-              top: 7,
-              right: 7,
-              child: InkWell(
-                onTap:widget.heartFavorite,
-
-                child: Container(
-                  padding: const EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child:  Icon(
-                    Icons.favorite,
-                    color:Colors.grey,
-                      // pageDetailController.isRed.value?const Color(0xFFE17055):
-                  ),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   top: 7,
+            //   right: 7,
+            //   child: InkWell(
+            //     onTap:(){},
+            //
+            //     child: Container(
+            //       padding: const EdgeInsets.all(3),
+            //       decoration: BoxDecoration(
+            //         color: Colors.white,
+            //         borderRadius: BorderRadius.circular(20),
+            //       ),
+            //       child:  Icon(
+            //         Icons.favorite,
+            //         color:Colors.grey,
+            //           // pageDetailController.isRed.value?const Color(0xFFE17055):
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Positioned(
               bottom: 0,
               left: 0,

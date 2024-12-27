@@ -43,10 +43,9 @@ class LoginScreen extends StatelessWidget {
                         children: [
 
                           // SvgPicture.asset(Images.janbiahBack,fit: BoxFit.cover,),
-                          Text("Login",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
+                          Text('login'.tr,style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
                           SizedBox(height: 35,),
-                          Text("Happy to see you again! Please enter your email and",style: TextStyle(color: Colors.black),),
-                          Text("password to login to your account.",style: TextStyle(color: Colors.black)),
+                          Text('welcome'.tr,style: TextStyle(color: Colors.black),),
                           SizedBox(height: 110,),
                           Container(
                             // width: double.infinity,
@@ -71,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(20),
                                           borderSide: BorderSide.none,
                                         ),
-                                        hintText:"Email",
+                                        hintText:'Email'.tr,
                                       ),
 
                                       onSaved: (value) {
@@ -91,7 +90,7 @@ class LoginScreen extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(20),
                                           borderSide: BorderSide.none,
                                         ),
-                                        hintText:"Password",
+                                        hintText:'Password'.tr,
                                       ),
 
                                       onSaved: (value) {
@@ -138,7 +137,7 @@ class LoginScreen extends StatelessWidget {
                                                   borderRadius: BorderRadius.circular(20),
                                                   color: Color(0xffDE7254),
                                                 ),
-                                                child: loginController.isLoading.value?Center(child: CircularProgressIndicator(color: Colors.white,)):Text("Login",style: fontLarge,textAlign: TextAlign.center,),
+                                                child: loginController.isLoading.value?Center(child: CircularProgressIndicator(color: Colors.white,)):Text('login'.tr,style: fontLarge,textAlign: TextAlign.center,),
                                               );
                                             }
                                         )
@@ -152,12 +151,12 @@ class LoginScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Dont have an acount? ",style: fontMedium,),
+                              Text('dontHave'.tr,style: fontMedium,),
                               InkWell(
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SignupScreen()));
                                 },
-                                child:Text("Sign up",style: TextStyle(color: Color(0xffD87234)),),
+                                child:Text('Sign up'.tr,style: TextStyle(color: Color(0xffD87234)),),
                               )
                             ],
                           ),
@@ -165,14 +164,14 @@ class LoginScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Continue as ",style: fontMediumBold,),
+                              Text('Continue as '.tr,style: fontMediumBold,),
                               InkWell(
                                 onTap: (){
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context)=>RootScreen()));
                                 },
-                                child:Text("a Guest",style: TextStyle(color: Color(0xffD87234)),),
+                                child:Text('a Guest'.tr,style: TextStyle(color: Color(0xffD87234)),),
                               )
                             ],
                           ),
@@ -186,7 +185,7 @@ class LoginScreen extends StatelessWidget {
                               // ),
 
 
-                          const Text("Sign in with",
+                           Text('Sign in with'.tr,
                               style: fontSmallBold
                           ),
                           const SizedBox(height: 10.0),
