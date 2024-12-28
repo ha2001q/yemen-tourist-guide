@@ -45,6 +45,10 @@ const english = {
   'enter Full name':'enter Full name',
   'just_letter':'just letter',
   'already have':'Already have an account? ',
+  'text_in_empty_favorite_page': 'Your favorite page is empty',
+  'text_in_empty_favorite_page2': 'click the add button to start exploring and chooses your favorite places',
+  'search_here':'search here',
+
 
 
 

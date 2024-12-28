@@ -47,7 +47,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // print("onTapEdit");
         },
       ),
-      body:id==''?Center(child: Text('You have to login'),): Padding(
+      body:
+      id==''?
+      Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('You have to login first',style: fontMediumBold,),
+            SizedBox(height: 20,),
+            InkWell(
+              onTap: (){
+                Get.toNamed('/login');
+              },
+              child: Container(
+                height: 45,
+                width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: const Color(0xffDE7254),
+                ),
+                child:Center(
+                  child: Text('login'.tr,textAlign: TextAlign.center,),
+                ) ,
+              ),
+            )
+          ],
+        )
+      )
+
+          : Padding(
           padding: const EdgeInsets.only(top: 15.0),
           child: Column(
             children: [
@@ -69,29 +97,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: 100,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              image: profileController.userData['user_image']==null?DecorationImage(
-                                image:AssetImage('assets/images/logo_icon.jpg'),
-                                fit: BoxFit.cover
-                              ):DecorationImage(
-                                  image:CachedNetworkImageProvider(profileController.userData['user_image']),
+                              image: profileController.userData['user_image']==null
+                                  ?const DecorationImage(
+                                  image:AssetImage(Images.profileNonImage),
                                   fit: BoxFit.cover
-                              ),
+                                  ):DecorationImage(
+                                      image:CachedNetworkImageProvider(profileController.userData['user_image']),
+                                      fit: BoxFit.cover
+                                  ),
                             ),
-                            // child: Image.network(profileController.userData['user_image'],fit: BoxFit.cover,),
                           ),
                         ),
-                        // Container(
-                        //   width: 100,
-                        //   height: 100,
-                        //   decoration: BoxDecoration(
-                        //     borderRadius: BorderRadius.circular(100),
-                        //     color: Colors.deepOrange
-                        //     // image: DecorationImage(
-                        //     //   image:
-                        //     //   fit: BoxFit.cover,
-                        //     // ),
-                        //   ),
-                        // ),
+
                         const SizedBox(height: 5,),
                         /// text user_name
                         Text(profileController.userData['user_name']??"", style: fontMediumBold,),
@@ -109,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             iconUserData: Images.smallEmail),
                         const SizedBox(height: 20,),
                         ///password
-                        UserDataWidget(
+                        const UserDataWidget(
                             userData: "***************  ",
                             iconUserData: Images.lockIcon),
 

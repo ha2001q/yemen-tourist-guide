@@ -98,7 +98,7 @@ class ProfileController extends GetxController {
     UserDataController.loadUser();
     var id = UserDataController.userId;
     var name = UserDataController.userName;
-    UserDataController.setUser(id, name, imageUrl.value);
+    UserDataController.setUser(id, name, downloadUrl);
     UserDataController.loadUser();
 
     return downloadUrl;

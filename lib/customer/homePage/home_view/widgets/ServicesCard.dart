@@ -12,7 +12,6 @@ class ServicesCard extends StatefulWidget {
   final int reviews;
   final String imageBath;
   final VoidCallback onTap;
-  // final String? price;
 
   @override
   State<ServicesCard> createState() => _ServicesCardState();

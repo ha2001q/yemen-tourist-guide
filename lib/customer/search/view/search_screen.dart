@@ -126,19 +126,19 @@ class _SearchScreenState extends State<SearchScreen> {
 
 
 
-  bool isDesign1 = true;
-
-  void showDesign1() {
-    setState(() {
-      isDesign1 = true;
-    });
-  }
-
-  void showDesign2() {
-    setState(() {
-      isDesign1 = false;
-    });
-  }
+  // bool isDesign1 = true;
+  //
+  // void showDesign1() {
+  //   setState(() {
+  //     isDesign1 = true;
+  //   });
+  // }
+  //
+  // void showDesign2() {
+  //   setState(() {
+  //     isDesign1 = false;
+  //   });
+  // }
 
    Widget hits(BuildContext context) => PagedGridView<int, MyModel>(
      pagingController: _pagingController,
@@ -212,13 +212,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 focusNode: _focusNode,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Theme.of(context).cardColor,
+                  fillColor: const Color(0xffF5F4F8),
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none,
                   ),
-                  hintText: "search_here",
+                  hintText: 'search_here'.tr,
                   contentPadding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8), // Adjust the vertical padding as needed
                 ),
               ),
@@ -244,10 +244,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                     }
                                     return Wrap(
                                       children: [
-                                        Text("have ", style: fontLarge,),
-                                        Text(" ${snapshot.data!.nbHits} ", style: fontLargeBold,),
+                                        Text("have ", style: fontMedium,),
+                                        Text(" ${snapshot.data!.nbHits} ", style: fontMedium,),
                                         Text(' Places',
-                                          style: fontLarge,)
+                                          style: fontMedium,)
                                       ],
                                     );
                                   },
@@ -255,60 +255,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Container(
-                        height: 40,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Theme.of(context).cardColor
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: showDesign1,
-                                child: Container(
-                                  height: 24,
-                                  width: 34,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: isDesign1 ? Colors.white : Colors.transparent,
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      Images.listIcon,
-                                      color: isDesign1 ? null : Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: showDesign2,
-                                child: Container(
-                                  height: 24,
-                                  width: 34,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: isDesign1 ? Colors.transparent : Colors.white,
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      Images.grideIcon,
-                                      fit: BoxFit.contain,
-                                      color: isDesign1 ? null : Colors.blue,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+
                   ],
                 ),
               ],

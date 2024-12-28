@@ -136,8 +136,5 @@ class CommentController extends GetxController{
         print("Error fetching comments: $error");
       },
     );
-
   }
-
-
 }

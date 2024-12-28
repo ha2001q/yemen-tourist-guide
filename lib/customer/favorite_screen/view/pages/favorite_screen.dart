@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 import 'package:yemen_tourist_guide/customer/favorite_screen/controller/favorite_controller.dart';
+import 'package:yemen_tourist_guide/customer/favorite_screen/view/widgets/add_favorite.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 import 'package:yemen_tourist_guide/customer/homePage/home_view/widgets/PlaceCard.dart';
 
@@ -15,13 +16,6 @@ class FavoriteScreen extends StatelessWidget {
   FavoriteScreen({super.key});
   FavoriteController favoriteController=Get.put(FavoriteController());
 
-
-
-  // FavoriteScreen({super.key}) {
-  //   // Call listenToUser in the constructor.
-  //   favoriteController.listenToUserFavorites(userId);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,11 +26,10 @@ class FavoriteScreen extends StatelessWidget {
           favoriteController.deleteAllUserFavorites();
           Navigator.pop(context);
         },),
-      body:
-            Obx(
+      body: favoriteController.placesData.isEmpty
+          ?AddFavorite()
+          : Obx(
               (){
-
-
                 return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,6 +51,7 @@ class FavoriteScreen extends StatelessWidget {
                           spacing: 30, // Space between items horizontally
                           runSpacing: 10, // Space between items vertically
                           children: favoriteController.placesData.map((placeData) {
+
                             return Padding(
                               padding: const EdgeInsets.all(6.0),
                               child:

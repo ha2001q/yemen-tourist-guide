@@ -22,6 +22,7 @@ import 'package:yemen_tourist_guide/customer/place_details/view/place_details.da
 import 'package:yemen_tourist_guide/customer/profile_screen/controller/profile_controller.dart';
 import 'package:yemen_tourist_guide/customer/profile_screen/view/pages/profile_screen.dart';
 import 'package:yemen_tourist_guide/customer/root_screen/root_screen.dart';
+import 'package:yemen_tourist_guide/customer/search/view/search_screen.dart';
 import 'package:yemen_tourist_guide/customer/setting_screen/view/setting_screen.dart';
 import 'package:yemen_tourist_guide/customer/signup_screen/controller/signup_controller.dart';
 import 'package:yemen_tourist_guide/customer/signup_screen/view/signup_screen.dart';
@@ -140,11 +141,11 @@ class MyApp extends StatelessWidget {
             page: ()=>SettingScreen(),
             // binding: BindingsBuilder(()=>Get.put(CommentController()))
         ),
-        // GetPage(
-        //   name: "/test",
-        //   page: ()=>Test(),
-        //   // binding: BindingsBuilder(()=>Get.put(CommentController()))
-        // ),
+        GetPage(
+          name: "/search",
+          page: ()=>SearchScreen(),
+          // binding: BindingsBuilder(()=>Get.put(CommentController()))
+        ),
       ],
 
     );

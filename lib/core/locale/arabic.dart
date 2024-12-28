@@ -2,7 +2,6 @@ const arabic = {
   'app_name': "الشبح VPN",
   'hello':"مرحبا بكم في \nالدليل السياحي اليمني",
   'profile':"الحساب",
-
   'how_u_day':'كيف حالك',
   'all_places':'كل الاماكن',
   'All':'الكل',
@@ -46,6 +45,10 @@ const arabic = {
   'enter Full name':'ادخل الأسم الكامل',
   'just_letter':'احرف فقط',
   'already have':'هل لديك حساب من قبل ',
+  'text_in_empty_favorite_page': 'الصفحة المفضلة لديك فارغة',
+  'text_in_empty_favorite_page2': 'انقر فوق زر إضافة اعلاه لبدء الاستكشاف واختيار الأماكن المفضلة لديك',
+  'search_here':'ابحث هنا',
+
 
 
 

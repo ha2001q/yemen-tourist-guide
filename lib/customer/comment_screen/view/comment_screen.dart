@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,7 +50,7 @@ class CommentScreen extends StatelessWidget {
                   imageBath: placeData['place_image'][0]??"https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg",
                   reviews: int.parse(placeData['review_num']?? ""),
                   rating: double.parse(placeData['rate_avg']?? ""),
-                  type: placeData['type_id'].toString()??"",
+                  type: '',
                   onTap: (){},
                 ),
                 const SizedBox(height: 20,),
@@ -87,7 +88,7 @@ class CommentScreen extends StatelessWidget {
                   runSpacing: 8.0, // Vertical spacing
                   children: commentController.commentData.map((comment) {
                     return PlaceReviewWidget(
-                      image: comment['user_image']??'https://images.tagesschau.de/image/45f26910-1a13-4397-b18a-685d81b81d9d/AAABjTEBCY4/AAABkZLiamM/16x9-1920/jemen-huthi-kaempfer-102.jpg',
+                      image: comment['user_image'],
                       massage: comment['message'].toString(),
                       name: comment['user_name'].toString()??'',
                       rate: comment['rate'].toString(),
@@ -106,3 +107,6 @@ class CommentScreen extends StatelessWidget {
     );
   }
 }
+
+
+

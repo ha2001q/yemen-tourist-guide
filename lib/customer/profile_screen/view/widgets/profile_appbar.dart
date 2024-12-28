@@ -19,23 +19,15 @@ class ProfileAppBarWidget extends StatelessWidget  implements PreferredSizeWidge
       child: AppBar(
         title: Text('profile'.tr,style: fontLargeBold,),
         centerTitle: true,
-
-        // leading: IconButton(
-        //     style: IconButton.styleFrom(
-        //       backgroundColor:const Color(0xffF5F4F8),
-        //     ),
-        //     icon: const Icon(Icons.arrow_back_ios_new_outlined,),
-        //     onPressed: onTapBack
-        // ),
-        actions: [
-          IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor:Theme.of(context).cardColor,
-              ),
-              icon: SvgPicture.asset(editIcon, width: 41.0, height: 41.0,),
-              onPressed: onTapEdit
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //       style: IconButton.styleFrom(
+        //         backgroundColor:Theme.of(context).cardColor,
+        //       ),
+        //       icon: SvgPicture.asset(editIcon, width: 41.0, height: 41.0,),
+        //       onPressed: onTapEdit
+        //   ),
+        // ],
 
       ),
     );

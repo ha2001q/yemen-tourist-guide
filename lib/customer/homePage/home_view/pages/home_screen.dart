@@ -171,9 +171,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               Wrap(
                                 children: [
 
-                                  Text('search'.tr, style: const TextStyle(color: Colors.grey),),
+                                  Text('search_here'.tr, style: const TextStyle(color: Colors.grey),),
+                                  const SizedBox(width: 20,),
+                                  SvgPicture.asset('assets/svg/search-icon.svg',width: 25,height: 25,),
                                   const SizedBox(width: 10,),
-                                  SvgPicture.asset('assets/svg/search-icon.svg')
                                 ],
                               )
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/utils.dart';
 
 import '../../../../core/utils/styles.dart';
 
@@ -14,7 +15,7 @@ class AppBarSearch extends StatelessWidget implements PreferredSizeWidget{
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("search",style: fontLargeBold,),
+      title: Text('search'.tr,style: fontLargeBold,),
       centerTitle: true,
 
       leading:IconButton(
