@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -35,7 +33,7 @@ class CommentScreen extends StatelessWidget {
         final placeData = commentController.placeData.value;
 
         if (placeData == null) {
-          return Center(child: CircularProgressIndicator()); // Show a loading indicator
+          return const Center(child: CircularProgressIndicator()); // Show a loading indicator
         }
         return
         Padding(
@@ -51,7 +49,14 @@ class CommentScreen extends StatelessWidget {
                   reviews: int.parse(placeData['review_num']?? ""),
                   rating: double.parse(placeData['rate_avg']?? ""),
                   type: '',
-                  onTap: (){},
+                  onTap: (){
+                    Get.toNamed(
+                      '/placeDetailes',
+                      arguments: {
+                        'place': placeData['place_id']
+                      },
+                    );
+                  },
                 ),
                 const SizedBox(height: 20,),
                 Container(
@@ -82,7 +87,7 @@ class CommentScreen extends StatelessWidget {
                      Text('userComment'.tr,style: fontLarge,),
                   ],
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 Wrap(
                   spacing: 8.0, // Horizontal spacing
                   runSpacing: 8.0, // Vertical spacing

@@ -27,19 +27,19 @@ class FavoriteScreen extends StatelessWidget {
           Navigator.pop(context);
         },),
       body: favoriteController.placesData.isEmpty
-          ?AddFavorite()
+          ?const AddFavorite()
           : Obx(
               (){
-                return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
+                return SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
 
-                  Expanded(
-                    child: Column(
+                    Column(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.all(15.0),
                           child: Row(
                             children: [
@@ -47,15 +47,18 @@ class FavoriteScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Wrap(
-                          spacing: 30, // Space between items horizontally
-                          runSpacing: 10, // Space between items vertically
+                        GridView.count(
+                          crossAxisCount: 2, // Number of columns in the grid
+                          crossAxisSpacing: 10, // Space between items horizontally
+                          mainAxisSpacing: 10, // Space between items vertically
+                          childAspectRatio: 3 / 4, // Adjust the card's width-to-height ratio
+                          shrinkWrap: true, // Ensures the GridView doesn't take infinite height
+                          physics: const NeverScrollableScrollPhysics(),
                           children: favoriteController.placesData.map((placeData) {
-
                             return Padding(
                               padding: const EdgeInsets.all(6.0),
-                              child:
-                              PlaceCard(title: placeData['place_name'].toString(),
+                              child: PlaceCard(
+                                title: placeData['place_name'].toString(),
                                 location: placeData['place_location'].toString(),
                                 imagePath: placeData['place_image'][0],
                                 reviews: int.parse(placeData['review_num']),
@@ -63,23 +66,22 @@ class FavoriteScreen extends StatelessWidget {
                                 onTap: () {
                                   Get.toNamed(
                                     '/placeDetailes',
-                                    arguments: {
-                                      'place': placeData['place_id']
-                                    },
+                                    arguments: {'place': placeData['place_id']},
                                   );
                                 },
                               ),
                             );
                           }).toList(),
                         ),
+
                       ],
-                    ),
-                  )
+                    )
 
 
 
-                ],
-              );
+                  ],
+                                ),
+                );
               }
             ),
 

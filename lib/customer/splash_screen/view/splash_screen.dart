@@ -19,11 +19,11 @@ class SplashScreen extends StatelessWidget {
               height: double.infinity,
               child: SvgPicture.asset(Images.splash,fit: BoxFit.fill,),
             ),
-             Center(
-                child:  Text('hello'.tr,
-                  style: const TextStyle(fontSize: 35,color: Color(0xff61462E),fontWeight: FontWeight.bold,),
-                  textAlign: TextAlign.center,),
-                )
+             // Center(
+             //    child:  Text('hello'.tr,
+             //      style: const TextStyle(fontSize: 35,color: Color(0xff61462E),fontWeight: FontWeight.bold,),
+             //      textAlign: TextAlign.center,),
+             //    )
           ]
       );
   }

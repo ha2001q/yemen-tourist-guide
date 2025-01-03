@@ -38,6 +38,7 @@ dependencies:
   firebase_core: ^2.16.0
   firebase_storage: ^11.7.1
   cloud_firestore: ^4.9.0
+
   get: ^4.6.6
   # pick images
   image_picker: ^0.8.5+3
@@ -76,6 +77,9 @@ dependencies:
   algolia_client_insights: 1.27.1
   algolia_client_search: 1.27.1
   algoliasearch: 1.27.1
+  #containue with google_sign_in:
+  google_sign_in: ^6.2.2
+  firebase_auth: ^4.20.0
 
 
 dev_dependencies:
@@ -85,12 +89,12 @@ dev_dependencies:
   flutter_launcher_icons: "^0.14.1"
 
 
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/images/logo_icon.jpg"
-  adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/images/logo_icon.jpg"
+#flutter_launcher_icons:
+#  android: true
+#  ios: true
+#  image_path: "assets/images/logo.png"
+#  adaptive_icon_background: "#ffffff"
+#  adaptive_icon_foreground: "assets/images/logo.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

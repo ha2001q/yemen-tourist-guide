@@ -22,9 +22,10 @@ class PlaceReviewWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
       child: Container(
 
+
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Color(0xffF5F4F8)
+          color: const Color(0xffF5F4F8)
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -53,7 +54,7 @@ class PlaceReviewWidget extends StatelessWidget {
               ///
 
               SizedBox(
-                width: 330,
+                width: 274,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

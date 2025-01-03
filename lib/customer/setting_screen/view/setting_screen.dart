@@ -68,22 +68,22 @@ class SettingScreen extends StatelessWidget {
                 height: 15,
               ),
 
-              SettingTemplete(
-                hamzah: 'notification'.tr,
-                path: Images.notification,
-                flag: true,
-                onTap: ()  {
+              // SettingTemplete(
+              //   hamzah: 'notification'.tr,
+              //   path: Images.notification,
+              //   flag: true,
+              //   onTap: ()  {
+              //
+              //   },
+              // ),
 
-                },
-              ),
+              // const SizedBox(
+              //   height: 15,
+              // ),
+
 
               const SizedBox(
-                height: 15,
-              ),
-
-
-              const SizedBox(
-                height: 30.0,
+                height: 45.0,
               ),
 
               Text('information'.tr,

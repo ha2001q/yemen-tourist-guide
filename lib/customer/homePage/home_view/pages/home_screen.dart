@@ -464,11 +464,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   /// high rate places
                   const SizedBox(height: 20,),
                    Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 13),
+                    padding: const EdgeInsets.symmetric(horizontal: 13),
                     child: Align(alignment: Alignment.bottomLeft,child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('love by people'.tr, style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
+                        Text('love by people'.tr, style: const TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
                         // Text('See All', style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold, color: Colors.deepOrange),),
                       ],
                     )),
