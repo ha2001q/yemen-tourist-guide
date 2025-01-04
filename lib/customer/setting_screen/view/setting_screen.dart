@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:yemen_tourist_guide/core/utils/styles.dart';
 import 'package:yemen_tourist_guide/customer/setting_screen/view/widget/setting_widget.dart';
 
@@ -139,15 +141,35 @@ class SettingScreen extends StatelessWidget {
                           child:  Text('Cancel'.tr),
                         ),
                         TextButton(
-                          onPressed: (){
-                            UserDataController.loadUser();
-                            var id = UserDataController.userId;
-                            if(id == ''){
-                              return;
-                            }else{
-                              UserDataController.deleteUser();
+                          onPressed: () async {
+                            // Call the Google logout method
+                            try {
+                              await GoogleSignIn().signOut(); // Google SignOut
+                              await FirebaseAuth.instance.signOut(); // Firebase SignOut
+
+                              // Optionally, delete user data here (if needed)
                               UserDataController.loadUser();
-                              Get.back(result: false);
+                              var id = UserDataController.userId;
+                              if (id == '') {
+                                return;
+                              } else {
+                                // If there's a valid user, delete and reload data
+                                UserDataController.deleteUser();
+                                UserDataController.loadUser();
+
+                                // Optionally, use Get.back to go back with a result
+                                Get.back(result: false);
+
+                                // Show a snackbar or toast as feedback
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Logged out successfully!")),
+                                );
+                              }
+                            } catch (e) {
+                              // Handle any errors during logout
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Logout failed: $e")),
+                              );
                             }
                           },
                           child:  Text('Logout'.tr),

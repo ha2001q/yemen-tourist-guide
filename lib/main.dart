@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,15 +32,114 @@ import 'package:yemen_tourist_guide/customer/splash_screen/controller/Splash_con
 import 'package:yemen_tourist_guide/customer/splash_screen/view/splash_screen.dart';
 
 import 'customer/homePage/home_view/pages/home_screen.dart';
+import 'notification.dart';
 
 SharedPreferences? sharedPref;
 
+class NotificationService {
+  final FlutterLocalNotificationsPlugin _localNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
+  // Initialize the notifications
+  Future<void> initializeNotifications() async {
+    const AndroidInitializationSettings androidSettings =
+    AndroidInitializationSettings('@mipmap/logo'); // Replace with your app icon
+
+    const InitializationSettings initSettings =
+    InitializationSettings(android: androidSettings);
+
+    await _localNotificationsPlugin.initialize(initSettings);
+  }
+
+  // Show a notification
+  Future<void> showNotification({
+    required int id,
+    required String title,
+    required String body,
+  }) async {
+    const AndroidNotificationDetails androidDetails =
+    AndroidNotificationDetails(
+      'channel_id', // Unique channel ID
+      'channel_name', // Channel name
+      channelDescription: 'channel_description', // Channel description
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+
+    const NotificationDetails notificationDetails =
+    NotificationDetails(android: androidDetails);
+
+    await _localNotificationsPlugin.show(
+      id,       // Notification ID
+      title,    // Notification title
+      body,     // Notification body
+      notificationDetails,
+    );
+  }
+}
+// Background message handler
+Future<void> _firebaseBackgroundMessage(RemoteMessage message) async {
+  if (message.notification != null) {
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+    // Ensure notifications are initialized
+    await NotificationInitialize.initializeNotifications(flutterLocalNotificationsPlugin);
+
+    var notificationService = NotificationService();
+    await notificationService.initializeNotifications();
+    notificationService = NotificationService();
+    notificationService.showNotification(
+      id: 1,
+      title: message.notification!.title ?? "No Title",
+      body: message.notification!.body ?? "No Body",
+    );
+    // Display the notification
+    await NotificationInitialize.showNotification(
+      title: message.notification!.title ?? "No Title",
+      body: message.notification!.body ?? "No Body",
+      flutterLocalNotificationsPlugin: flutterLocalNotificationsPlugin,
+    );
+  }
+}
+
+// Foreground message handler
+Future<void> _firebaseForegroundMessage(RemoteMessage message) async {
+  if (message.notification != null) {
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+    // Ensure notifications are initialized
+    await NotificationInitialize.initializeNotifications(flutterLocalNotificationsPlugin);
+    var notificationService = NotificationService();
+    await notificationService.initializeNotifications();
+    notificationService = NotificationService();
+    notificationService.showNotification(
+      id: 1,
+      title: message.notification!.title ?? "No Title",
+      body: message.notification!.body ?? "No Body",
+    );
+    // Display
+    // Display the notification
+    await NotificationInitialize.showNotification(
+      title: message.notification!.title ?? "No Title",
+      body: message.notification!.body ?? "No Body",
+      flutterLocalNotificationsPlugin: flutterLocalNotificationsPlugin,
+    );
+  }
+}
+
 Future<void> main() async {
-  /// 1. for Localization and Languages
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init(); // Initialize GetStorage
+  await GetStorage.init();
   sharedPref = await SharedPreferences.getInstance();
   await Firebase.initializeApp();
+
+
+
+  // Set the background message handler
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
+
 
   /// this to make battery, notification icons fixable changes colors above the appbar.
   SystemChrome.setSystemUIOverlayStyle(
@@ -53,12 +154,46 @@ Future<void> main() async {
   // // userController.setUser('1', 'dheya', 'https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg');
   // // userController.deleteUser();
   // userController.loadUser();
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp(){
+     _initializeFCM();
+   }
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
+
+
+
+
+  void _initializeFCM() async {
+    // Request notification permissions
+    NotificationSettings settings = await _firebaseMessaging.requestPermission();
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print("User granted permission");
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      print("User granted provisional permission");
+    } else {
+      print("User declined or has not accepted permission");
+    }
+
+    // Print the FCM token
+    String? token = await _firebaseMessaging.getToken();
+    print("FCM Token: $token");
+
+    // Handle foreground messages
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("Message received in foreground: ${message.notification?.title}");
+      print("Message body: ${message.notification?.body}");
+    });
+
+    // Handle messages when the app is opened from a background notification
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("Message opened: ${message.data}");
+    });
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

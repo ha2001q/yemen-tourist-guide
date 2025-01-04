@@ -1,8 +1,87 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart'; // If using GetX for state management
 
 class LoginController extends GetxController {
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> signUpWithGoogle(BuildContext context) async {
+    try {
+      // Trigger the Google Sign-In flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Sign-Up Cancelled")),
+        );
+        return;
+      }
+
+      // Obtain Google authentication details
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      // Create a credential for Firebase Authentication
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign up with Firebase using Google credentials
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        // Save user data in Firestore
+        await _firestore.collection("Users").doc(user.uid).set({
+          "user_id": user.uid,
+          "user_name": user.displayName,
+          "user_email": user.email,
+          "user_image": user.photoURL,
+          "user_created_at": DateTime.now(),
+        });
+
+        UserDataController.setUser(user.uid, user.displayName.toString(), user.photoURL.toString());
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Sign-Up Successful! Welcome, ${user.displayName}")),
+        );
+
+        Get.toNamed('/root');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Sign-Up Failed: $e")),
+      );
+
+      print("Sign-Up Failed: $e");
+    }
+  }
+
+
+  Future<void> logout() async {
+    try {
+      // Sign out from Google
+      await _googleSignIn.signOut();
+
+      // Sign out from Firebase
+      await _auth.signOut();
+
+      Get.snackbar("Logged Out", "You have successfully logged out.");
+    } catch (e) {
+      Get.snackbar("Logout Failed", e.toString());
+    }
+  }
+
+
+
+
+
   // Observables for login state (optional, for UI binding)
   var isLoading = false.obs;
   var errorMessage = ''.obs;

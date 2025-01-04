@@ -1,7 +1,8 @@
 const arabic = {
   'app_name': "الشبح VPN",
   'hello':"مرحبا بكم في \nالدليل السياحي اليمني",
-  'profile':"الحساب",
+  'profile':'الحساب',
+  'home':'الرئيسية',
   'how_u_day':'كيف حالك',
   'all_places':'كل الاماكن',
   'All':'الكل',

@@ -12,7 +12,20 @@
           "package_name": "com.example.yemen_tourist_guide"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "840146696225-rvd41i2fhohccnv1hk4qndooa5irc3aj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.yemen_tourist_guide",
+            "certificate_hash": "2887a6932e7320c63f44239c0849b5676b4298aa"
+          }
+        },
+        {
+          "client_id": "840146696225-nm6h1g7ktrgqbods3k7h9d56rg5b0ji1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAFdnkc6XuLfREMuTv9KmSn8XbSpPiamGQ"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840146696225-nm6h1g7ktrgqbods3k7h9d56rg5b0ji1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

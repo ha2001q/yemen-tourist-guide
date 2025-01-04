@@ -1,8 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yemen_tourist_guide/core/method/SRValidator.dart';
-
 import '../../../core/utils/images.dart';
 import '../../../core/utils/styles.dart';
 import '../../root_screen/root_screen.dart';
@@ -11,7 +11,7 @@ import '../controller/login_controller.dart';
 
 
 final _loginForm = GlobalKey<FormState>();
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatelessWidget{
    LoginScreen({super.key});
   // Create an instance of the LoginController
   final LoginController loginController = Get.put(LoginController());
@@ -19,6 +19,7 @@ class LoginScreen extends StatelessWidget {
 
    TextEditingController email = TextEditingController();
    TextEditingController password = TextEditingController();
+
 
 
    @override
@@ -81,7 +82,7 @@ class LoginScreen extends StatelessWidget {
                                       controller:email,
                                       keyboardType: TextInputType.emailAddress,
                                     ),
-                                    SizedBox(height: 15,),
+                                    const SizedBox(height: 15,),
                                     TextFormField(
                                       decoration: InputDecoration(
                                         filled: true,
@@ -196,6 +197,7 @@ class LoginScreen extends StatelessWidget {
                             children: <Widget>[
                               InkWell(
                                 onTap: (){
+                                  loginController.signUpWithGoogle(context);
                                   // _handleGoogleBtnClick();
                                 },
                                 child: Padding(

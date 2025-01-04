@@ -2,6 +2,7 @@ const english = {
   'app_name': "Ghost VPN",
   'hello':"Welcome to Yemen\ntourist guide",
   'profile':"Profile",
+  'home':'Home',
   'how_u_day':'How are you',
   'all_places':'all places',
   'All':'All',
