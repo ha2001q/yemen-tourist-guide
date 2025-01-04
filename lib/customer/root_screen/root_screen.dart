@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
-
 import '../favorite_screen/view/pages/favorite_screen.dart';
 import '../homePage/home_view/pages/home_screen.dart';
 import '../profile_screen/view/pages/profile_screen.dart';
@@ -24,45 +22,7 @@ class _RootScreenState extends State<RootScreen> {
   void initState() {
     super.initState();
 
-    // Request permission for notifications
-    _requestPermission();
 
-    // Handle messages when the app is in the foreground
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (message.notification != null) {
-        print('Message Title: ${message.notification!.title}');
-        print('Message Body: ${message.notification!.body}');
-      }
-    });
-
-    // Handle messages when the app is opened from a background notification
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Message opened: ${message.data}');
-    });
-    // Retrieve and print the FCM token when the app is started
-    _getFCMToken();
-  }
-  void _requestPermission() async {
-    NotificationSettings settings = await _firebaseMessaging.requestPermission();
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
-    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
-    } else {
-      print('User denied permission');
-    }
-  }
-  Future<void> _getFCMToken() async {
-    try {
-      String? token = await _firebaseMessaging.getToken();
-      if (token != null) {
-        print("FCM Token: $token");  // Print the FCM token
-      } else {
-        print("Failed to retrieve FCM token.");
-      }
-    } catch (e) {
-      print("Error getting FCM token: $e");
-    }
   }
   // UserController userController =Get.put(UserController());
   int bottomNavIndex = 0;

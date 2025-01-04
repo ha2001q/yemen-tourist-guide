@@ -59,7 +59,7 @@ class NotificationService {
   }) async {
     const AndroidNotificationDetails androidDetails =
     AndroidNotificationDetails(
-      'channel_id', // Unique channel ID
+      '1', // Unique channel ID
       'channel_name', // Channel name
       channelDescription: 'channel_description', // Channel description
       importance: Importance.high,
@@ -103,7 +103,7 @@ Future<void> _firebaseBackgroundMessage(RemoteMessage message) async {
   }
 }
 
-// Foreground message handler
+//Foreground message handler
 Future<void> _firebaseForegroundMessage(RemoteMessage message) async {
   if (message.notification != null) {
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -111,6 +111,7 @@ Future<void> _firebaseForegroundMessage(RemoteMessage message) async {
 
     // Ensure notifications are initialized
     await NotificationInitialize.initializeNotifications(flutterLocalNotificationsPlugin);
+
     var notificationService = NotificationService();
     await notificationService.initializeNotifications();
     notificationService = NotificationService();
@@ -119,7 +120,6 @@ Future<void> _firebaseForegroundMessage(RemoteMessage message) async {
       title: message.notification!.title ?? "No Title",
       body: message.notification!.body ?? "No Body",
     );
-    // Display
     // Display the notification
     await NotificationInitialize.showNotification(
       title: message.notification!.title ?? "No Title",
@@ -136,9 +136,10 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
 
-
+  FirebaseMessaging.onMessage.listen(_firebaseForegroundMessage);
   // Set the background message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
+  FirebaseMessaging.onBackgroundMessage(_firebaseForegroundMessage);
 
 
   /// this to make battery, notification icons fixable changes colors above the appbar.
@@ -282,6 +283,10 @@ class MyApp extends StatelessWidget {
           // binding: BindingsBuilder(()=>Get.put(CommentController()))
         ),
       ],
+
+
+      ///////////////////////////////////////////////////////////////////////
+
 
     );
   }

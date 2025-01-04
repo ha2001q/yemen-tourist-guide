@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -130,13 +131,14 @@ class SignupScreen extends StatelessWidget {
                                   SizedBox(height: 50,),
                                   InkWell(
                                       onTap:() async {
+                                        String? token = await FirebaseMessaging.instance.getToken();
                                         if (_SignUpForm.currentState!.validate()) {
                                           try{
                                            var name1 = name.text ;
                                            var email1 = email.text ;
                                            var password1 = password.text ;
                                            // Call the login method
-                                           bool success = await signupController.signupUser(name1, email1, password1);
+                                           bool success = await signupController.signupUser(name1, email1, password1,token!);
 
                                            if (success) {
                                              // Navigate to the next screen if login is successful
