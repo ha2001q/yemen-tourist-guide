@@ -46,8 +46,8 @@ class CommentScreen extends StatelessWidget {
                   title: placeData['place_name']??" ",
                   location: placeData['place_location']??"",
                   imageBath: placeData['place_image'][0]??"https://s.france24.com/media/display/cc2f52c0-b4eb-11ea-a534-005056a964fe/w:1280/p:16x9/yemen%20houthi%20sanaa%20reuters.jpg",
-                  reviews: int.parse(placeData['review_num']?? ""),
-                  rating: double.parse(placeData['rate_avg']?? ""),
+                  reviews: int.parse(placeData['review_num'].toString()?? ""),
+                  rating: double.parse(placeData['rate_avg'].toString()?? ""),
                   type: '',
                   onTap: (){
                     Get.toNamed(

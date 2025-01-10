@@ -253,10 +253,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                 onPressed: () {
                                   homeController.selectedOption.value = isSelected ? null : option['city_name']; // Toggle selection
 
-                                  homeController.cityId.value = option['city_id'];
+                                  homeController.cityId.value = int.parse(option['city_id']);
                                   print(option['city_id'].toString());
-                                  homeController.listenToBanners(option['city_id']);
-                                  homeController.listenToPlaces(option['city_id'],homeController.typeId.value);
+                                  homeController.listenToBanners(int.parse(option['city_id']));
+                                  homeController.listenToPlaces(int.parse(option['city_id']),homeController.typeId.value);
 
                                 },
                                 shape: StadiumBorder(
@@ -402,9 +402,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                 onPressed: () {
                                   homeController.selectedOptionTypes.value = isSelected ? null : option['type_name']; // Toggle selection
 
-                                  homeController.typeId.value = option['type_id'];
+                                  homeController.typeId.value = int.parse(option['type_id'].toString());
                                   print(option['type_id'].toString());
-                                  homeController.listenToPlaces(homeController.cityId.value, option['type_id']);
+                                  homeController.listenToPlaces(homeController.cityId.value, int.parse(option['type_id'].toString()));
                                 },
                                 shape: StadiumBorder(
                                   side: BorderSide(
@@ -441,7 +441,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               title: place['place_name'],
                               location: place['place_location'],
                               rating: double.tryParse(place['rate_avg'] ?? '0.0') ?? 0.0,
-                              reviews: int.tryParse(place['review_num'] ?? '0') ?? 0,
+                              reviews: int.tryParse(place['review_num'].toString() ?? '0') ?? 0,
                               imagePath: place['place_image']?[0] ?? 'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg',
                               onTap: () {
                                 Get.toNamed(
@@ -503,7 +503,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               type: '',
                               location: place['place_location'],
                               rating: double.tryParse(place['rate_avg']) ?? 0.0,
-                              reviews: int.tryParse(place['review_num']) ?? 0,
+                              reviews: int.tryParse(place['review_num'].toString()) ?? 0,
                               imageBath: place['place_image'][0]??'https://tourismteacher.com/wp-content/uploads/2023/10/mosq.jpg'
                             ),
                           );
