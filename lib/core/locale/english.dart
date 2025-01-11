@@ -49,6 +49,8 @@ const english = {
   'text_in_empty_favorite_page': 'Your favorite page is empty',
   'text_in_empty_favorite_page2': 'click the add button to start exploring and chooses your favorite places',
   'search_here':'search here',
+  'have':'have ',
+  'places':' places'
 
 
 

@@ -102,7 +102,7 @@ dev_dependencies:
 #  android: true
 #  ios: true
 #  image_path: "assets/images/logo.png"
-#  adaptive_icon_background: "#ffffff"
+#  adaptive_icon_background: "#000000"
 #  adaptive_icon_foreground: "assets/images/logo.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to

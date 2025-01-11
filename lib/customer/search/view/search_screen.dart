@@ -244,9 +244,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                     }
                                     return Wrap(
                                       children: [
-                                        Text("have ", style: fontMedium,),
+                                        Text('have'.tr, style: fontMedium,),
                                         Text(" ${snapshot.data!.nbHits} ", style: fontMedium,),
-                                        Text(' Places',
+                                        Text('places'.tr,
                                           style: fontMedium,)
                                       ],
                                     );

@@ -15,6 +15,7 @@
         android:label="Yemen Tourist Guide"
         android:name="${applicationName}"
         android:icon="@mipmap/logo">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

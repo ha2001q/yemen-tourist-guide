@@ -49,6 +49,8 @@ const arabic = {
   'text_in_empty_favorite_page': 'الصفحة المفضلة لديك فارغة',
   'text_in_empty_favorite_page2': 'انقر فوق زر إضافة اعلاه لبدء الاستكشاف واختيار الأماكن المفضلة لديك',
   'search_here':'ابحث هنا',
+  'have':'يوجد ',
+  'places':' أماكن'
 
 
 
