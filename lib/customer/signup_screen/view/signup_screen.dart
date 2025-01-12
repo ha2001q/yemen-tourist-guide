@@ -2,9 +2,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
 import 'package:yemen_tourist_guide/core/method/SRValidator.dart';
 import 'package:yemen_tourist_guide/customer/signup_screen/controller/signup_controller.dart';
+import 'package:yemen_tourist_guide/customer/signup_screen/view/verification_email.dart';
 
 import '../../../core/utils/images.dart';
 import '../../../core/utils/styles.dart';
@@ -12,11 +12,18 @@ import '../../login_screen/view/login_screen.dart';
 
 final _SignUpForm = GlobalKey<FormState>();
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
    SignupScreen({super.key});
 
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   TextEditingController name = TextEditingController();
+
   TextEditingController email = TextEditingController();
+
   TextEditingController password = TextEditingController();
 
   SignupController signupController = Get.put(SignupController());
@@ -39,10 +46,10 @@ class SignupScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('Sign up',style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
-                        SizedBox(height: 35,),
-                        Text('welcome'.tr,style: TextStyle(color: Colors.black),),
-                        SizedBox(height: 110,),
+                        const Text('Sign up',style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
+                        const SizedBox(height: 35,),
+                        Text('welcome'.tr,style: const TextStyle(color: Colors.black),),
+                        const SizedBox(height: 110,),
                         Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -128,7 +135,7 @@ class SignupScreen extends StatelessWidget {
                                     controller:password,
                                     keyboardType: TextInputType.visiblePassword,
                                   ),
-                                  SizedBox(height: 50,),
+                                  const SizedBox(height: 50,),
                                   InkWell(
                                       onTap:() async {
                                         String? token = await FirebaseMessaging.instance.getToken();
@@ -138,16 +145,15 @@ class SignupScreen extends StatelessWidget {
                                            var email1 = email.text ;
                                            var password1 = password.text ;
                                            // Call the login method
-                                           bool success = await signupController.signupUser(name1, email1, password1,token!);
+                                           var success = await signupController.signupUser(name1, email1, password1,token!);
 
                                            if (success) {
-                                             // Navigate to the next screen if login is successful
-                                             Get.snackbar('Login Success', 'Welcome back!');
-                                             // You can use Get.to() for navigation
-                                             Get.offAndToNamed('/root');
+                                             // After calling signupUser and sending verification email
+                                             Get.to(() => VerifyEmailScreen(email: email1,image: '',userName: name1,password: password1,));
+                                             // Get.offAndToNamed('/root');
                                            } else {
                                              // Show error message if login fails
-                                             Get.snackbar('Login Failed', signupController.errorMessage.value);
+                                             Get.snackbar('Sign up Failed', signupController.errorMessage.value);
                                            }
                                           }catch(onPressed){
                                             Navigator.push(
@@ -156,14 +162,16 @@ class SignupScreen extends StatelessWidget {
                                           }
                                         }
                                       },
-                                      child: Container(
-                                        height: 45,
-                                        width: 280,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20),
-                                          color: Color(0xffDE7254),
+                                      child: Obx(
+                                        ()=> Container(
+                                          height: 45,
+                                          width: 280,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20),
+                                            color: const Color(0xffDE7254),
+                                          ),
+                                          child: signupController.isLoading.value?const Center(child: CircularProgressIndicator(color: Colors.white,)):Text('Sign up'.tr,style: fontLarge,textAlign: TextAlign.center,),
                                         ),
-                                        child: Text('Sign up'.tr,style: fontLarge,textAlign: TextAlign.center,),
                                       )
                                   ),
                                 ],
@@ -171,7 +179,7 @@ class SignupScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 15,),
+                        const SizedBox(height: 15,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -180,11 +188,11 @@ class SignupScreen extends StatelessWidget {
                               onTap: (){
                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
                               },
-                              child:Text('login'.tr,style: TextStyle(color: Color(0xffD87234)),),
+                              child:Text('login'.tr,style: const TextStyle(color: Color(0xffD87234)),),
                             )
                           ],
                         ),
-                        SizedBox(height: 20,),
+                        const SizedBox(height: 20,),
                       ],
                     ),
                   ),

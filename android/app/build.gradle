@@ -69,9 +69,10 @@ android {
 flutter {
     source '../..'
 }
-//dependencies {
-//    implementation 'com.google.android.gms:play-services-auth:21.3.0' // Make sure this is included
-//}
+dependencies {
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
+    implementation 'com.google.android.gms:play-services-auth:21.3.0' // Make sure this is included
+}
 //dependencies {
 //
 ////    compile fileTree(dir: 'libs', include: ['*.jar'])

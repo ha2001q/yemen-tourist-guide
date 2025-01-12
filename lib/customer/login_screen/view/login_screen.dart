@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yemen_tourist_guide/core/method/SRValidator.dart';
@@ -20,6 +21,37 @@ class LoginScreen extends StatelessWidget{
    TextEditingController email = TextEditingController();
    TextEditingController password = TextEditingController();
 
+   Future<UserCredential?> loginWithFacebook() async {
+     try {
+       // Trigger the Facebook login process
+       final LoginResult loginResult = await FacebookAuth.instance.login();
+
+       // Check the status of the login result
+       if (loginResult.status == LoginStatus.success) {
+         // Retrieve the Facebook access token
+         final AccessToken accessToken = loginResult.accessToken!;
+
+         // Create an OAuth credential using the access token
+         final OAuthCredential oAuthCredential =
+         FacebookAuthProvider.credential(accessToken.tokenString);
+
+         // Sign in to Firebase with the Facebook OAuth credential
+         return await FirebaseAuth.instance.signInWithCredential(oAuthCredential);
+       } else if (loginResult.status == LoginStatus.cancelled) {
+         // Handle login cancellation
+         debugPrint('Facebook login cancelled by user.');
+         return null;
+       } else {
+         // Handle login error
+         debugPrint('Facebook login failed: ${loginResult.message}');
+         return null;
+       }
+     } catch (e) {
+       // Handle any exceptions that occur during the login process
+       debugPrint('Error during Facebook login: $e');
+       return null;
+     }
+   }
 
 
    @override
@@ -30,7 +62,7 @@ class LoginScreen extends StatelessWidget{
             body:
             Stack(
                 children: [
-                  Container(
+                  SizedBox(
                       width: double.infinity,
                       height: double.infinity,
                       child:SvgPicture.asset(Images.janbiahBack,fit: BoxFit.fill,)
@@ -244,7 +276,15 @@ class LoginScreen extends StatelessWidget{
                               ),
 
                               InkWell(
-                                onTap: (){},
+                                onTap: ()async{
+                                  final userCredential = await loginWithFacebook();
+                                  if (userCredential != null) {
+                                    debugPrint('User signed in: ${userCredential.user?.email}');
+                                  } else {
+                                    debugPrint('Facebook login unsuccessful.');
+                                  }
+
+                                },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart'; // If using GetX for state management
@@ -147,6 +148,7 @@ class LoginController extends GetxController {
       isLoading.value = false;
     }
   }
+
 
   // Future<void> updateUserToken(String userId) async {
   //   try {

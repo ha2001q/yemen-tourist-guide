@@ -61,8 +61,8 @@ class FavoriteScreen extends StatelessWidget {
                                 title: placeData['place_name'].toString(),
                                 location: placeData['place_location'].toString(),
                                 imagePath: placeData['place_image'][0],
-                                reviews: int.parse(placeData['review_num']),
-                                rating: double.parse(placeData['rate_avg']),
+                                reviews: int.parse(placeData['review_num'].toString()),
+                                rating: double.parse(placeData['rate_avg'].toString()),
                                 onTap: () {
                                   Get.toNamed(
                                     '/placeDetailes',

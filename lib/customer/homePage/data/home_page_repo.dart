@@ -117,7 +117,7 @@ class HomePageRepo{
   Stream<List<Map<String, dynamic>>> streamServices(int place_id) {
     return _firestore
         .collection('Services')
-    .where('place_id', isEqualTo: place_id)
+    .where('place_id', isEqualTo: place_id.toString())
         .snapshots()
         .map((querySnapshot) {
       return querySnapshot.docs.map((doc) {
