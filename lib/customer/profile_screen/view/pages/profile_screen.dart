@@ -97,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: 100,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              image: profileController.userData['user_image']==null
+                              image: profileController.userData['user_image']==''||profileController.userData['user_image']==null
                                   ?const DecorationImage(
                                   image:AssetImage(Images.profileNonImage),
                                   fit: BoxFit.cover

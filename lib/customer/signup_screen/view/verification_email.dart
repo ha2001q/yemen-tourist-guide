@@ -54,8 +54,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       timer?.cancel();
       await createUserInFirestore();
       // Delay for 3 seconds before navigating to RootScreen
-      Future.delayed(const Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 2), () {
 
+        Get.toNamed('/root');
       });
     }
   }
@@ -109,10 +110,10 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           backgroundColor: Colors.green.shade100,
           colorText: Colors.green.shade800);
     } catch (e) {
-      Get.snackbar('Error', e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red.shade100,
-          colorText: Colors.red.shade800);
+      // Get.snackbar('Error', e.toString(),
+      //     snackPosition: SnackPosition.BOTTOM,
+      //     backgroundColor: Colors.red.shade100,
+      //     colorText: Colors.red.shade800);
     }
   }
 

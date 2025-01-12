@@ -181,7 +181,7 @@ class _MapWithLineScreenState extends State<MapWithLineScreen> {
             compassEnabled: true, // Enable compass to rotate the map
             rotateGesturesEnabled: true, // Allow rotation gesture
             tiltGesturesEnabled: true, // Allow tilt gestures
-            mapType: MapType.hybrid, // Hybrid mode for satellite + terrain view
+            mapType: MapType.normal, // Hybrid mode for satellite + terrain view
             onCameraMove: (position) {
               // This can be used for any additional logic on camera movement
             },

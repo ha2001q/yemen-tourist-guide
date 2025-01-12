@@ -21,7 +21,7 @@ class PageDetailRepo{
 
       if (docSnapshot.docs.isNotEmpty) {
         // If the document exists, show a message
-        Get.snackbar('Info', 'This place is already in your favorites');
+        // Get.snackbar('Info', 'This place is already in your favorites');
         return true; // Document exists
       }
 
@@ -49,7 +49,7 @@ class PageDetailRepo{
 
       if (docSnapshot.exists) {
         // If the document exists, show a message
-        Get.snackbar('Info', 'This place is already in your favorites');
+        // Get.snackbar('Info', 'This place is already in your favorites');
         var docSnapshott = await FirebaseFirestore.instance
             .collection('User_favorites')
             .doc(documentId)

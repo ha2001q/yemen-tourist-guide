@@ -13,6 +13,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/state_manager.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:yemen_tourist_guide/core/utils/images.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 import 'package:yemen_tourist_guide/customer/homePage/home_view/pages/all_places.dart';
 import 'package:yemen_tourist_guide/customer/search/view/search_screen.dart';
@@ -83,16 +84,21 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
 
                           id!=''?Container(
-                            height: 45.0,
-                            width: 45.0,
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              image:  DecorationImage(
-                                image: CachedNetworkImageProvider(image),
-                                fit: BoxFit.cover
+                              height: 45.0,
+                              width: 45.0,
+                              margin: const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  image:  image!=''||image!=null
+                                      ?DecorationImage(
+                                      image: CachedNetworkImageProvider(image),
+                                      fit: BoxFit.cover
+                                  ):const DecorationImage(
+                                      image: AssetImage(Images.profileNonImage),
+                                      fit: BoxFit.cover
+                                  )
                               )
-                            ),
+
                           ):const SizedBox.shrink(),
 
 

@@ -179,7 +179,25 @@ class PlaceDetails extends StatelessWidget {
                             runSpacing: 10,
                             children: homeController.services
                                 .map((service) => ServicesCard(
-                              onTap: () {},
+                              onTap: () async{
+                                if (pageDetailController.placeData.value != null) {
+                                  var check = await requestLocationPermission();
+                                  if (!check!) return;
+
+                                  var place = service;
+                                  if (place!['service_latitude'] != null &&
+                                      place['service_longitude'] != null) {
+                                    Get.toNamed('map_page', arguments: {
+                                      'lat': place['service_latitude'],
+                                      'lon': place['service_longitude']
+                                    });
+                                  } else {
+                                    Get.snackbar('Error', 'Latitude or Longitude is missing.');
+                                  }
+                                } else {
+                                  Get.snackbar('Error', 'Arguments or place data is missing.');
+                                }
+                              },
                               title: service['service_name'] ?? '',
                               type: service['service_type'] ?? '',
                               location: service['service_location'] ?? '',
