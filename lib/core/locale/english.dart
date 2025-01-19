@@ -34,7 +34,8 @@ const english = {
   'Comments':'Comments',
   'userComment':'User Comments',
   'login':'Login',
-  'welcome':'Happy to see you again! Please enter your email and \npassword to login to your account.',
+  'welcome1':'Happy to see you again! Please enter your email and ',
+  'welcome2':'password to login to your account.',
   'Email':'Email',
   'Password':'Password',
   'dontHave':'Dont have an acount? ',
@@ -43,14 +44,16 @@ const english = {
   'a Guest':'a Guest',
   'Sign in with':'Sign in with',
   'Full Name':'Full Name',
-  'enter Full name':'enter Full name',
+  'enter Full name':'please enter name',
+  'enter password':'please enter password',
   'just_letter':'just letter',
   'already have':'Already have an account? ',
   'text_in_empty_favorite_page': 'Your favorite page is empty',
   'text_in_empty_favorite_page2': 'click the add button to start exploring and chooses your favorite places',
   'search_here':'search here',
   'have':'have ',
-  'places':' places'
+  'places':' places',
+  'duration':'duration by car',
 
 
 

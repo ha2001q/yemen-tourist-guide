@@ -76,10 +76,11 @@ class LoginScreen extends StatelessWidget{
                         children: [
 
                           // SvgPicture.asset(Images.janbiahBack,fit: BoxFit.cover,),
-                          Text('login'.tr,style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
-                          SizedBox(height: 35,),
-                          Text('welcome'.tr,style: TextStyle(color: Colors.black),),
-                          SizedBox(height: 110,),
+                          Text('login'.tr,style: const TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
+                          const SizedBox(height: 35,),
+                          Text('welcome1'.tr,style: const TextStyle(color: Colors.brown),),
+                          Text('welcome2'.tr,style: const TextStyle(color: Colors.brown),),
+                          const SizedBox(height: 110,),
                           Container(
                             // width: double.infinity,
                             decoration: BoxDecoration(
@@ -157,7 +158,7 @@ class LoginScreen extends StatelessWidget{
                                             }catch(onPressed){
                                               Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(builder: (context)=>RootScreen()));
+                                                  MaterialPageRoute(builder: (context)=>const RootScreen()));
                                             }
                                           }
                                         },
@@ -168,9 +169,9 @@ class LoginScreen extends StatelessWidget{
                                                 width: 280,
                                                 decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(20),
-                                                  color: Color(0xffDE7254),
+                                                  color: const Color(0xffDE7254),
                                                 ),
-                                                child: loginController.isLoading.value?Center(child: CircularProgressIndicator(color: Colors.white,)):Text('login'.tr,style: fontLarge,textAlign: TextAlign.center,),
+                                                child: loginController.isLoading.value?const Center(child: CircularProgressIndicator(color: Colors.white,)):Text('login'.tr,style: fontLarge,textAlign: TextAlign.center,),
                                               );
                                             }
                                         )
@@ -180,7 +181,7 @@ class LoginScreen extends StatelessWidget{
                               ),
                             ),
                           ),
-                          SizedBox(height: 15,),
+                          const SizedBox(height: 15,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -189,11 +190,11 @@ class LoginScreen extends StatelessWidget{
                                 onTap: (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SignupScreen()));
                                 },
-                                child:Text('Sign up'.tr,style: TextStyle(color: Color(0xffD87234)),),
+                                child:Text('Sign up'.tr,style: const TextStyle(color: Color(0xffD87234)),),
                               )
                             ],
                           ),
-                          SizedBox(height: 20,),
+                          const SizedBox(height: 20,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -202,25 +203,39 @@ class LoginScreen extends StatelessWidget{
                                 onTap: (){
                                   Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context)=>RootScreen()));
+                                      MaterialPageRoute(builder: (context)=>const RootScreen()));
                                 },
-                                child:Text('a Guest'.tr,style: TextStyle(color: Color(0xffD87234)),),
+                                child:Text('a Guest'.tr,style: const TextStyle(color: Color(0xffD87234)),),
                               )
                             ],
                           ),
-                          const SizedBox(height: 30.0),
+                          const SizedBox(height: 20.0),
 
-
-                              // Container(
-                              //   height: 1,
-                              //   width: double.infinity,
-                              //   color: Colors.white,
-                              // ),
-
-
-                           Text('Sign in with'.tr,
-                              style: fontSmallBold
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Expanded(
+                                child: Divider(
+                                  thickness: 1,
+                                  color: Colors.blue,
+                                  indent: 1,
+                                  endIndent: 10,
+                                ),
+                              ),
+                              Text(
+                                'Sign in with'.tr,
+                              ),
+                              const Expanded(
+                                child: Divider(
+                                  thickness: 1,
+                                  color: Colors.blue,
+                                  indent: 10,
+                                  endIndent: 1,
+                                ),
+                              ),
+                            ],
                           ),
+
                           const SizedBox(height: 10.0),
 
                           Row(

@@ -153,12 +153,33 @@ class PlaceDetails extends StatelessWidget {
                             },
                             child:  Text(
                               'readComment'.tr,
-                              style: TextStyle(color: Color(0xFFE17055)),
+                              style: const TextStyle(color: Color(0xFFE17055)),
                             ),
                           ),
                           const Spacer(),
                           const Icon(Icons.time_to_leave, size: 20),
-                          const Text(' 30 دقيقة بالسيارة'),
+                          InkWell(
+                            onTap: () async {
+                              if (pageDetailController.placeData.value != null) {
+                                var check = await requestLocationPermission();
+                                if (!check!) return;
+
+                                var place = pageDetailController.placeData.value;
+                                if (place!['Place_latitude'] != null &&
+                                    place['Place_longitude'] != null) {
+                                  Get.toNamed('map_page', arguments: {
+                                    'lat': place['Place_latitude'],
+                                    'lon': place['Place_longitude']
+                                  });
+                                } else {
+                                  Get.snackbar('Error', 'Latitude or Longitude is missing.');
+                                }
+                              } else {
+                                Get.snackbar('Error', 'Arguments or place data is missing.');
+                              }
+                            },
+                              child: Text('duration'.tr)
+                          ),
                         ],
                       ),
 
@@ -166,8 +187,7 @@ class PlaceDetails extends StatelessWidget {
 
                       // Services section
                        Text('Services at this place'.tr,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 20),
 
                       // Services list

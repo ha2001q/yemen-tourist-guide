@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:yemen_tourist_guide/core/method/SRValidator.dart';
 import 'package:yemen_tourist_guide/customer/signup_screen/controller/signup_controller.dart';
 import 'package:yemen_tourist_guide/customer/signup_screen/view/verification_email.dart';
-
 import '../../../core/utils/images.dart';
 import '../../../core/utils/styles.dart';
 import '../../login_screen/view/login_screen.dart';
@@ -13,7 +12,7 @@ import '../../login_screen/view/login_screen.dart';
 final _SignUpForm = GlobalKey<FormState>();
 
 class SignupScreen extends StatefulWidget {
-   SignupScreen({super.key});
+   const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -34,7 +33,7 @@ class _SignupScreenState extends State<SignupScreen> {
         child: Scaffold(
           body: Stack(
               children: [
-                Container(
+                SizedBox(
                     width: double.infinity,
                     height: double.infinity,
                     child:SvgPicture.asset(Images.janbiahBack,fit: BoxFit.fill,)
@@ -48,7 +47,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       children: [
                         const Text('Sign up',style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
                         const SizedBox(height: 35,),
-                        Text('welcome'.tr,style: const TextStyle(color: Colors.black),),
+                        Text('welcome1'.tr,style: const TextStyle(color: Colors.brown),),
+                        Text('welcome2'.tr,style: const TextStyle(color: Colors.brown),),
                         const SizedBox(height: 110,),
                         Container(
                           width: double.infinity,
@@ -89,7 +89,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     controller:name,
                                     keyboardType: TextInputType.name,
                                   ),
-                                  SizedBox(height: 15,),
+                                  const SizedBox(height: 15,),
                                   TextFormField(
                                     decoration: InputDecoration(
                                       filled: true,
@@ -108,7 +108,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     controller:email,
                                     keyboardType: TextInputType.emailAddress,
                                   ),
-                                  SizedBox(height: 15,),
+                                  const SizedBox(height: 15,),
                                   TextFormField(
                                     decoration: InputDecoration(
                                       filled: true,
@@ -119,15 +119,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                       ),
                                       hintText:'Password'.tr,
                                     ),
-                                    // validator: (value) {
-                                    //   if (value == null || value.isEmpty) {
-                                    //     return "enter password";
-                                    //   }
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'enter password'.tr;
+                                      }
                                     //   if (!RegExp(r'^[a-zA-Z\s]*$').hasMatch(value!)) {
                                     //     return "just_letter";
                                     //   }
-                                    //   return null;
-                                    // },
+                                      return null;
+                                    },
                                     onSaved: (value) {
                                       password = password;
                                       // = value!;

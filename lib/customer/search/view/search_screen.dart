@@ -1,16 +1,10 @@
-import 'dart:convert';
-
 import 'package:algolia_helper_flutter/algolia_helper_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:yemen_tourist_guide/customer/homePage/home_view/widgets/PlaceCard.dart';
 import 'package:yemen_tourist_guide/customer/search/view/search_meta_data.dart';
-import 'package:yemen_tourist_guide/customer/search/view/widgets/list_property_widget.dart';
 import 'package:yemen_tourist_guide/customer/search/view/widgets/search_appbar.dart';
-
-import '../../../../../core/utils/images.dart';
 import '../../../../../core/utils/styles.dart';
 
 
@@ -186,18 +180,20 @@ class _SearchScreenState extends State<SearchScreen> {
    @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarSearch(
-          onPressed: (){
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (builder)=> SearchScreen(),
-                  // _filterScreen(),
-            );
-          },
-          onTapBack: (){
-            Navigator.pop(context);
-          }),
+      appBar: AppBar(
+        title: Text('search'.tr,style: fontLargeBold,),
+        centerTitle: true,
+
+        leading:IconButton(
+          style: IconButton.styleFrom(
+            backgroundColor:Theme.of(context).cardColor,
+          ),
+          icon: const Icon(Icons.arrow_back_ios_new_outlined,size: 15,),
+          onPressed: () => Navigator.pop(context),
+        ) ,
+
+
+      ),
 
       body:Padding(
         padding: const EdgeInsets.all(15.0),
