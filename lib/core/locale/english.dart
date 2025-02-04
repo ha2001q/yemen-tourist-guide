@@ -42,7 +42,7 @@ const english = {
   'Sign up':'Sign Up',
   'Continue as ':'Continue as ',
   'a Guest':'a Guest',
-  'Sign in with':'Sign in with',
+  'Sign in with':'Sign in with google',
   'Full Name':'Full Name',
   'enter Full name':'please enter name',
   'enter password':'please enter password',

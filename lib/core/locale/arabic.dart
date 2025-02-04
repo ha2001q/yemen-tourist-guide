@@ -42,7 +42,7 @@ const arabic = {
   'Sign up':'انشاء حساب',
   'Continue as ':'الأستمرار كا ',
   'a Guest':'زائر',
-  'Sign in with':'التسجيل بواسطة',
+  'Sign in with':'التسجيل بواسطة جوجل',
   'Full Name':'الأسم الكامل',
   'enter Full name':'من فضلك ادخل الأسم',
   'enter password':'من فضلك ادخل كلمه السر',

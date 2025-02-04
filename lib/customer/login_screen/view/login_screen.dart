@@ -250,7 +250,7 @@ class LoginScreen extends StatelessWidget{
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    width: 158.50,
+                                    width: 360.50,
                                     height: 70,
                                     padding: const EdgeInsets.only(top: 22, bottom: 23),
                                     decoration: BoxDecoration(
@@ -290,61 +290,61 @@ class LoginScreen extends StatelessWidget{
                                 ),
                               ),
 
-                              InkWell(
-                                onTap: ()async{
-                                  final userCredential = await loginWithFacebook();
-                                  if (userCredential != null) {
-                                    debugPrint('User signed in: ${userCredential.user?.email}');
-                                  } else {
-                                    debugPrint('Facebook login unsuccessful.');
-                                  }
-
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    width: 158.50,
-                                    height: 70,
-                                    padding: const EdgeInsets.only(top: 22, bottom: 23),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      color: Theme.of(context).cardColor,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Theme.of(context).shadowColor.withOpacity(0.2), // Use shadowColor from the theme with opacity
-                                          spreadRadius: 2, // Spread radius of the shadow
-                                          blurRadius: 4, // Blur radius of the shadow
-                                          offset: const Offset(0, 2), // Offset of the shadow
-                                        ),
-                                      ],
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                                width: 25,
-                                                height: 25,
-                                                child:
-                                                SvgPicture.asset(
-                                                  Images.facebookIcon,
-                                                  height: 25,
-                                                  width: 25,
-                                                )
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              )
+                              // InkWell(
+                              //   onTap: ()async{
+                              //     final userCredential = await loginWithFacebook();
+                              //     if (userCredential != null) {
+                              //       debugPrint('User signed in: ${userCredential.user?.email}');
+                              //     } else {
+                              //       debugPrint('Facebook login unsuccessful.');
+                              //     }
+                              //
+                              //   },
+                              //   child: Padding(
+                              //     padding: const EdgeInsets.all(8.0),
+                              //     child: Container(
+                              //       width: 158.50,
+                              //       height: 70,
+                              //       padding: const EdgeInsets.only(top: 22, bottom: 23),
+                              //       decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(30),
+                              //         color: Theme.of(context).cardColor,
+                              //         boxShadow: [
+                              //           BoxShadow(
+                              //             color: Theme.of(context).shadowColor.withOpacity(0.2), // Use shadowColor from the theme with opacity
+                              //             spreadRadius: 2, // Spread radius of the shadow
+                              //             blurRadius: 4, // Blur radius of the shadow
+                              //             offset: const Offset(0, 2), // Offset of the shadow
+                              //           ),
+                              //         ],
+                              //       ),
+                              //       child: Row(
+                              //         mainAxisSize: MainAxisSize.min,
+                              //         mainAxisAlignment: MainAxisAlignment.center,
+                              //         crossAxisAlignment: CrossAxisAlignment.center,
+                              //         children: [
+                              //           Row(
+                              //             mainAxisSize: MainAxisSize.min,
+                              //             mainAxisAlignment: MainAxisAlignment.start,
+                              //             crossAxisAlignment: CrossAxisAlignment.center,
+                              //             children: [
+                              //               SizedBox(
+                              //                   width: 25,
+                              //                   height: 25,
+                              //                   child:
+                              //                   SvgPicture.asset(
+                              //                     Images.facebookIcon,
+                              //                     height: 25,
+                              //                     width: 25,
+                              //                   )
+                              //               ),
+                              //             ],
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ),
+                              // )
                             ],
                           ),
 
