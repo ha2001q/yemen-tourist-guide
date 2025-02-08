@@ -100,7 +100,7 @@ class _MapWithLineScreenState extends State<MapWithLineScreen> {
   // Function to fetch the route from Google Maps Directions API
   Future<void> _getRouteFromAPI(LatLng origin, LatLng destination) async {
     final String url =
-        "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=AIzaSyBadvdbDUOBWaod8XbuA2AB5Ot4cdoiKfY";
+        "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=AIzaSyAB0BvnlEVPrOoRcdVdVMVwJk2pRneqiak";
 
     try {
       final response = await http.get(Uri.parse(url));

@@ -12,13 +12,20 @@ import '../controller/login_controller.dart';
 
 
 final _loginForm = GlobalKey<FormState>();
-class LoginScreen extends StatelessWidget{
+class LoginScreen extends StatefulWidget{
    LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   // Create an instance of the LoginController
+  bool _isObscure = true;
   final LoginController loginController = Get.put(LoginController());
 
-
    TextEditingController email = TextEditingController();
+
    TextEditingController password = TextEditingController();
 
    Future<UserCredential?> loginWithFacebook() async {
@@ -53,9 +60,9 @@ class LoginScreen extends StatelessWidget{
      }
    }
 
-
    @override
   Widget build(BuildContext context) {
+
 
     return SafeArea(
         child: Scaffold(
@@ -70,7 +77,7 @@ class LoginScreen extends StatelessWidget{
                   SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 150,left: 10,right: 10),
+                      padding: const EdgeInsets.only(top: 120,left: 10,right: 10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -78,8 +85,8 @@ class LoginScreen extends StatelessWidget{
                           // SvgPicture.asset(Images.janbiahBack,fit: BoxFit.cover,),
                           Text('login'.tr,style: const TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
                           const SizedBox(height: 35,),
-                          Text('welcome1'.tr,style: const TextStyle(color: Colors.brown),),
-                          Text('welcome2'.tr,style: const TextStyle(color: Colors.brown),),
+                          Text('welcome1'.tr,style: const TextStyle(color: Colors.blueGrey),),
+                          Text('welcome2'.tr,style: const TextStyle(color: Colors.blueGrey),),
                           const SizedBox(height: 110,),
                           Container(
                             // width: double.infinity,
@@ -124,14 +131,21 @@ class LoginScreen extends StatelessWidget{
                                           borderRadius: BorderRadius.circular(20),
                                           borderSide: BorderSide.none,
                                         ),
-                                        hintText:'Password'.tr,
+                                        hintText: 'Password'.tr,
+                                        suffixIcon: IconButton(
+                                          icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+                                          onPressed: () {
+                                            setState(() {
+                                              _isObscure = !_isObscure;
+                                            });
+                                          },
+                                        ),
                                       ),
-
+                                      obscureText: _isObscure,
                                       onSaved: (value) {
                                         password = password;
-                                        // = value!;
                                       },
-                                      controller:password,
+                                      controller: password,
                                       keyboardType: TextInputType.visiblePassword,
                                     ),
                                     const SizedBox(height: 20,),
@@ -250,7 +264,7 @@ class LoginScreen extends StatelessWidget{
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    width: 360.50,
+                                    width: 330.50,
                                     height: 70,
                                     padding: const EdgeInsets.only(top: 22, bottom: 23),
                                     decoration: BoxDecoration(

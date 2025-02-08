@@ -41,14 +41,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 150,left: 10,right: 10),
+                    padding: const EdgeInsets.only(top: 120,left: 10,right: 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const Text('Sign up',style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
                         const SizedBox(height: 35,),
-                        Text('welcome1'.tr,style: const TextStyle(color: Colors.brown),),
-                        Text('welcome2'.tr,style: const TextStyle(color: Colors.brown),),
+                        Text('welcome1'.tr,style: const TextStyle(color: Colors.blueGrey),),
+                        Text('welcome2'.tr,style: const TextStyle(color: Colors.blueGrey),),
                         const SizedBox(height: 110,),
                         Container(
                           width: double.infinity,
