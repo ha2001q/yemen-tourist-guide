@@ -57,7 +57,7 @@ class LoginController extends GetxController {
           SnackBar(content: Text("Sign-Up Successful! Welcome, ${user.displayName}")),
         );
 
-        Get.toNamed('/root');
+        Get.offAllNamed('/root');
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

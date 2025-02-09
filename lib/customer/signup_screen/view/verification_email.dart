@@ -38,7 +38,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     if (!isEmailVerified) {
       // sendVerificationEmail();
 
-      timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      timer = Timer.periodic(const Duration(seconds: 5), (timer) {
         checkEmailVerification();
       });
     }
@@ -56,7 +56,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       // Delay for 3 seconds before navigating to RootScreen
       Future.delayed(const Duration(seconds: 2), () {
 
-        Get.toNamed('/root');
+        Get.offAllNamed('/root');
       });
     }
   }

@@ -164,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 // Navigate to the next screen if login is successful
                                                 Get.snackbar('Login Success', 'Welcome back!');
                                                 // You can use Get.to() for navigation
-                                                Get.offAndToNamed('/root');
+                                                Get.offAllNamed('/root');
                                               } else {
                                                 // Show error message if login fails
                                                 Get.snackbar('Login Failed', loginController.errorMessage.value);

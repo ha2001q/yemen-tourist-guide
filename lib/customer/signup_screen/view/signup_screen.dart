@@ -153,7 +153,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                              // Get.offAndToNamed('/root');
                                            } else {
                                              // Show error message if login fails
-                                             Get.snackbar('Sign up Failed', signupController.errorMessage.value);
+                                             Get.snackbar('Go to login', 'this email already exist');
                                            }
                                           }catch(onPressed){
                                             Navigator.push(
