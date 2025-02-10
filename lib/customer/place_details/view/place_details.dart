@@ -8,6 +8,7 @@ import 'package:yemen_tourist_guide/customer/add_review/view/review_screen.dart'
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 import 'package:yemen_tourist_guide/customer/place_details/controller/page_detail_controller.dart';
 import 'package:yemen_tourist_guide/customer/place_details/data/grant_location.dart';
+import 'package:yemen_tourist_guide/customer/place_details/view/widgets/Service_cart.dart';
 import 'package:yemen_tourist_guide/customer/place_details/view/widgets/image_slider_widget.dart';
 
 import '../../../core/utils/images.dart';
@@ -198,7 +199,7 @@ class PlaceDetails extends StatelessWidget {
                             spacing: 30,
                             runSpacing: 10,
                             children: homeController.services
-                                .map((service) => ServicesCard(
+                                .map((service) => ServicesCard1(
                               onTap: () async{
                                 if (pageDetailController.placeData.value != null) {
                                   var check = await requestLocationPermission();
@@ -221,8 +222,6 @@ class PlaceDetails extends StatelessWidget {
                               title: service['service_name'] ?? '',
                               type: service['service_type'] ?? '',
                               location: service['service_location'] ?? '',
-                              rating: service['rating']?.toDouble() ?? 0.0,
-                              reviews: service['reviews'] ?? 0,
                               imageBath: service['service_images'] ??
                                   'https://via.placeholder.com/150',
                             ))
