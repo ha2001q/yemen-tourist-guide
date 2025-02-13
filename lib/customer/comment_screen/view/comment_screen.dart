@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yemen_tourist_guide/core/utils/styles.dart';
 import 'package:yemen_tourist_guide/customer/comment_screen/controller/comment_controller.dart';
 import 'package:yemen_tourist_guide/customer/comment_screen/view/widgets/place_review_widget.dart';
-
+import 'package:intl/intl.dart';
 import '../../../core/common_controller/user_data.dart';
 import '../../../core/utils/images.dart';
 import '../../homePage/home_view/widgets/ServicesCard.dart';
@@ -89,17 +90,21 @@ class CommentScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10,),
                 Wrap(
-                  spacing: 8.0, // Horizontal spacing
-                  runSpacing: 8.0, // Vertical spacing
-                  children: commentController.commentData.map((comment) {
-                    return PlaceReviewWidget(
-                      image: comment['user_image'],
-                      massage: comment['message'].toString(),
-                      name: comment['user_name'].toString()??'',
-                      rate: comment['rate'].toString(),
-                      time: '',
-                    );
-                  }).toList(),
+                    spacing: 8.0, // Horizontal spacing
+                    runSpacing: 8.0, // Vertical spacing
+                    children: commentController.commentData.map((comment) {
+                      // Convert Timestamp to DateTime
+                      DateTime dateTime = (comment['timestamp'] as Timestamp).toDate();
+                      // Format DateTime to desired format (yyyy/mm/dd hh:mm am)
+                      String formattedDate = DateFormat('yy/MM/dd HH:mm ').format(dateTime);
+                      return PlaceReviewWidget(
+                        image: comment['user_image'],
+                        massage: comment['message'].toString(),
+                        name: comment['user_name'].toString() ?? '',
+                        rate: comment['rate'].toString(),
+                        time: formattedDate, // Use formatted date here
+                      );
+                    }).toList(),
                 )
 
 

@@ -93,8 +93,10 @@ class PlaceReviewWidget extends StatelessWidget {
                     /// message
                     Text(massage,style: TextStyle(color: Colors.grey),),
 
+                    SizedBox(height: 10,),
+
                     /// time
-                    Text(time)
+                    Text(time,style: TextStyle(color: Colors.grey))
                   ],
                 ),
               )
