@@ -10,6 +10,7 @@ import 'package:yemen_tourist_guide/customer/place_details/controller/page_detai
 import 'package:yemen_tourist_guide/customer/place_details/data/grant_location.dart';
 import 'package:yemen_tourist_guide/customer/place_details/view/widgets/Service_cart.dart';
 import 'package:yemen_tourist_guide/customer/place_details/view/widgets/image_slider_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/utils/images.dart';
 import '../../../core/utils/styles.dart';
@@ -243,24 +244,50 @@ class PlaceDetails extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: ElevatedButton(
           onPressed: () async {
-            if (pageDetailController.placeData.value != null) {
-              var check = await requestLocationPermission();
-              if (!check!) return;
 
-              var place = pageDetailController.placeData.value;
-              if (place!['Place_latitude'] != null &&
-                  place['Place_longitude'] != null) {
-                Get.toNamed('map_page', arguments: {
-                  'lat': place['Place_latitude'],
-                  'lon': place['Place_longitude']
-                });
-              } else {
-                Get.snackbar('Error', 'Latitude or Longitude is missing.');
-              }
+              if (pageDetailController.placeData.value != null) {
+                var check = await requestLocationPermission();
+                if (!check!) return;
+
+                var place = pageDetailController.placeData.value;
+                if (place!['Place_latitude'] != null && place['Place_longitude'] != null) {
+                  double destinationLat = double.parse(place['Place_latitude']);
+                  double destinationLon = double.parse(place['Place_longitude']);
+
+                  String googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=$destinationLat,$destinationLon&travelmode=driving";
+
+                  if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+            await launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
             } else {
-              Get.snackbar('Error', 'Arguments or place data is missing.');
+            Get.snackbar('Error', 'Could not open Google Maps.');
             }
+            } else {
+            Get.snackbar('Error', 'Latitude or Longitude is missing.');
+            }
+            } else {
+            Get.snackbar('Error', 'Arguments or place data is missing.');
+            }
+
           },
+          // onPressed: () async {
+          //   if (pageDetailController.placeData.value != null) {
+          //     var check = await requestLocationPermission();
+          //     if (!check!) return;
+          //
+          //     var place = pageDetailController.placeData.value;
+          //     if (place!['Place_latitude'] != null &&
+          //         place['Place_longitude'] != null) {
+          //       Get.toNamed('map_page', arguments: {
+          //         'lat': place['Place_latitude'],
+          //         'lon': place['Place_longitude']
+          //       });
+          //     } else {
+          //       Get.snackbar('Error', 'Latitude or Longitude is missing.');
+          //     }
+          //   } else {
+          //     Get.snackbar('Error', 'Arguments or place data is missing.');
+          //   }
+          // },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFE17055),
             minimumSize: const Size(double.infinity, 50),

@@ -22,10 +22,11 @@ class NotificationInitialize {
   }) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
-      '1',
-      'channel_name',
+      'you_can_name_it_whatever',
+      'flutterfcm',
       // 'your_channel_description', // optional description
       playSound: true, // Play the default notification sound
+      sound: RawResourceAndroidNotificationSound('notification'),
       importance: Importance.max,
       priority: Priority.high,
     );

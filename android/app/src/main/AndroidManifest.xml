@@ -42,7 +42,7 @@
             <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
             <meta-data
                 android:name="com.google.messaging.default_notification_channel_id"
-                android:value="1"/>
+                android:value="dbfood"/>
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

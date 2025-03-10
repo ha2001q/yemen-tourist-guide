@@ -20,6 +20,7 @@ import 'package:yemen_tourist_guide/customer/homePage/home_view/pages/all_places
 import 'package:yemen_tourist_guide/customer/login_screen/controller/login_controller.dart';
 import 'package:yemen_tourist_guide/customer/login_screen/view/login_screen.dart';
 import 'package:yemen_tourist_guide/customer/map/view/pages/map_page.dart';
+import 'package:yemen_tourist_guide/customer/notifications/view/notification_screen.dart';
 import 'package:yemen_tourist_guide/customer/place_details/view/place_details.dart';
 import 'package:yemen_tourist_guide/customer/profile_screen/controller/profile_controller.dart';
 import 'package:yemen_tourist_guide/customer/profile_screen/view/pages/profile_screen.dart';
@@ -59,9 +60,10 @@ class NotificationService {
   }) async {
     const AndroidNotificationDetails androidDetails =
     AndroidNotificationDetails(
-      '1', // Unique channel ID
-      'channel_name', // Channel name
-      channelDescription: 'channel_description', // Channel description
+      'you_can_name_it_whatever',
+      'flutterfcm',
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('notification'),
       importance: Importance.high,
       priority: Priority.high,
     );
@@ -280,6 +282,11 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: "/search",
           page: ()=>SearchScreen(),
+          // binding: BindingsBuilder(()=>Get.put(CommentController()))
+        ),
+        GetPage(
+          name: "/notification",
+          page: ()=>NotificationScreen(),
           // binding: BindingsBuilder(()=>Get.put(CommentController()))
         ),
       ],
