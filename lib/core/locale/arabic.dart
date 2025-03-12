@@ -14,7 +14,7 @@ const arabic = {
   'elements':' عناصر',
   'Setting':'الأعدادات',
   'Language':'اللغة',
-  'notification':'الأعدادات',
+  // 'notification':'الأعدادات',
   'information':'معلومات',
   'version':'الأصدار',
   'Terms of service':'شروط الخدمة',
@@ -54,6 +54,8 @@ const arabic = {
   'have':'يوجد ',
   'places':' أماكن',
   'duration':' المدة بالسيارة',
+  'noNotification':'لا توجد إشعارات حالياً',
+  'notification':'الإشعارات'
 
 
 

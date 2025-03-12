@@ -71,7 +71,7 @@ class SettingScreen extends StatelessWidget {
               ),
 
               SettingTemplete(
-                hamzah: 'Notification'.tr,
+                hamzah: 'notification'.tr,
                 path: Images.notification,
                 flag: true,
                 onTap: ()  {

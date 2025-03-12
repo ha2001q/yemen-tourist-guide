@@ -35,101 +35,86 @@ import 'package:yemen_tourist_guide/customer/splash_screen/view/splash_screen.da
 import 'customer/homePage/home_view/pages/home_screen.dart';
 import 'notification.dart';
 
+
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 SharedPreferences? sharedPref;
 
-class NotificationService {
-  final FlutterLocalNotificationsPlugin _localNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+class NotificationModel {
+  final String title;
+  final String body;
+  final DateTime timestamp;
 
-  // Initialize the notifications
-  Future<void> initializeNotifications() async {
-    const AndroidInitializationSettings androidSettings =
-    AndroidInitializationSettings('@mipmap/logo'); // Replace with your app icon
+  NotificationModel({
+    required this.title,
+    required this.body,
+    required this.timestamp,
+  });
 
-    const InitializationSettings initSettings =
-    InitializationSettings(android: androidSettings);
-
-    await _localNotificationsPlugin.initialize(initSettings);
-  }
-
-  // Show a notification
-  Future<void> showNotification({
-    required int id,
-    required String title,
-    required String body,
-  }) async {
-    const AndroidNotificationDetails androidDetails =
-    AndroidNotificationDetails(
-      'you_can_name_it_whatever',
-      'flutterfcm',
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound('notification'),
-      importance: Importance.high,
-      priority: Priority.high,
-    );
-
-    const NotificationDetails notificationDetails =
-    NotificationDetails(android: androidDetails);
-
-    await _localNotificationsPlugin.show(
-      id,       // Notification ID
-      title,    // Notification title
-      body,     // Notification body
-      notificationDetails,
-    );
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'body': body,
+      'timestamp': timestamp.toIso8601String(),
+    };
   }
 }
-// Background message handler
+
+class NotificationDatabaseService {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> saveNotification(NotificationModel notification) async {
+    await _firestore.collection('notifications').add(notification.toMap());
+  }
+}
+
 Future<void> _firebaseBackgroundMessage(RemoteMessage message) async {
   if (message.notification != null) {
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-    // Ensure notifications are initialized
     await NotificationInitialize.initializeNotifications(flutterLocalNotificationsPlugin);
 
-    var notificationService = NotificationService();
-    await notificationService.initializeNotifications();
-    notificationService = NotificationService();
-    notificationService.showNotification(
-      id: 1,
-      title: message.notification!.title ?? "No Title",
-      body: message.notification!.body ?? "No Body",
-    );
-    // Display the notification
     await NotificationInitialize.showNotification(
       title: message.notification!.title ?? "No Title",
       body: message.notification!.body ?? "No Body",
       flutterLocalNotificationsPlugin: flutterLocalNotificationsPlugin,
     );
+
+    // Save notification to database
+    final notification = NotificationModel(
+      title: message.notification!.title ?? "No Title",
+      body: message.notification!.body ?? "No Body",
+      timestamp: DateTime.now(),
+    );
+
+    await NotificationDatabaseService().saveNotification(notification);
   }
 }
 
-//Foreground message handler
 Future<void> _firebaseForegroundMessage(RemoteMessage message) async {
   if (message.notification != null) {
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-    // Ensure notifications are initialized
     await NotificationInitialize.initializeNotifications(flutterLocalNotificationsPlugin);
 
-    var notificationService = NotificationService();
-    await notificationService.initializeNotifications();
-    notificationService = NotificationService();
-    notificationService.showNotification(
-      id: 1,
-      title: message.notification!.title ?? "No Title",
-      body: message.notification!.body ?? "No Body",
-    );
-    // Display the notification
     await NotificationInitialize.showNotification(
       title: message.notification!.title ?? "No Title",
       body: message.notification!.body ?? "No Body",
       flutterLocalNotificationsPlugin: flutterLocalNotificationsPlugin,
     );
+
+    // Save notification to database
+    final notification = NotificationModel(
+      title: message.notification!.title ?? "No Title",
+      body: message.notification!.body ?? "No Body",
+      timestamp: DateTime.now(),
+    );
+
+    await NotificationDatabaseService().saveNotification(notification);
   }
 }
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -141,7 +126,6 @@ Future<void> main() async {
   FirebaseMessaging.onMessage.listen(_firebaseForegroundMessage);
   // Set the background message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
-  FirebaseMessaging.onBackgroundMessage(_firebaseForegroundMessage);
 
 
   /// this to make battery, notification icons fixable changes colors above the appbar.
@@ -161,42 +145,42 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-   MyApp(){
-     _initializeFCM();
-   }
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  //  MyApp(){
+  //    _initializeFCM();
+  //  }
+  // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
 
 
 
 
-  void _initializeFCM() async {
-    // Request notification permissions
-    NotificationSettings settings = await _firebaseMessaging.requestPermission();
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print("User granted permission");
-    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-      print("User granted provisional permission");
-    } else {
-      print("User declined or has not accepted permission");
-    }
-
-    // Print the FCM token
-    String? token = await _firebaseMessaging.getToken();
-    print("FCM Token: $token");
-
-    // Handle foreground messages
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Message received in foreground: ${message.notification?.title}");
-      print("Message body: ${message.notification?.body}");
-    });
-
-    // Handle messages when the app is opened from a background notification
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("Message opened: ${message.data}");
-    });
-  }
+  // void _initializeFCM() async {
+  //   // Request notification permissions
+  //   NotificationSettings settings = await _firebaseMessaging.requestPermission();
+  //
+  //   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+  //     print("User granted permission");
+  //   } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+  //     print("User granted provisional permission");
+  //   } else {
+  //     print("User declined or has not accepted permission");
+  //   }
+  //
+  //   // Print the FCM token
+  //   String? token = await _firebaseMessaging.getToken();
+  //   print("FCM Token: $token");
+  //
+  //   // Handle foreground messages
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     print("Message received in foreground: ${message.notification?.title}");
+  //     print("Message body: ${message.notification?.body}");
+  //   });
+  //
+  //   // Handle messages when the app is opened from a background notification
+  //   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  //     print("Message opened: ${message.data}");
+  //   });
+  // }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

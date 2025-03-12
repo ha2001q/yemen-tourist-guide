@@ -167,12 +167,17 @@ class PlaceDetails extends StatelessWidget {
                                 if (!check!) return;
 
                                 var place = pageDetailController.placeData.value;
-                                if (place!['Place_latitude'] != null &&
-                                    place['Place_longitude'] != null) {
-                                  Get.toNamed('map_page', arguments: {
-                                    'lat': place['Place_latitude'],
-                                    'lon': place['Place_longitude']
-                                  });
+                                if (place!['Place_latitude'] != null && place['Place_longitude'] != null) {
+                                  double destinationLat = double.parse(place['Place_latitude']);
+                                  double destinationLon = double.parse(place['Place_longitude']);
+
+                                  String googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=$destinationLat,$destinationLon&travelmode=driving";
+
+                                  if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+                                    await launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
+                                  } else {
+                                    Get.snackbar('Error', 'Could not open Google Maps.');
+                                  }
                                 } else {
                                   Get.snackbar('Error', 'Latitude or Longitude is missing.');
                                 }

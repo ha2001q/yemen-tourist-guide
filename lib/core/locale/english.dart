@@ -14,7 +14,7 @@ const english = {
   'elements':'elements',
   'Setting':'Setting',
   'Language':'Language',
-  'notification':'notifications',
+  'notification':'Notifications',
   'information':'Information',
   'version':'Version',
   'Terms of service':'Terms of service',
@@ -54,6 +54,7 @@ const english = {
   'have':'have ',
   'places':' places',
   'duration':'duration by car',
+  'noNotification':'There are no notifications currentlyً',
 
 
 

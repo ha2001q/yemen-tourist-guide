@@ -41,5 +41,7 @@ class NotificationInitialize {
       body, // body
       platformChannelSpecifics,
     );
+
+
   }
 }

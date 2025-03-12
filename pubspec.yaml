@@ -42,7 +42,7 @@ dependencies:
   get: ^4.6.6
   # pick images
   image_picker: ^0.8.5+3
-  path_provider: ^2.0.11
+  path_provider: ^2.1.4
   image_cropper: ^5.0.1
   permission_handler: ^11.3.1
   file_picker: ^8.0.0+1
@@ -93,6 +93,9 @@ dependencies:
   flutter_facebook_auth: ^7.0.1
   intl: ^0.17.0
   url_launcher: ^6.3.1
+  googleapis: ^13.1.0
+  googleapis_auth: ^1.6.0
+  json_annotation: ^4.9.0
 
 
 dev_dependencies:

@@ -83,23 +83,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
 
 
-                          id!=''?Container(
-                              height: 45.0,
-                              width: 45.0,
-                              margin: const EdgeInsets.symmetric(horizontal: 10),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  image:  image!=''||image!=null
-                                      ?DecorationImage(
-                                      image: CachedNetworkImageProvider(image),
-                                      fit: BoxFit.cover
-                                  ):const DecorationImage(
-                                      image: AssetImage(Images.profileNonImage),
-                                      fit: BoxFit.cover
-                                  )
-                              )
 
-                          ):const SizedBox.shrink(),
 
 
                         Column(
@@ -138,7 +122,24 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               ],
                             )
                           ],
-                        )
+                        ),
+                        id!=''?Container(
+                            height: 45.0,
+                            width: 45.0,
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                image:  image!=''||image!=null
+                                    ?DecorationImage(
+                                    image: CachedNetworkImageProvider(image),
+                                    fit: BoxFit.cover
+                                ):const DecorationImage(
+                                    image: AssetImage(Images.profileNonImage),
+                                    fit: BoxFit.cover
+                                )
+                            )
+
+                        ):const SizedBox.shrink(),
                       ],
                     ),
                   ),
