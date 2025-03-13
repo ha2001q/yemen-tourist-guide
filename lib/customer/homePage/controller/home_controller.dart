@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,6 +47,7 @@ class HomeController extends GetxController{
   final HomePageRepo _repository = HomePageRepo();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var bannersd = <Map<String, dynamic>>[].obs;
+  Timer? _bannerTimer;
 
   @override
   void onInit() {
@@ -62,6 +64,7 @@ class HomeController extends GetxController{
     }
     fetchAllCities(); // Fetch cities when the controller is initialized
     listenToBanners(0);
+    ever(bannersd, (_) => _removeExpiredBanners());
     listenToTypes();
     listenToPlaces(0, 0);
   }
@@ -107,14 +110,49 @@ class HomeController extends GetxController{
     }
   }
 
-
   void listenToBanners(int cityId) {
     _repository.streamBannersByCityId(cityId).listen((data) {
       bannersd.value = data;
+      _removeExpiredBanners(immediate: true); // Immediately remove expired banners
     }, onError: (error) {
       Get.snackbar("Error", error.toString());
     });
   }
+
+  void _removeExpiredBanners({bool immediate = false}) {
+    if (immediate) {
+      // Remove expired banners instantly
+      _filterExpiredBanners();
+    }
+
+    _bannerTimer?.cancel(); // Cancel any existing timer
+    _bannerTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      _filterExpiredBanners();
+      if (bannersd.isEmpty) timer.cancel(); // Stop checking if no banners remain
+    });
+  }
+
+  void _filterExpiredBanners() {
+    DateTime now = DateTime.now();
+    bannersd.removeWhere((banner) {
+      DateTime? endTime = _parseDateTime(banner['end_time']);
+      return endTime != null && now.isAfter(endTime);
+    });
+  }
+
+  DateTime? _parseDateTime(String? dateString) {
+    if (dateString == null) return null;
+    try {
+      return DateTime.parse(dateString);
+    } catch (e) {
+      print("Invalid date format: $dateString");
+      return null;
+    }
+  }
+
+
+
+
 
 
   void listenToTypes() {

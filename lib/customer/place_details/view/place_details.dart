@@ -1,10 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
-import 'package:yemen_tourist_guide/customer/add_review/view/review_screen.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 import 'package:yemen_tourist_guide/customer/place_details/controller/page_detail_controller.dart';
 import 'package:yemen_tourist_guide/customer/place_details/data/grant_location.dart';
@@ -13,13 +10,89 @@ import 'package:yemen_tourist_guide/customer/place_details/view/widgets/image_sl
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/utils/images.dart';
-import '../../../core/utils/styles.dart';
-import '../../favorite_screen/view/pages/favorite_screen.dart';
-import '../../homePage/home_view/widgets/ServicesCard.dart';
 
 class PlaceDetails extends StatelessWidget {
   final PageDetailController pageDetailController =
   Get.put(PageDetailController(), permanent: false);
+
+  void _showFullImage(BuildContext context, List<String> images, int selectedIndex) {
+    PageController pageController = PageController(initialPage: selectedIndex);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.black.withOpacity(0.9), // Dimmed background
+          insetPadding: const EdgeInsets.all(15), // Full-screen effect
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // PageView for Swiping Images
+              PageView.builder(
+                controller: pageController,
+                itemCount: images.length,
+                physics: const ClampingScrollPhysics(), // Prevents unwanted overscroll
+                clipBehavior: Clip.none, // Allows zoomed image to overflow
+                itemBuilder: (context, index) {
+                  return Center(
+                    child: InteractiveViewer(
+                      panEnabled: true, // Allow panning while zoomed
+                      boundaryMargin: const EdgeInsets.all(20), // Give space for zoom
+                      minScale: 1.0,
+                      maxScale: 4.0, // Enable zoom up to 4x
+                      child: Image.network(images[index], fit: BoxFit.contain),
+                    ),
+                  );
+                },
+              ),
+
+              // Left Arrow Button
+              Positioned(
+                left: 10,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 30),
+                  onPressed: () {
+                    if (pageController.page! > 0) {
+                      pageController.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  },
+                ),
+              ),
+
+              // Right Arrow Button
+              Positioned(
+                right: 10,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 30),
+                  onPressed: () {
+                    if (pageController.page! < images.length - 1) {
+                      pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  },
+                ),
+              ),
+
+              // Close Button (Top-Right)
+              Positioned(
+                top: 20,
+                right: 20,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +107,26 @@ class PlaceDetails extends StatelessWidget {
               return const Center(child: CircularProgressIndicator()); // Loading indicator
             }
 
+
+            // String imageUrl = placeData['place_image'][0];
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Place image with back and favorite button
                 Stack(
                   children: [
-                    ImageSliderWidget(images: placeData['place_image'] ?? ['']),
+
+                    InkWell(
+                      child: ImageSliderWidget(images: placeData['place_image'] ?? ['']),
+                      onTap: () => _showFullImage(
+                        context,
+                        List<String>.from(placeData['place_image'] ?? []),
+                        0, // Open from the first image
+                      ),
+                    ),
+
+                    // ImageSliderWidget(images: placeData['place_image'] ?? ['']),
                     Positioned(
                       top: 50,
                       left: 20,
@@ -212,12 +298,24 @@ class PlaceDetails extends StatelessWidget {
                                   if (!check!) return;
 
                                   var place = service;
-                                  if (place!['service_latitude'] != null &&
-                                      place['service_longitude'] != null) {
-                                    Get.toNamed('map_page', arguments: {
-                                      'lat': place['service_latitude'],
-                                      'lon': place['service_longitude']
-                                    });
+                                  // if (place!['service_latitude'] != null &&
+                                  //     place['service_longitude'] != null) {
+                                  //   Get.toNamed('map_page', arguments: {
+                                  //     'lat': place['service_latitude'],
+                                  //     'lon': place['service_longitude']
+                                  //   });
+                                  // }
+                                  if (place!['service_latitude'] != null && place['service_longitude'] != null) {
+                                    double destinationLat = double.parse(place['service_latitude']);
+                                    double destinationLon = double.parse(place['service_longitude']);
+
+                                    String googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=$destinationLat,$destinationLon&travelmode=driving";
+
+                                    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+                                      await launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
+                                    } else {
+                                      Get.snackbar('Error', 'Could not open Google Maps.');
+                                    }
                                   } else {
                                     Get.snackbar('Error', 'Latitude or Longitude is missing.');
                                   }

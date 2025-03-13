@@ -13,6 +13,8 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/state_manager.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:googleapis/shared.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yemen_tourist_guide/core/utils/images.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
 import 'package:yemen_tourist_guide/customer/homePage/home_view/pages/all_places.dart';
@@ -288,10 +290,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   const SizedBox(height: 30,),
                   Obx(() {
                     if (homeController.bannersd.isEmpty) {
-                      return const Center(child: Text('No banners found'));
+                      return const Center(child: Text('No Banners Found'));
                     }
 
-                    print(homeController.bannersd[0]['title']);
                     return SizedBox(
                       child: Column(
                         children: [
@@ -301,9 +302,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
                             itemBuilder: (context, index, realIndex) {
                               return promotionWidget(
                                 homeController.bannersd[index]['image'],
-                                homeController.bannersd[index]['title'],
+                                // homeController.bannersd[index]['title'],
                                 homeController.bannersd[index]['description'],
-                                index,
+                                // index,
                               );
                             },
                             options: CarouselOptions(
@@ -530,8 +531,15 @@ class _HomePageScreenState extends State<HomePageScreen> {
     );
   }
 
-  Widget promotionWidget(String image, String title, String description,
-      int index) {
+  Widget promotionWidget(String image,String link) {
+    // Function to launch a URL
+    Future<void> _launchURL(link) async {
+      try {
+        await launch(link);  // Directly try launching without canLaunch check
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
     return Container(
       width: 310.0,
       height: 150,
@@ -544,7 +552,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
       ),
       child: InkWell(
         onTap: () {
-          // widget.onTapBanner(index);
+          _launchURL(link);
         },
         child: Stack(
           children: [
@@ -552,7 +560,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(image),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
                 borderRadius: const BorderRadius.only(
                   bottomRight: Radius.circular(25),
@@ -561,15 +569,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 ),
               ),
               child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.1),
-                      Colors.black.withOpacity(0.6),
-                    ],
-                  ),
-                  borderRadius: const BorderRadius.only(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(25),
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25),
@@ -601,36 +602,36 @@ class _HomePageScreenState extends State<HomePageScreen> {
               ),
             ),
 
-            Positioned(
-              top: 55,
-              right: 33,
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontFamily: 'Raleway',
-                  fontWeight: FontWeight.w700,
-                  height: 0,
-                  letterSpacing: 0.54,
-                ),
-              ),
-            ),
+            // Positioned(
+            //   top: 55,
+            //   right: 33,
+            //   child: Text(
+            //     title,
+            //     style: const TextStyle(
+            //       color: Colors.white,
+            //       fontSize: 18,
+            //       fontFamily: 'Raleway',
+            //       fontWeight: FontWeight.w700,
+            //       height: 0,
+            //       letterSpacing: 0.54,
+            //     ),
+            //   ),
+            // ),
 
-            Positioned(
-              top: 105,
-              right: 9,
-              child: Text(
-                description,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontFamily: 'Raleway',
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                ),
-              ),
-            )
+            // Positioned(
+            //   top: 105,
+            //   right: 9,
+            //   child: Text(
+            //     description,
+            //     style: const TextStyle(
+            //       color: Colors.white,
+            //       fontSize: 10,
+            //       fontFamily: 'Raleway',
+            //       fontWeight: FontWeight.w400,
+            //       height: 0,
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
