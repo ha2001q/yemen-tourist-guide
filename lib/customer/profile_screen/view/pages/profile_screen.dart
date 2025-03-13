@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 
@@ -90,24 +92,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         /// image
-                        InkWell(
-                          onTap: profileController.pickFile,
-                          child: Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              image: profileController.userData['user_image']==''||profileController.userData['user_image']==null
-                                  ?const DecorationImage(
-                                  image:AssetImage(Images.profileNonImage),
-                                  fit: BoxFit.cover
-                                  ):DecorationImage(
-                                      image:CachedNetworkImageProvider(profileController.userData['user_image']),
-                                      fit: BoxFit.cover
+                        Container(
+                          height: 100,
+                          width: 100,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                bottom: 0,
+                                right: 0,
+                                left: 0,
+                                child: InkWell(
+                                  onTap: profileController.pickFile,
+                                  child: Obx(() => Container(
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      image: profileController.isUploading.value
+                                          ? null // Remove the image when uploading
+                                          : profileController.userData['user_image'] == '' || profileController.userData['user_image'] == null
+                                          ? const DecorationImage(
+                                          image: AssetImage(Images.profileNonImage),
+                                          fit: BoxFit.cover)
+                                          : DecorationImage(
+                                          image: CachedNetworkImageProvider(profileController.userData['user_image']),
+                                          fit: BoxFit.cover),
+                                    ),
+                                    child: profileController.isUploading.value
+                                        ? const Center(child: CircularProgressIndicator(color: Colors.orange,)) // ✅ Show loading
+                                        : null,
+                                  )),
+                                ),
+                              ),
+
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: InkWell(
+                                  onTap: profileController.pickFile,
+                                  child: Container(
+                                    height: 25,
+                                    width: 25,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: Colors.orange
+                                    ),
+                                    child: const Center(
+                                      child: Icon(Icons.edit, size: 15, color: Colors.white,),
+                                    ),
                                   ),
-                            ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
+
 
                         const SizedBox(height: 5,),
                         /// text user_name

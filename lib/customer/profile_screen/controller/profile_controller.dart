@@ -14,7 +14,7 @@ import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 class ProfileController extends GetxController {
   // A variable to store the user data.
   var userData = <String, dynamic>{}.obs;
-
+  var isUploading = false.obs; // ✅ Track loading state
   // UserController userController=Get.put(UserController());
 
   // Firestore instance.
@@ -70,18 +70,32 @@ class ProfileController extends GetxController {
 
 
 
-  Future pickFile() async {
-    final result = await FilePicker.platform.pickFiles();
-    if(result==null){
+  // Future pickFile() async {
+  //   final result = await FilePicker.platform.pickFiles();
+  //   if(result==null){
+  //     return;
+  //   }else{
+  //     pickImage = result.files.first; // Display the selected file immediately
+  //     uploadFile();
+  //
+  //
+  //   }
+  // }
+  Future<void> pickFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom, // Specify custom types
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'], // Allowed image formats
+    );
+
+    if (result == null) {
       return;
-    }else{
-      pickImage = result.files.first; // Display the selected file immediately
-      uploadFile();
-
-
     }
-  }
 
+    pickImage = result.files.first;
+    uploadFile();
+    // Validate MIME type (Optional but recommended)
+
+  }
   /// Uploads the file to Firebase Storage
   // Future<String?> uploadFile() async {
   //   final path = 'Images/${pickImage!.name}';
@@ -105,13 +119,14 @@ class ProfileController extends GetxController {
 
   Future<String?> uploadFile() async {
     try {
+      isUploading.value = true; // ✅ Start loading
       final path = 'Images/${pickImage!.name}';
       final file = File(pickImage!.path!);
 
       UserDataController.loadUser();
       var userid = UserDataController.userId;
       // First request to upload the file
-      var request = http.MultipartRequest('POST', Uri.parse('https://yemen.allactivitieshub.com/upload-image/'));
+      var request = http.MultipartRequest('POST', Uri.parse('http://192.168.0.110:8000/upload-image/'));
       request.fields.addAll({
         'user_id': userid, // Replace with your user ID
       });
@@ -140,13 +155,15 @@ class ProfileController extends GetxController {
         var name = UserDataController.userName;
         UserDataController.setUser(id, name, downloadUrl);
         UserDataController.loadUser();
-
+        isUploading.value = false; // ✅ Stop loading
         return downloadUrl; // Return the download URL
       } else {
+        isUploading.value = false; // ✅ Stop loading
         print('Upload failed: ${response.reasonPhrase}');
         return null;
       }
     } catch (e) {
+      isUploading.value = false; // ✅ Stop loading
       print('Error occurred: $e');
       return null;
     }

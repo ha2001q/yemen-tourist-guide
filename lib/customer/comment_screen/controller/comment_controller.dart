@@ -121,8 +121,6 @@ class CommentController extends GetxController{
       }
     });
 
-
-
     print(argument['place_id']);
     fetchComments(argument['place_id']).listen(
           (comments) {

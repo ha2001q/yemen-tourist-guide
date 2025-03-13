@@ -477,11 +477,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
                           final double rateB = double.tryParse(b['rate_avg']) ?? 0.0;
                           return rateB.compareTo(rateA); // Sort in descending order
                         });
-
+                      final placesToShow = sortedPlaces.take(10).toList();
                       return Wrap(
                         spacing: 30, // Space between items horizontally
                         runSpacing: 10, // Space between items vertically
-                        children: sortedPlaces.map((place) {
+                        children: placesToShow.map((place) {
                           return Padding(
                             padding: const EdgeInsets.all(6.0),
                             child: ServicesCard(

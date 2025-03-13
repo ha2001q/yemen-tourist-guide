@@ -37,10 +37,13 @@ class PlaceDetails extends StatelessWidget {
                   return Center(
                     child: InteractiveViewer(
                       panEnabled: true, // Allow panning while zoomed
-                      boundaryMargin: const EdgeInsets.all(20), // Give space for zoom
+                      boundaryMargin: const EdgeInsets.all(5), // Give space for zoom
                       minScale: 1.0,
                       maxScale: 4.0, // Enable zoom up to 4x
-                      child: Image.network(images[index], fit: BoxFit.contain),
+                      child: Container(
+                        height: double.infinity,
+                          width: double.infinity,
+                          child: Image.network(images[index], fit: BoxFit.contain)),
                     ),
                   );
                 },
