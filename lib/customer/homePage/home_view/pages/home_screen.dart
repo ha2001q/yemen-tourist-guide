@@ -1,19 +1,9 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:get/state_manager.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:googleapis/shared.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yemen_tourist_guide/core/utils/images.dart';
 import 'package:yemen_tourist_guide/customer/homePage/controller/home_controller.dart';
@@ -24,7 +14,7 @@ import '../widgets/ServicesCard.dart';
 
 
 class HomePageScreen extends StatefulWidget {
-  HomePageScreen({super.key});
+  const HomePageScreen({super.key});
 
 
 
@@ -463,11 +453,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
                           );
                         }).toList(),
                       );
-
                     },
                   ),
-
-
 
                   /// high rate places
                   const SizedBox(height: 20,),
@@ -533,7 +520,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   Widget promotionWidget(String image,String link) {
     // Function to launch a URL
-    Future<void> _launchURL(link) async {
+    Future<void> launchURL(link) async {
       try {
         await launch(link);  // Directly try launching without canLaunch check
       } catch (e) {
@@ -541,8 +528,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
       }
     }
     return Container(
-      width: 310.0,
-      height: 150,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(25),
@@ -552,7 +537,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
       ),
       child: InkWell(
         onTap: () {
-          _launchURL(link);
+          launchURL(link);
         },
         child: Stack(
           children: [
@@ -586,7 +571,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 height: 56,
                 child: ElevatedButton(
                     onPressed: () {
-                      // widget.onTapBanner(index);
+                      launchURL(link);
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,

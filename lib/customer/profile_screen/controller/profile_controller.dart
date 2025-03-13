@@ -2,13 +2,12 @@
 
 
 import 'dart:io';
-
+import 'dart:convert';  // Importing to decode the JSON response
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
-
+import 'package:http/http.dart'as http;
 import 'package:yemen_tourist_guide/core/common_controller/user_data.dart';
 
 
@@ -76,7 +75,7 @@ class ProfileController extends GetxController {
     if(result==null){
       return;
     }else{
-      pickImage = result?.files.first; // Display the selected file immediately
+      pickImage = result.files.first; // Display the selected file immediately
       uploadFile();
 
 
@@ -84,55 +83,103 @@ class ProfileController extends GetxController {
   }
 
   /// Uploads the file to Firebase Storage
+  // Future<String?> uploadFile() async {
+  //   final path = 'Images/${pickImage!.name}';
+  //   final file = File(pickImage!.path!);
+  //   final ref = FirebaseStorage.instance.ref().child(path);
+  //   ref.putFile(file);
+  //   TaskSnapshot snapshot = await ref.putFile(file);
+  //   final downloadUrl = await snapshot.ref.getDownloadURL();
+  //   print(downloadUrl.toString());
+  //   imageUrl.value=downloadUrl;
+  //   await updateUserImagePath(imageUrl.value);
+  //
+  //   UserDataController.loadUser();
+  //   var id = UserDataController.userId;
+  //   var name = UserDataController.userName;
+  //   UserDataController.setUser(id, name, downloadUrl);
+  //   UserDataController.loadUser();
+  //
+  //   return downloadUrl;
+  // }
+
   Future<String?> uploadFile() async {
-    final path = 'Images/${pickImage!.name}';
-    final file = File(pickImage!.path!);
-    final ref = FirebaseStorage.instance.ref().child(path);
-    ref.putFile(file);
-    TaskSnapshot snapshot = await ref.putFile(file);
-    final downloadUrl = await snapshot.ref.getDownloadURL();
-    print(downloadUrl.toString());
-    imageUrl.value=downloadUrl;
-    await updateUserImagePath(imageUrl.value);
-
-    UserDataController.loadUser();
-    var id = UserDataController.userId;
-    var name = UserDataController.userName;
-    UserDataController.setUser(id, name, downloadUrl);
-    UserDataController.loadUser();
-
-    return downloadUrl;
-  }
-
-
-  /// Updates the user's image path in Firestore
-  Future<void> updateUserImagePath( String imageUrl) async {
     try {
+      final path = 'Images/${pickImage!.name}';
+      final file = File(pickImage!.path!);
+
       UserDataController.loadUser();
-      var id = UserDataController.userId;
-      print("====================================");
-      // Query the Users collection for the document with matching user_id
-      var querySnapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('user_id', isEqualTo: id)
-          .get();
+      var userid = UserDataController.userId;
+      // First request to upload the file
+      var request = http.MultipartRequest('POST', Uri.parse('https://yemen.allactivitieshub.com/upload-image/'));
+      request.fields.addAll({
+        'user_id': userid, // Replace with your user ID
+      });
+      request.files.add(await http.MultipartFile.fromPath('image', file.path));
 
-      if (querySnapshot.docs.isNotEmpty) {
-        // Update the first matching document
-        var docId = querySnapshot.docs.first.id;
-        await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(docId)
-            .update({'user_image': imageUrl});
+      http.StreamedResponse response = await request.send();
 
-        Get.snackbar("Success", "Profile image updated successfully!");
+      // Check the response
+      if (response.statusCode == 200) {
+        String responseBody = await response.stream.bytesToString();
+        print(responseBody); // Prints the response body (for debugging)
+
+        // Parse the JSON response
+        var responseData = json.decode(responseBody);
+
+        // Extract the file URL from the response
+        final downloadUrl = responseData['file_url'];
+        print(downloadUrl.toString());
+
+        // Assuming you are updating the user image path and other logic here
+        imageUrl.value = downloadUrl; // Update image URL in your state
+        // await updateUserImagePath(imageUrl.value);
+
+        UserDataController.loadUser();
+        var id = UserDataController.userId;
+        var name = UserDataController.userName;
+        UserDataController.setUser(id, name, downloadUrl);
+        UserDataController.loadUser();
+
+        return downloadUrl; // Return the download URL
       } else {
-        Get.snackbar("Error", "No user found with the given user ID.");
+        print('Upload failed: ${response.reasonPhrase}');
+        return null;
       }
     } catch (e) {
-      Get.snackbar("Error", "Failed to update user image. Error: $e");
+      print('Error occurred: $e');
+      return null;
     }
   }
+
+  /// Updates the user's image path in Firestore
+  // Future<void> updateUserImagePath( String imageUrl) async {
+  //   try {
+  //     UserDataController.loadUser();
+  //     var id = UserDataController.userId;
+  //     print("====================================");
+  //     // Query the Users collection for the document with matching user_id
+  //     var querySnapshot = await FirebaseFirestore.instance
+  //         .collection('Users')
+  //         .where('user_id', isEqualTo: id)
+  //         .get();
+  //
+  //     if (querySnapshot.docs.isNotEmpty) {
+  //       // Update the first matching document
+  //       var docId = querySnapshot.docs.first.id;
+  //       await FirebaseFirestore.instance
+  //           .collection('Users')
+  //           .doc(docId)
+  //           .update({'user_image': imageUrl});
+  //
+  //       Get.snackbar("Success", "Profile image updated successfully!");
+  //     } else {
+  //       Get.snackbar("Error", "No user found with the given user ID.");
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar("Error", "Failed to update user image. Error: $e");
+  //   }
+  // }
 
   @override
   void onInit() {
